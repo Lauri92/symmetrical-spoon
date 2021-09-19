@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="fi.lauriari.ar_project.MainMenuFragment"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_gameMapFragment"
+            app:destination="@id/gameMapFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_itemListFragment"
+            app:destination="@id/itemListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameMapFragment"
+        android:name="fi.lauriari.ar_project.GameMapFragment"
+        android:label="fragment_game_map"
+        tools:layout="@layout/fragment_game_map" >
+        <action
+            android:id="@+id/action_gameMapFragment_to_gameARFragment"
+            app:destination="@id/gameARFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemListFragment"
+        android:name="fi.lauriari.ar_project.ItemListFragment"
+        android:label="fragment_item_list"
+        tools:layout="@layout/fragment_item_list" />
+    <fragment
+        android:id="@+id/gameARFragment"
+        android:name="fi.lauriari.ar_project.GameARFragment"
+        android:label="fragment_game_a_r"
+        tools:layout="@layout/fragment_game_a_r" />
+</navigation>
