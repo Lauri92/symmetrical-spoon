@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -27,6 +28,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
+import java.util.*
+import kotlin.collections.ArrayList
 
 class GameMapFragment : Fragment() {
 
@@ -256,6 +259,9 @@ class GameMapFragment : Fragment() {
 
 
         chosenPoints.forEach {
+            if(getAddress(it.latitude, it.longitude).contains("Unnamed Road")) {
+                return
+            }
             val loopMarker = Marker(map)
             loopMarker.icon = AppCompatResources.getDrawable(
                 requireContext(),
@@ -280,10 +286,11 @@ class GameMapFragment : Fragment() {
                 drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
                 getDistanceToMarker(activeDestination)
                 map.invalidate()
+                marker.showInfoWindow()
                 return@setOnMarkerClickListener true
             }
 
-            //loopMarker.title = "Distance to this marker: ${getDistanceToMarker(markerLocation)}"
+            loopMarker.title = getAddress(it.latitude, it.longitude)
             map.overlays.add(loopMarker)
         }
     }
@@ -342,5 +349,12 @@ class GameMapFragment : Fragment() {
         map.overlays.add(ownLocationmarker)
         //displays the ownLocationmarker as soon as it has been added.
         map.invalidate()
+    }
+
+    private fun getAddress(lat: Double, lon: Double): String {
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        val addresses = geocoder.getFromLocation(lat, lon, 1)
+        //Log.d("address", "List info: ${addresses}")
+        return addresses[0].getAddressLine(0)
     }
 }
