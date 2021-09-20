@@ -255,11 +255,12 @@ class GameMapFragment : Fragment() {
         interactionLocations.shuffle()
 
         //Take first 20 elements of the shuffled arraylist
-        val chosenPoints = interactionLocations.take(20)
+        val chosenPoints = interactionLocations.take(15)
 
 
         chosenPoints.forEach {
-            if(getAddress(it.latitude, it.longitude).contains("Unnamed Road")) {
+            val address = getAddress(it.latitude, it.longitude)
+            if(address.contains("Unnamed Road")) {
                 return
             }
             val loopMarker = Marker(map)
@@ -290,7 +291,7 @@ class GameMapFragment : Fragment() {
                 return@setOnMarkerClickListener true
             }
 
-            loopMarker.title = getAddress(it.latitude, it.longitude)
+            loopMarker.title = address
             map.overlays.add(loopMarker)
         }
     }
