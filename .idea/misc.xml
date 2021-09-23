@@ -10,9 +10,13 @@
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/drawable/ic_coffee_cup.xml" value="0.132" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/drawable/ic_launcher_background.xml" value="0.11979166666666667" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/activity_main.xml" value="0.13802083333333334" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/flag_question_layout.xml" value="0.2546875" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_a_r.xml" value="0.2546875" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_ar_fragment.xml" value="0.1421875" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_map.xml" value="0.36" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_main_menu.xml" value="0.2" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/quiz_question_layout.xml" value="0.2546875" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/reward_layout.xml" value="0.2390625" />
       </map>
     </option>
   </component>
