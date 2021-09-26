@@ -44,7 +44,7 @@ class GameARFragment : Fragment() {
 
         buildViewRenderables()
 
-
+        //TODO: Obtain the lists of questions from elsewhere, change the structure to be something more meaningful
         val questions = mutableListOf<QuizQuestion>(
             QuizQuestion(
                 "How many legs does a spider have?",
