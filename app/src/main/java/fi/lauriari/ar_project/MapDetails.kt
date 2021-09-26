@@ -24,7 +24,8 @@ data class MapLatLng(
     val mapDetailsId: Long,
     val lat: Double,
     val lng: Double,
-    val address: String
+    val address: String,
+    val reward: String
 )
 
 class MapDetailsWithAllLatLngValues {
