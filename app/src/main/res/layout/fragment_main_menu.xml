@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuFragment"
+    tools:context=".Fragments.MainMenuFragment"
+    android:background="@drawable/ic_background"
     android:padding="24dp">
 
     <Button
@@ -20,10 +21,10 @@
         app:layout_constraintVertical_bias="0.306" />
 
     <Button
-        android:id="@+id/navigate_to_item_list_btn"
+        android:id="@+id/navigate_to_game_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/go_to_item_list"
+        android:text="@string/see_more_game_menus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

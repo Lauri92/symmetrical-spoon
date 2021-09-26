@@ -14,7 +14,18 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="SplashActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--        <item name="android:windowSplashScreenBackground">@drawable/ic_splash_screen</item>-->
+
+
+    </style>
+
     <style name="Project_Theme">
 
+    </style>
+
+    <style name="ThemeOverlay.AR_Project.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 </resources>

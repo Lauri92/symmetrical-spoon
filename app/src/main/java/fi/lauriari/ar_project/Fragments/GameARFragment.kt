@@ -1,10 +1,8 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Fragments
 
 
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +15,12 @@ import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import fi.lauriari.ar_project.FlagQuestion
+import fi.lauriari.ar_project.QuizQuestion
+import fi.lauriari.ar_project.R
 import java.io.InputStream
 
 

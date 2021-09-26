@@ -5,4 +5,9 @@
     <string name="go_to_game_map">Go to game map</string>
     <string name="navigate_to_game_ar">Navigate to game AR</string>
     <string name="go_to_item_list">Go to item list</string>
+    <string name="item_list">item list</string>
+    <string name="reward_list">reward list</string>
+    <string name="daily_quest">daily quest</string>
+    <string name="back_to_main_menu">back to main menu</string>
+    <string name="see_more_game_menus">see more game menus</string>
 </resources>
