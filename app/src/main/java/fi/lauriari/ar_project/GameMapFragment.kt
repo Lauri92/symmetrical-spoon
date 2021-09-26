@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -85,6 +83,7 @@ class GameMapFragment : Fragment() {
                     if (!isInteractionsLocationsSet) {
                         setInteractionLocations(geoPoint)
                         isInteractionsLocationsSet = !isInteractionsLocationsSet
+                        view.findViewById<RelativeLayout>(R.id.loadingPanel).visibility = View.GONE
                     }
                 }
             }
