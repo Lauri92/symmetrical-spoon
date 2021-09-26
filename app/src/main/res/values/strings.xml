@@ -10,4 +10,6 @@
     <string name="daily_quest">daily quest</string>
     <string name="back_to_main_menu">back to main menu</string>
     <string name="see_more_game_menus">see more game menus</string>
+    <string name="rewards">Reward Shop</string>
+    <string name="buy_item">Buy this item</string>
 </resources>

@@ -40,7 +40,11 @@
         android:id="@+id/rewardListFragment"
         android:name="fi.lauriari.ar_project.Fragments.RewardListFragment"
         android:label="fragment_reward_list"
-        tools:layout="@layout/fragment_reward_list" />
+        tools:layout="@layout/fragment_reward_list" >
+        <action
+            android:id="@+id/action_rewardListFragment_to_rewardItemDescription"
+            app:destination="@id/rewardItemDescription" />
+    </fragment>
     <fragment
         android:id="@+id/dailyQuestFragment"
         android:name="fi.lauriari.ar_project.Fragments.DailyQuestFragment"
@@ -60,5 +64,14 @@
         <action
             android:id="@+id/action_gameMenuFragment_to_dailyQuestFragment"
             app:destination="@id/dailyQuestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rewardItemDescription"
+        android:name="fi.lauriari.ar_project.Fragments.RewardItemDescriptionFragment"
+        android:label="fragment_reward_item_description"
+        tools:layout="@layout/fragment_reward_item_description" >
+        <argument
+            android:name="rewardItem"
+            app:argType="fi.lauriari.ar_project.RewardItem" />
     </fragment>
 </navigation>
