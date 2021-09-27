@@ -3,6 +3,7 @@ package fi.lauriari.ar_project.Fragments
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.fragment.navArgs
 import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
 import com.google.ar.sceneform.AnchorNode
@@ -30,6 +32,7 @@ class GameARFragment : Fragment() {
     private var quizQuestionRenderable: ViewRenderable? = null
     private var diamondRenderable: ViewRenderable? = null
     private var flagQuestionRenderable: ViewRenderable? = null
+    private val args by navArgs<GameARFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +40,7 @@ class GameARFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_a_r, container, false)
+        Log.d("argstest","Id of this latlng instance: ${args.id}")
 
         arFrag = childFragmentManager.findFragmentById(
             R.id.sceneform_fragment
@@ -44,7 +48,7 @@ class GameARFragment : Fragment() {
 
         buildViewRenderables()
 
-
+        //TODO: Obtain the lists of questions from elsewhere, change the structure to be something more meaningful
         val questions = mutableListOf<QuizQuestion>(
             QuizQuestion(
                 "How many legs does a spider have?",

@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/gameMapFragment"
-        android:name="fi.lauriari.ar_project.Fragments.GameMapFragment"
+        android:name="fi.lauriari.ar_project.GameMapFragment"
         android:label="fragment_game_map"
         tools:layout="@layout/fragment_game_map" >
         <action
@@ -35,7 +35,14 @@
         android:id="@+id/gameARFragment"
         android:name="fi.lauriari.ar_project.Fragments.GameARFragment"
         android:label="fragment_game_a_r"
-        tools:layout="@layout/fragment_game_a_r" />
+        tools:layout="@layout/fragment_game_a_r" >
+        <action
+            android:id="@+id/action_gameARFragment_to_gameMapFragment"
+            app:destination="@id/gameMapFragment" />
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
     <fragment
         android:id="@+id/rewardListFragment"
         android:name="fi.lauriari.ar_project.Fragments.RewardListFragment"

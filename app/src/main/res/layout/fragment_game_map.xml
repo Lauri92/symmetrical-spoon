@@ -16,6 +16,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="230dp"
+            android:layout_height="263dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/blue"/>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/navigate_to_game_AR_btn"
