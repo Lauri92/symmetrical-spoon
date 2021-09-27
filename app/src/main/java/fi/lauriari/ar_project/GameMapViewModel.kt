@@ -33,6 +33,12 @@ class GameMapViewModel(application: Application) : AndroidViewModel(application)
         return insertedRowId
     }
 
+    fun updateMapLatLng(mapLatLng: MapLatLng) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mapDetailsRepository.updateMapLatLng(mapLatLng)
+        }
+    }
+
     fun getLatestMapDetails(): MapDetails {
         var selectedMapinfo: MapDetails
         runBlocking {
