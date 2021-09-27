@@ -26,6 +26,10 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
         return mapDetailsDao.insertMapLatLng(mapLatLng)
     }
 
+    suspend fun updateMapLatLng(mapLatLng: MapLatLng) {
+        mapDetailsDao.updateMapLatLng(mapLatLng)
+    }
+
     suspend fun getMapLatPointLngById(id: Long): MapLatLng {
         return mapDetailsDao.getMapLatPointLngById(id)
     }

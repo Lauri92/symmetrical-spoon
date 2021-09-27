@@ -1,9 +1,6 @@
 package fi.lauriari.ar_project
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface MapDetailsDao {
@@ -24,6 +21,9 @@ interface MapDetailsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMapLatLng(mapLatLng: MapLatLng): Long
+
+    @Update
+    suspend fun updateMapLatLng(mapLatLng: MapLatLng)
 
     @Query("SELECT * FROM maplatlng_table WHERE id = :id")
     suspend fun getMapLatPointLngById(id: Long): MapLatLng

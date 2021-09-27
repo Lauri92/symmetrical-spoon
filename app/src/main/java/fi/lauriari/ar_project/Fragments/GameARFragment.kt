@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
@@ -33,6 +34,8 @@ class GameARFragment : Fragment() {
     private var diamondRenderable: ViewRenderable? = null
     private var flagQuestionRenderable: ViewRenderable? = null
     private val args by navArgs<GameARFragmentArgs>()
+    private val mGameMapViewModel: GameMapViewModel by viewModels()
+    private var selectedMapLatLngPoint: MapLatLng? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +44,10 @@ class GameARFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_a_r, container, false)
         Log.d("argstest","Id of this latlng instance: ${args.id}")
+        val latestMapDetails = mGameMapViewModel.getLatestMapDetails()
+        Log.d("argstest", latestMapDetails.toString())
+        selectedMapLatLngPoint = mGameMapViewModel.getMapLatPointLngById(args.id)
+        Log.d("argstest", selectedMapLatLngPoint.toString())
 
         arFrag = childFragmentManager.findFragmentById(
             R.id.sceneform_fragment
