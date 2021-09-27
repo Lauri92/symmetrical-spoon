@@ -16,14 +16,6 @@ class GameMapViewModel(application: Application) : AndroidViewModel(application)
         mapDetailsRepository = MapDetailsRepository(mapDetailsDao)
     }
 
-/*
-    fun insertMapDetails(mapDetails: MapDetails) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mapDetailsRepository.insertMapDetails(mapDetails)
-        }
-    }
-
- */
 
     fun insertMapDetails(mapDetails: MapDetails): Long {
         var insertedRowId: Long
@@ -33,10 +25,12 @@ class GameMapViewModel(application: Application) : AndroidViewModel(application)
         return insertedRowId
     }
 
-    fun insertMapLatLng(mapLatLng: MapLatLng) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mapDetailsRepository.insertMapLatLng(mapLatLng)
+    fun insertMapLatLng(mapLatLng: MapLatLng): Long {
+        var insertedRowId: Long
+        runBlocking {
+            insertedRowId = mapDetailsRepository.insertMapLatLng(mapLatLng)
         }
+        return insertedRowId
     }
 
     fun getLatestMapDetails(): MapDetails {
@@ -45,6 +39,14 @@ class GameMapViewModel(application: Application) : AndroidViewModel(application)
             selectedMapinfo = mapDetailsRepository.getLatestMapDetails()
         }
         return selectedMapinfo
+    }
+
+    fun getMapLatPointLngById(id: Long): MapLatLng {
+        var selectedLatLngPoint: MapLatLng
+        runBlocking {
+            selectedLatLngPoint = mapDetailsRepository.getMapLatPointLngById(id)
+        }
+        return selectedLatLngPoint
     }
 
     fun getMapLatLngPointsByMapDetailsId(mapDetailsId: Long): List<MapLatLng> {

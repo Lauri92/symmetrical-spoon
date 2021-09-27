@@ -1,6 +1,8 @@
 package fi.lauriari.ar_project
 
+import android.os.Parcelable
 import androidx.room.*
+import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "mapdetails_table")
 data class MapDetails(
@@ -9,6 +11,7 @@ data class MapDetails(
     val time: Long
 )
 
+@Parcelize
 @Entity(
     tableName = "maplatlng_table",
     foreignKeys = [ForeignKey(
@@ -25,8 +28,9 @@ data class MapLatLng(
     val lat: Double,
     val lng: Double,
     val address: String,
-    val reward: String
-)
+    val reward: String,
+    var isActive: Boolean
+) : Parcelable
 
 class MapDetailsWithAllLatLngValues {
     @Embedded

@@ -3,7 +3,6 @@ package fi.lauriari.ar_project
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -14,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -24,8 +22,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -50,6 +46,7 @@ class GameMapFragment : Fragment() {
     private var isInteractionsLocationsSet: Boolean = false
     private var activeDestination = Location("activeDestination")
     private val mGameMapViewModel: GameMapViewModel by viewModels()
+    private var locationIdAction: Long? = null
 
 
     override fun onCreateView(
@@ -92,7 +89,12 @@ class GameMapFragment : Fragment() {
         checkSelfPermissions()
 
         view.findViewById<Button>(R.id.navigate_to_game_AR_btn).setOnClickListener {
-            findNavController().navigate(R.id.action_gameMapFragment_to_gameARFragment)
+            //findNavController().navigate(R.id.action_gameMapFragment_to_gameARFragment)
+            val action = GameMapFragmentDirections.actionGameMapFragmentToGameARFragment(
+                locationIdAction!!
+            )
+            findNavController().navigate(action)
+
         }
 
         return view
@@ -254,7 +256,7 @@ class GameMapFragment : Fragment() {
 
         // Check if latest DB date matches with current date
         if (latestDbDate == dateNowString) {
-        //if (dateNow == latestMapDetails.time) {
+            //if (dateNow == latestMapDetails.time) {
             // Dates match -> set old values
             val latLngList = mGameMapViewModel.getMapLatLngPointsByMapDetailsId(latestMapDetails.id)
             setOldLocationsOnMap(latLngList)
@@ -285,41 +287,37 @@ class GameMapFragment : Fragment() {
     private fun setOldLocationsOnMap(chosenPoints: List<MapLatLng>) {
         Log.d("locationsset", "Setting old locations")
         chosenPoints.forEach {
-            val loopMarker = Marker(map)
-            var iconDrawable = R.drawable.ic_baseline_pets_24
-            when(it.reward) {
-                "Coin" -> iconDrawable = R.drawable.ic_baseline_pix_24
-                "Diamond" -> iconDrawable = R.drawable.ic_baseline_diamond_24
-            }
-            loopMarker.icon = AppCompatResources.getDrawable(
-                requireContext(),
-                iconDrawable
-            )
-            loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            loopMarker.position = GeoPoint(it.lat, it.lng)
-
-            loopMarker.setOnMarkerClickListener { marker, mapView ->
-                Log.d("test", marker.position.latitude.toString())
-                activeDestination.latitude = marker.position.latitude
-                activeDestination.longitude = marker.position.longitude
-
-                // Change the icon on marker click...
-                /*
-                marker.icon = AppCompatResources.getDrawable(
+            if (it.isActive) {
+                val loopMarker = Marker(map)
+                var iconDrawable = R.drawable.ic_baseline_pets_24
+                when (it.reward) {
+                    "Coin" -> iconDrawable = R.drawable.ic_baseline_pix_24
+                    "Diamond" -> iconDrawable = R.drawable.ic_baseline_diamond_24
+                }
+                loopMarker.icon = AppCompatResources.getDrawable(
                     requireContext(),
-                    R.drawable.ic_baseline_location_on_24
+                    iconDrawable
                 )
-                 */
-                // Or draw a Polygon around it
-                drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
-                getDistanceToMarker(activeDestination)
-                map.invalidate()
-                marker.showInfoWindow()
-                return@setOnMarkerClickListener true
-            }
+                loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                loopMarker.position = GeoPoint(it.lat, it.lng)
 
-            loopMarker.title = it.address
-            map.overlays.add(loopMarker)
+                loopMarker.setOnMarkerClickListener { marker, mapView ->
+                    locationIdAction = it.id
+                    Log.d("test", marker.position.latitude.toString())
+                    activeDestination.latitude = marker.position.latitude
+                    activeDestination.longitude = marker.position.longitude
+
+                    // Draw a Polygon around it
+                    drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
+                    getDistanceToMarker(activeDestination)
+                    map.invalidate()
+                    marker.showInfoWindow()
+                    return@setOnMarkerClickListener true
+                }
+
+                loopMarker.title = it.address
+                map.overlays.add(loopMarker)
+            }
         }
     }
 
@@ -340,29 +338,31 @@ class GameMapFragment : Fragment() {
 
                 var collectableReward = ""
                 var collectable = R.drawable.ic_baseline_pets_24
-                when(val random = (0..100).random()) {
-                    in 1..90 -> {
-                        Log.d("random", "Number is: $random 0-85, add coin marker!")
+                when (val random = (0..100).random()) {
+                    in 0..84 -> {
+                        //Log.d("random", "Number is: $random 0-84, add coin marker!")
                         collectable = R.drawable.ic_baseline_pix_24
                         collectableReward = "Coin"
                     }
                     in 85..100 -> {
-                        Log.d("random", "Number is: $random 90-100, add DIAMOND marker!")
+                        //Log.d("random", "Number is: $random 90-100, add DIAMOND marker!")
                         collectable = R.drawable.ic_baseline_diamond_24
                         collectableReward = "Diamond"
                     }
                 }
                 Log.d("random", "Collectable: $collectable")
-                mGameMapViewModel.insertMapLatLng(
+                val insertedId = mGameMapViewModel.insertMapLatLng(
                     MapLatLng(
                         0,
                         newMapDetailsId,
                         it.latitude,
                         it.longitude,
                         address,
-                        collectableReward
+                        collectableReward,
+                        true
                     )
                 )
+                locationIdAction = insertedId
                 val loopMarker = Marker(map)
                 loopMarker.icon = AppCompatResources.getDrawable(
                     requireContext(),
@@ -375,15 +375,7 @@ class GameMapFragment : Fragment() {
                     Log.d("test", marker.position.latitude.toString())
                     activeDestination.latitude = marker.position.latitude
                     activeDestination.longitude = marker.position.longitude
-
-                    // Change the icon on marker click...
-                    /*
-                    marker.icon = AppCompatResources.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_baseline_location_on_24
-                    )
-                     */
-                    // Or draw a Polygon around it
+                    // Draw a Polygon around it
                     drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
                     getDistanceToMarker(activeDestination)
                     map.invalidate()

@@ -1,7 +1,5 @@
 package fi.lauriari.ar_project
 
-import android.util.Log
-
 class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
 
     suspend fun getAllMapDetails(): List<MapDetails> {
@@ -9,11 +7,11 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
     }
 
     suspend fun insertMapDetails(mapDetails: MapDetails): Long {
-        mapDetailsDao.insertMapDetails(mapDetails)
-        val latest = getLatestMapDetails()
-        Log.d("repo", "mapDetails: $mapDetails")
-        Log.d("repo", "latest: $latest")
-        return latest.id
+        //Log.d("repo", "testering: $testering")
+        //val latest = getLatestMapDetails()
+        //Log.d("repo", "mapDetails: $mapDetails")
+        //Log.d("repo", "latest: $latest")
+        return mapDetailsDao.insertMapDetails(mapDetails)
     }
 
     suspend fun getLatestMapDetails(): MapDetails {
@@ -24,8 +22,12 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
         return mapDetailsDao.getMapDetailsWithAllLatLngValues(id)
     }
 
-    suspend fun insertMapLatLng(mapLatLng: MapLatLng) {
-        mapDetailsDao.insertMapLatLng(mapLatLng)
+    suspend fun insertMapLatLng(mapLatLng: MapLatLng): Long {
+        return mapDetailsDao.insertMapLatLng(mapLatLng)
+    }
+
+    suspend fun getMapLatPointLngById(id: Long): MapLatLng {
+        return mapDetailsDao.getMapLatPointLngById(id)
     }
 
     suspend fun getMapLatLngPointsByMapDetailsId(mapdetailsId: Long): List<MapLatLng> {
