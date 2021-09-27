@@ -21,9 +21,7 @@ import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
-import fi.lauriari.ar_project.FlagQuestion
-import fi.lauriari.ar_project.QuizQuestion
-import fi.lauriari.ar_project.R
+import fi.lauriari.ar_project.*
 import java.io.InputStream
 
 
