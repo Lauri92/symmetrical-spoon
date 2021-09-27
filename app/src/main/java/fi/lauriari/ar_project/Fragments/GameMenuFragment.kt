@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.lauriari.ar_project.R
 
 class GameMenuFragment : Fragment() {
@@ -26,7 +27,10 @@ class GameMenuFragment : Fragment() {
         view.findViewById<Button>(R.id.daily_quest).setOnClickListener {
             findNavController().navigate(R.id.action_gameMenuFragment_to_dailyQuestFragment)
         }
-        view.findViewById<Button>(R.id.back_to_main_menu).setOnClickListener {
+//        view.findViewById<Button>(R.id.back_to_main_menu).setOnClickListener {
+//            findNavController().popBackStack()
+//        }
+        view.findViewById<FloatingActionButton>(R.id.back_btn).setOnClickListener {
             findNavController().popBackStack()
         }
         return view
