@@ -1,6 +1,7 @@
 package fi.lauriari.ar_project.Fragments
 
 
+import android.app.AlertDialog
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
@@ -32,8 +34,11 @@ class GameARFragment : Fragment() {
     private var diamondRenderable: ViewRenderable? = null
     private var flagQuestionRenderable: ViewRenderable? = null
     private val args by navArgs<GameARFragmentArgs>()
-    private val mGameMapViewModel: GameMapViewModel by viewModels()
+    private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
+    private val mInventoryViewModel: InventoryViewModel by viewModels()
+    private var latestMapDetails: MapDetails? = null
     private var selectedMapLatLngPoint: MapLatLng? = null
+    private var inventory: Inventory? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +46,12 @@ class GameARFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_a_r, container, false)
-        Log.d("argstest","Id of this latlng instance: ${args.id}")
-        val latestMapDetails = mGameMapViewModel.getLatestMapDetails()
+        Log.d("argstest", "Id of this latlng instance: ${args.id}")
+        latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
         Log.d("argstest", latestMapDetails.toString())
-        selectedMapLatLngPoint = mGameMapViewModel.getMapLatPointLngById(args.id)
+        selectedMapLatLngPoint = mMapDetailsViewModel.getMapLatPointLngById(args.id)
         Log.d("argstest", selectedMapLatLngPoint.toString())
+        inventory = mInventoryViewModel.getInventory()
 
         arFrag = childFragmentManager.findFragmentById(
             R.id.sceneform_fragment
@@ -101,7 +107,8 @@ class GameARFragment : Fragment() {
         view.findViewById<Button>(R.id.add_flag_question_btn).setOnClickListener {
             flagQuestionRenderable ?: return@setOnClickListener
 
-            val node : TransformableNode = createLocationAnchor(flagQuestionRenderable!!) ?: return@setOnClickListener
+            val node: TransformableNode =
+                createLocationAnchor(flagQuestionRenderable!!) ?: return@setOnClickListener
 
             // Randomize the questions
             flagQuestions.shuffle()
@@ -122,7 +129,7 @@ class GameARFragment : Fragment() {
             answers.shuffle()
 
             // Create a drawable from an inputstream opened from an asset to display on screen
-            val stream : InputStream = activity?.assets!!.open(chosenQuestion[0].flagSource)
+            val stream: InputStream = activity?.assets!!.open(chosenQuestion[0].flagSource)
             val drawable = Drawable.createFromStream(stream, null)
 
 
@@ -135,7 +142,11 @@ class GameARFragment : Fragment() {
                 if (button1.text == chosenQuestion[0].correctAnswer) {
                     displayAnswerResult(node)
                 } else {
-                    Toast.makeText(requireContext(), "Wrong answer! No reward for you!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Wrong answer! No reward for you!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -144,7 +155,11 @@ class GameARFragment : Fragment() {
                 if (button2.text == chosenQuestion[0].correctAnswer) {
                     displayAnswerResult(node)
                 } else {
-                    Toast.makeText(requireContext(), "Wrong answer! No reward for you!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Wrong answer! No reward for you!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -153,7 +168,11 @@ class GameARFragment : Fragment() {
                 if (button3.text == chosenQuestion[0].correctAnswer) {
                     displayAnswerResult(node)
                 } else {
-                    Toast.makeText(requireContext(), "Wrong answer! No reward for you!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Wrong answer! No reward for you!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -162,7 +181,8 @@ class GameARFragment : Fragment() {
         view.findViewById<Button>(R.id.add_quiz_question_btn).setOnClickListener {
             quizQuestionRenderable ?: return@setOnClickListener
 
-            val node : TransformableNode = createLocationAnchor(quizQuestionRenderable!!) ?: return@setOnClickListener
+            val node: TransformableNode =
+                createLocationAnchor(quizQuestionRenderable!!) ?: return@setOnClickListener
 
             // Randomize the questions and take the first one to be asked from the user
             questions.shuffle()
@@ -191,7 +211,11 @@ class GameARFragment : Fragment() {
                 if (button1.text == chosenQuestion[0].correctAnswer) {
                     displayAnswerResult(node)
                 } else {
-                    Toast.makeText(requireContext(), "Wrong answer! No reward for you!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Wrong answer! No reward for you!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -200,7 +224,11 @@ class GameARFragment : Fragment() {
                 if (button2.text == chosenQuestion[0].correctAnswer) {
                     displayAnswerResult(node)
                 } else {
-                    Toast.makeText(requireContext(), "Wrong answer! No reward for you!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Wrong answer! No reward for you!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -209,7 +237,11 @@ class GameARFragment : Fragment() {
                 if (button3.text == chosenQuestion[0].correctAnswer) {
                     displayAnswerResult(node)
                 } else {
-                    Toast.makeText(requireContext(), "Wrong answer! No reward for you!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Wrong answer! No reward for you!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -228,10 +260,130 @@ class GameARFragment : Fragment() {
             .show()
         questionNode.setParent(null)
         questionNode.renderable = null
-        diamondRenderable?.let { createLocationAnchor(it) }?.setOnTapListener { hitTestResult, motionEvent ->
-            hitTestResult.node?.setParent(null)
-            hitTestResult.node?.renderable = null
+
+        val updatedMapLatLng = MapLatLng(
+            selectedMapLatLngPoint!!.id,
+            selectedMapLatLngPoint!!.mapDetailsId,
+            selectedMapLatLngPoint!!.lat,
+            selectedMapLatLngPoint!!.lng,
+            selectedMapLatLngPoint!!.address,
+            selectedMapLatLngPoint!!.reward,
+            false
+        )
+        mMapDetailsViewModel.updateMapLatLng(updatedMapLatLng)
+
+        when (selectedMapLatLngPoint!!.reward) {
+            "Emerald" -> {
+                mMapDetailsViewModel.updateMapDetails(
+                    MapDetails(
+                        latestMapDetails!!.id,
+                        latestMapDetails!!.time,
+                        latestMapDetails!!.collectedEmeralds + 1,
+                        latestMapDetails!!.collectedRubies,
+                        latestMapDetails!!.collectedSapphires,
+                        latestMapDetails!!.collectedTopazes,
+                        latestMapDetails!!.collectedDiamonds
+                    )
+                )
+                mInventoryViewModel.updateInventory(
+                    Inventory(
+                        inventory!!.id,
+                        inventory!!.emeralds + 1,
+                        inventory!!.rubies,
+                        inventory!!.sapphires,
+                        inventory!!.topazes,
+                        inventory!!.diamonds
+                    )
+                )
+            }
+            "Ruby" -> {
+                mMapDetailsViewModel.updateMapDetails(
+                    MapDetails(
+                        latestMapDetails!!.id,
+                        latestMapDetails!!.time,
+                        latestMapDetails!!.collectedEmeralds,
+                        latestMapDetails!!.collectedRubies + 1,
+                        latestMapDetails!!.collectedSapphires,
+                        latestMapDetails!!.collectedTopazes,
+                        latestMapDetails!!.collectedDiamonds
+                    )
+                )
+                mInventoryViewModel.updateInventory(
+                    Inventory(
+                        inventory!!.id,
+                        inventory!!.emeralds,
+                        inventory!!.rubies + 1,
+                        inventory!!.sapphires,
+                        inventory!!.topazes,
+                        inventory!!.diamonds
+                    )
+                )
+            }
+            "Sapphire" -> {
+                mMapDetailsViewModel.updateMapDetails(
+                    MapDetails(
+                        latestMapDetails!!.id,
+                        latestMapDetails!!.time,
+                        latestMapDetails!!.collectedEmeralds,
+                        latestMapDetails!!.collectedRubies,
+                        latestMapDetails!!.collectedSapphires + 1,
+                        latestMapDetails!!.collectedTopazes,
+                        latestMapDetails!!.collectedDiamonds
+                    )
+                )
+                mInventoryViewModel.updateInventory(
+                    Inventory(
+                        inventory!!.id,
+                        inventory!!.emeralds,
+                        inventory!!.rubies,
+                        inventory!!.sapphires + 1,
+                        inventory!!.topazes,
+                        inventory!!.diamonds
+                    )
+                )
+            }
+            "Topaz" -> {
+                mMapDetailsViewModel.updateMapDetails(
+                    MapDetails(
+                        latestMapDetails!!.id,
+                        latestMapDetails!!.time,
+                        latestMapDetails!!.collectedEmeralds,
+                        latestMapDetails!!.collectedRubies,
+                        latestMapDetails!!.collectedSapphires,
+                        latestMapDetails!!.collectedTopazes + 1,
+                        latestMapDetails!!.collectedDiamonds
+                    )
+                )
+                mInventoryViewModel.updateInventory(
+                    Inventory(
+                        inventory!!.id,
+                        inventory!!.emeralds,
+                        inventory!!.rubies,
+                        inventory!!.sapphires,
+                        inventory!!.topazes + 1,
+                        inventory!!.diamonds
+                    )
+                )
+            }
         }
+
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("OK") { _, _ ->
+            findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
+        }
+        builder.setTitle("Task completed")
+        builder.setMessage("You were rewarded a ${selectedMapLatLngPoint!!.reward}!")
+        builder.create().show()
+
+
+        /*
+        diamondRenderable?.let { createLocationAnchor(it) }
+            ?.setOnTapListener { hitTestResult, motionEvent ->
+                hitTestResult.node?.setParent(null)
+                hitTestResult.node?.renderable = null
+            }
+         */
     }
 
     /**

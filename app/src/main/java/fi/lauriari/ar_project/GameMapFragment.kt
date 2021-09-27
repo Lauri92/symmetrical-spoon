@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
-import fi.lauriari.ar_project.GameMapFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
@@ -46,7 +45,7 @@ class GameMapFragment : Fragment() {
     private var isMapSet: Boolean = false
     private var isInteractionsLocationsSet: Boolean = false
     private var activeDestination = Location("activeDestination")
-    private val mGameMapViewModel: GameMapViewModel by viewModels()
+    private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
     private var locationIdAction: Long? = null
 
 
@@ -247,7 +246,7 @@ class GameMapFragment : Fragment() {
     private fun setInteractionLocations(geoPoint: GeoPoint) {
 
         val dateNow = Calendar.getInstance().timeInMillis
-        val latestMapDetails = mGameMapViewModel.getLatestMapDetails()
+        val latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
 
 
         val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
@@ -259,7 +258,8 @@ class GameMapFragment : Fragment() {
         if (latestDbDate == dateNowString) {
             //if (dateNow == latestMapDetails.time) {
             // Dates match -> set old values
-            val latLngList = mGameMapViewModel.getMapLatLngPointsByMapDetailsId(latestMapDetails.id)
+            val latLngList =
+                mMapDetailsViewModel.getMapLatLngPointsByMapDetailsId(latestMapDetails.id)
             setOldLocationsOnMap(latLngList)
         } else {
             // Dates don't match -> generate new values
@@ -292,8 +292,10 @@ class GameMapFragment : Fragment() {
                 val loopMarker = Marker(map)
                 var iconDrawable = R.drawable.ic_baseline_pets_24
                 when (it.reward) {
-                    "Coin" -> iconDrawable = R.drawable.ic_baseline_pix_24
-                    "Diamond" -> iconDrawable = R.drawable.ic_baseline_diamond_24
+                    "Emerald" -> iconDrawable = R.drawable.ic_baseline_emerald_24
+                    "Ruby" -> iconDrawable = R.drawable.ic_baseline_ruby_24
+                    "Sapphire" -> iconDrawable = R.drawable.ic_baseline_sapphire_24
+                    "Topaz" -> iconDrawable = R.drawable.ic_baseline_topaz_24
                 }
                 loopMarker.icon = AppCompatResources.getDrawable(
                     requireContext(),
@@ -329,7 +331,8 @@ class GameMapFragment : Fragment() {
         Log.d("locationsset", "Setting new locations")
         val dateNow = Calendar.getInstance().timeInMillis
         // Returns the inserted rowId as well
-        val newMapDetailsId = mGameMapViewModel.insertMapDetails(MapDetails(0, dateNow))
+        val newMapDetailsId =
+            mMapDetailsViewModel.insertMapDetails(MapDetails(0, dateNow, 0, 0, 0, 0, 0))
         chosenPoints.forEach {
             lifecycleScope.launch(context = Dispatchers.IO) {
                 val address = getAddress(it.latitude, it.longitude)
@@ -340,19 +343,25 @@ class GameMapFragment : Fragment() {
                 var collectableReward = ""
                 var collectable = R.drawable.ic_baseline_pets_24
                 when (val random = (0..100).random()) {
-                    in 0..84 -> {
-                        //Log.d("random", "Number is: $random 0-84, add coin marker!")
-                        collectable = R.drawable.ic_baseline_pix_24
-                        collectableReward = "Coin"
+                    in 0..24 -> {
+                        collectable = R.drawable.ic_baseline_topaz_24
+                        collectableReward = "Topaz"
                     }
-                    in 85..100 -> {
-                        //Log.d("random", "Number is: $random 90-100, add DIAMOND marker!")
-                        collectable = R.drawable.ic_baseline_diamond_24
-                        collectableReward = "Diamond"
+                    in 25..49 -> {
+                        collectable = R.drawable.ic_baseline_ruby_24
+                        collectableReward = "Ruby"
+                    }
+                    in 50..75 -> {
+                        collectable = R.drawable.ic_baseline_sapphire_24
+                        collectableReward = "Sapphire"
+                    }
+                    in 76..100 -> {
+                        collectable = R.drawable.ic_baseline_emerald_24
+                        collectableReward = "Emerald"
                     }
                 }
                 Log.d("random", "Collectable: $collectable")
-                val insertedId = mGameMapViewModel.insertMapLatLng(
+                val insertedId = mMapDetailsViewModel.insertMapLatLng(
                     MapLatLng(
                         0,
                         newMapDetailsId,
@@ -403,7 +412,7 @@ class GameMapFragment : Fragment() {
         view.findViewById<TextView>(R.id.textView).text = distance.toString()
 
         // Set isEnable to true or false
-        view.findViewById<Button>(R.id.navigate_to_game_AR_btn).isEnabled = distance < 2000
+        view.findViewById<Button>(R.id.navigate_to_game_AR_btn).isEnabled = distance < 5000
 
     }
 

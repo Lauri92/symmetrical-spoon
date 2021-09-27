@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [(MapDetails::class), (MapLatLng::class)], version = 1, exportSchema = false)
+@Database(entities = [(MapDetails::class), (MapLatLng::class), (Inventory::class)], version = 1, exportSchema = false)
 abstract class SpoonDB : RoomDatabase() {
 
     abstract fun mapDetailsDao(): MapDetailsDao
+    abstract fun inventoryDao(): InventoryDao
 
     companion object {
         @Volatile
