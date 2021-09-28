@@ -1,9 +1,13 @@
 package fi.lauriari.ar_project.Activities
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import fi.lauriari.ar_project.R
@@ -18,9 +22,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         getSupportActionBar()?.hide()
         setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
-        stepCounter.initSensor(this)
-        Log.d("step counter" ,"${stepCounter.getStepCounterSensor()}")
 
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+            0
+        );
+        stepCounter.initSensor(this)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -30,7 +38,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        stepCounter.getStepCounterSensor().also { stepCounter.getSensorManager().registerListener(stepCounter, it, SensorManager.SENSOR_DELAY_NORMAL) }
+        stepCounter.getStepCounterSensor().also {
+            stepCounter.getSensorManager()
+                .registerListener(stepCounter, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 
     override fun onPause() {

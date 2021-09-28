@@ -5,4 +5,4 @@ import kotlinx.android.parcel.Parcelize
 
 // class for testing the reward list
 @Parcelize
-class RewardItem(val name:String,val img:Int, val descriptions:String, val currency:Int, val price:Int) : Parcelable
+class RewardItemDummy(val name:String, val img:Int, val descriptions:String, val currency:Int, val price:Int) : Parcelable
