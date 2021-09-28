@@ -14,23 +14,21 @@
             android:id="@+id/action_mainMenuFragment_to_gameMapFragment"
             app:destination="@id/gameMapFragment" />
         <action
-            android:id="@+id/action_mainMenuFragment_to_gameMenuFragment"
-            app:destination="@id/gameMenuFragment" />
+            android:id="@+id/action_mainMenuFragment_to_rewardListFragment"
+            app:destination="@id/rewardListFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_dailyQuestFragment"
+            app:destination="@id/dailyQuestFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameMapFragment"
-        android:name="fi.lauriari.ar_project.GameMapFragment"
+        android:name="fi.lauriari.ar_project.Fragments.GameMapFragment"
         android:label="fragment_game_map"
         tools:layout="@layout/fragment_game_map" >
         <action
             android:id="@+id/action_gameMapFragment_to_gameARFragment"
             app:destination="@id/gameARFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/itemListFragment"
-        android:name="fi.lauriari.ar_project.Fragments.ItemListFragment"
-        android:label="fragment_item_list"
-        tools:layout="@layout/fragment_item_list" />
     <fragment
         android:id="@+id/gameARFragment"
         android:name="fi.lauriari.ar_project.Fragments.GameARFragment"
@@ -57,21 +55,6 @@
         android:name="fi.lauriari.ar_project.Fragments.DailyQuestFragment"
         android:label="fragment_daily_quest"
         tools:layout="@layout/fragment_daily_quest" />
-    <fragment
-        android:id="@+id/gameMenuFragment"
-        android:name="fi.lauriari.ar_project.Fragments.GameMenuFragment"
-        android:label="fragment_game_menu"
-        tools:layout="@layout/fragment_game_menu" >
-        <action
-            android:id="@+id/action_gameMenuFragment_to_rewardListFragment"
-            app:destination="@id/rewardListFragment" />
-        <action
-            android:id="@+id/action_gameMenuFragment_to_itemListFragment"
-            app:destination="@id/itemListFragment" />
-        <action
-            android:id="@+id/action_gameMenuFragment_to_dailyQuestFragment"
-            app:destination="@id/dailyQuestFragment" />
-    </fragment>
     <fragment
         android:id="@+id/rewardItemDescription"
         android:name="fi.lauriari.ar_project.Fragments.RewardItemDescriptionFragment"

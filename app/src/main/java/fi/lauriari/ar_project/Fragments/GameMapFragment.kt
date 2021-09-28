@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Fragments
 
 import android.Manifest
 import android.app.Activity
@@ -21,7 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
-import fi.lauriari.ar_project.GameMapFragmentDirections
+import fi.lauriari.ar_project.*
+import fi.lauriari.ar_project.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
