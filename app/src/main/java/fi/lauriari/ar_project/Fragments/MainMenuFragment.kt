@@ -43,7 +43,7 @@ class MainMenuFragment : Fragment() {
         }
 
 
-        Log.d("inventory", "${inventory.diamonds}")
+        Log.d("inventory", "$inventory")
 
 
         return view
