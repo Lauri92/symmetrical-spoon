@@ -8,7 +8,12 @@ import kotlinx.android.parcel.Parcelize
 data class MapDetails(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val time: Long
+    val time: Long,
+    var collectedEmeralds: Int,
+    var collectedRubies: Int,
+    var collectedSapphires: Int,
+    var collectedTopazes: Int,
+    var collectedDiamonds: Int,
 )
 
 @Parcelize

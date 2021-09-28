@@ -9,9 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.viewModels
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import fi.lauriari.ar_project.Inventory
+import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,6 +23,8 @@ import kotlinx.coroutines.launch
 import java.net.URL
 
 class MainMenuFragment : Fragment() {
+
+    private val mInventoryViewModel: InventoryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +58,20 @@ class MainMenuFragment : Fragment() {
             val img = async(Dispatchers.IO) { getImg(IMG_URL) }
             //showImg(img.await())
         }
+
+        var inventory: Inventory? = mInventoryViewModel.getInventory()
+
+        if (inventory == null) {
+            Log.d("inventory", "No inventory, creating one")
+            mInventoryViewModel.insertInventory(Inventory(0, 0, 0, 0, 0, 0))
+            inventory = mInventoryViewModel.getInventory()
+        } else {
+            Log.d("inventory", "There was an inventory")
+        }
+
+
+        Log.d("inventory", "${inventory.diamonds}")
+
 
         return view
     }

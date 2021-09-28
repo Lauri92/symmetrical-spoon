@@ -10,10 +10,13 @@ interface MapDetailsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMapDetails(mapdetails: MapDetails): Long
 
+    @Update
+    suspend fun updateMapDetails(mapdetails: MapDetails)
+
     @Query("SELECT * FROM mapdetails_table ORDER BY id ASC")
     suspend fun getAllMapDetails(): List<MapDetails>
 
-    @Query("SELECT id, MAX(time) as time FROM mapdetails_table")
+    @Query("SELECT id, MAX(time) as time, collectedEmeralds, collectedRubies, collectedSapphires, collectedTopazes, collectedDiamonds FROM mapdetails_table")
     suspend fun getLatestMapDetails(): MapDetails
 
     @Query("SELECT * FROM mapdetails_table WHERE id = :id")

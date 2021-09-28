@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class GameMapViewModel(application: Application) : AndroidViewModel(application) {
+class MapDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
     val mapDetailsRepository: MapDetailsRepository
 
@@ -36,6 +36,12 @@ class GameMapViewModel(application: Application) : AndroidViewModel(application)
     fun updateMapLatLng(mapLatLng: MapLatLng) {
         viewModelScope.launch(Dispatchers.IO) {
             mapDetailsRepository.updateMapLatLng(mapLatLng)
+        }
+    }
+
+    fun updateMapDetails(mapDetails: MapDetails) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mapDetailsRepository.updateMapDetails(mapDetails)
         }
     }
 

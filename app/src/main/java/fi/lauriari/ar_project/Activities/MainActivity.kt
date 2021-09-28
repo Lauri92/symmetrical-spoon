@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import fi.lauriari.ar_project.ImageFatcher
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.StepCounter
 

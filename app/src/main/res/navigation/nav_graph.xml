@@ -36,7 +36,8 @@
         tools:layout="@layout/fragment_game_a_r" >
         <action
             android:id="@+id/action_gameARFragment_to_gameMapFragment"
-            app:destination="@id/gameMapFragment" />
+            app:destination="@id/gameMapFragment"
+            app:popUpTo="@id/mainMenuFragment" />
         <argument
             android:name="id"
             app:argType="long" />

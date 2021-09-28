@@ -7,10 +7,6 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
     }
 
     suspend fun insertMapDetails(mapDetails: MapDetails): Long {
-        //Log.d("repo", "testering: $testering")
-        //val latest = getLatestMapDetails()
-        //Log.d("repo", "mapDetails: $mapDetails")
-        //Log.d("repo", "latest: $latest")
         return mapDetailsDao.insertMapDetails(mapDetails)
     }
 
@@ -28,6 +24,10 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
 
     suspend fun updateMapLatLng(mapLatLng: MapLatLng) {
         mapDetailsDao.updateMapLatLng(mapLatLng)
+    }
+
+    suspend fun updateMapDetails(mapDetails: MapDetails) {
+        mapDetailsDao.updateMapDetails(mapDetails)
     }
 
     suspend fun getMapLatPointLngById(id: Long): MapLatLng {
