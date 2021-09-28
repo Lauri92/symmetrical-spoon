@@ -18,7 +18,6 @@ class RewardListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         val view = inflater.inflate(R.layout.fragment_reward_list, container, false)
         view.findViewById<FloatingActionButton>(R.id.back_btn).setOnClickListener {
             findNavController().popBackStack()

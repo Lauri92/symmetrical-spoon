@@ -17,7 +17,6 @@ import fi.lauriari.ar_project.Inventory
 import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.URL
