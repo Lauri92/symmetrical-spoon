@@ -367,13 +367,16 @@ class GameARFragment : Fragment() {
             }
         }
 
+        val gem = selectedMapLatLngPoint!!.reward
+        val message =
+            if (gem != "Emerald") "You were rewarded a" else "You were rewarded an"
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("OK") { _, _ ->
             findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
         }
         builder.setTitle("Task completed")
-        builder.setMessage("You were rewarded a ${selectedMapLatLngPoint!!.reward}!")
+        builder.setMessage("$message $gem!")
         builder.create().show()
 
 
