@@ -23,11 +23,14 @@ class MainActivity : AppCompatActivity() {
         getSupportActionBar()?.hide()
         setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
 
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-            0
-        );
+        if (ContextCompat.checkSelfPermission(
+                this@MainActivity,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions (this,arrayOf (Manifest.permission.ACTIVITY_RECOGNITION) , 1) ;
+        }
         stepCounter.initSensor(this)
     }
 
