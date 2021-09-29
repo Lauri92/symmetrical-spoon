@@ -20,10 +20,10 @@
         android:text="Add Flag question"
         app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sceneform_fragment"
-        app:layout_constraintVertical_bias="0.734" />
+        app:layout_constraintVertical_bias="0.737" />
 
     <Button
         android:id="@+id/add_quiz_question_btn"
@@ -33,10 +33,9 @@
         android:text="Add Quiz question"
         app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_flag_question_btn"
-        app:layout_constraintVertical_bias="0.234" />
+        app:layout_constraintVertical_bias="0.091" />
 
     <Button
         android:id="@+id/add_sphere_btn"
@@ -46,10 +45,23 @@
         android:text="Add Sphere"
         app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/add_quiz_question_btn"
-        app:layout_constraintVertical_bias="0.777" />
+        app:layout_constraintVertical_bias="0.439" />
+
+    <Button
+        android:id="@+id/add_image_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:text="Add Image"
+        app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/add_sphere_btn"
+        app:layout_constraintVertical_bias="0.757" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
