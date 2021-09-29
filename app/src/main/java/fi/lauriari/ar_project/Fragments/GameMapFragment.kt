@@ -294,10 +294,10 @@ class GameMapFragment : Fragment() {
                 val loopMarker = Marker(map)
                 var iconDrawable = R.drawable.ic_baseline_pets_24
                 when (it.reward) {
-                    "Emerald" -> iconDrawable = R.drawable.ic_baseline_emerald_24
-                    "Ruby" -> iconDrawable = R.drawable.ic_baseline_ruby_24
+                    "Emerald" -> iconDrawable = R.drawable.emerald
+                    "Ruby" -> iconDrawable = R.drawable.ruby
                     "Sapphire" -> iconDrawable = R.drawable.ic_baseline_sapphire_24
-                    "Topaz" -> iconDrawable = R.drawable.ic_baseline_topaz_24
+                    "Topaz" -> iconDrawable = R.drawable.topaz
                 }
                 loopMarker.icon = AppCompatResources.getDrawable(
                     requireContext(),
@@ -346,11 +346,11 @@ class GameMapFragment : Fragment() {
                 var collectable = R.drawable.ic_baseline_pets_24
                 when (val random = (0..100).random()) {
                     in 0..24 -> {
-                        collectable = R.drawable.ic_baseline_topaz_24
+                        collectable = R.drawable.topaz
                         collectableReward = "Topaz"
                     }
                     in 25..49 -> {
-                        collectable = R.drawable.ic_baseline_ruby_24
+                        collectable = R.drawable.ruby
                         collectableReward = "Ruby"
                     }
                     in 50..75 -> {
@@ -358,7 +358,7 @@ class GameMapFragment : Fragment() {
                         collectableReward = "Sapphire"
                     }
                     in 76..100 -> {
-                        collectable = R.drawable.ic_baseline_emerald_24
+                        collectable = R.drawable.emerald
                         collectableReward = "Emerald"
                     }
                 }

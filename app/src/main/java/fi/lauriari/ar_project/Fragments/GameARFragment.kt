@@ -2,7 +2,8 @@ package fi.lauriari.ar_project.Fragments
 
 
 import android.app.AlertDialog
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,25 +15,31 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.ViewRenderable
+import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import fi.lauriari.ar_project.*
-import java.io.InputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.net.URL
 
+val SERVER_IMG_BASE_URL = URL("https://users.metropolia.fi/~lauriari/AR_project/")
 
 class GameARFragment : Fragment() {
 
     private lateinit var arFrag: ArFragment
     private var quizQuestionRenderable: ViewRenderable? = null
-    private var diamondRenderable: ViewRenderable? = null
+    private var imageRenderable: ViewRenderable? = null
     private var flagQuestionRenderable: ViewRenderable? = null
+    private var sphereRenderable: ModelRenderable? = null
     private val args by navArgs<GameARFragmentArgs>()
     private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
     private val mInventoryViewModel: InventoryViewModel by viewModels()
@@ -57,7 +64,7 @@ class GameARFragment : Fragment() {
             R.id.sceneform_fragment
         ) as ArFragment
 
-        buildViewRenderables()
+        buildRenderables()
 
         //TODO: Obtain the lists of questions from elsewhere, change the structure to be something more meaningful
         val questions = mutableListOf<QuizQuestion>(
@@ -108,7 +115,7 @@ class GameARFragment : Fragment() {
             flagQuestionRenderable ?: return@setOnClickListener
 
             val node: TransformableNode =
-                createLocationAnchor(flagQuestionRenderable!!) ?: return@setOnClickListener
+                createLocationAnchorForViewRenderable(flagQuestionRenderable!!) ?: return@setOnClickListener
 
             // Randomize the questions
             flagQuestions.shuffle()
@@ -129,11 +136,25 @@ class GameARFragment : Fragment() {
             answers.shuffle()
 
             // Create a drawable from an inputstream opened from an asset to display on screen
-            val stream: InputStream = activity?.assets!!.open(chosenQuestion[0].flagSource)
-            val drawable = Drawable.createFromStream(stream, null)
+            //val stream: InputStream = activity?.assets!!.open(chosenQuestion[0].flagSource)
+            //val drawable = Drawable.createFromStream(stream, null)
+            //flagIv.setImageDrawable(drawable)
 
+            fun getImg(imgUrl: URL): Bitmap {
+                val inputStream = imgUrl.openStream()
+                return BitmapFactory.decodeStream(inputStream)
+            }
 
-            flagIv.setImageDrawable(drawable)
+            fun showImg(serverImg: Bitmap) {
+                flagIv.setImageBitmap(serverImg)
+            }
+
+            val serverImagePath = "$SERVER_IMG_BASE_URL${chosenQuestion[0].flagSource}"
+            lifecycleScope.launch(context = Dispatchers.Main) {
+                val img = async(Dispatchers.IO) { getImg(URL(serverImagePath)) }
+                showImg(img.await())
+            }
+
             button1.text = answers[0]
             button2.text = answers[1]
             button3.text = answers[2]
@@ -182,7 +203,7 @@ class GameARFragment : Fragment() {
             quizQuestionRenderable ?: return@setOnClickListener
 
             val node: TransformableNode =
-                createLocationAnchor(quizQuestionRenderable!!) ?: return@setOnClickListener
+                createLocationAnchorForViewRenderable(quizQuestionRenderable!!) ?: return@setOnClickListener
 
             // Randomize the questions and take the first one to be asked from the user
             questions.shuffle()
@@ -247,6 +268,47 @@ class GameARFragment : Fragment() {
             }
 
         }
+
+        view.findViewById<Button>(R.id.add_sphere_btn).setOnClickListener {
+            sphereRenderable ?: return@setOnClickListener
+
+            var collectedSpheres = 0
+
+            // Generate 3 spheres around the user
+            val list = mutableListOf(0, 1, 2, 3, 4, 5)
+            for (i in 1..3) {
+                val randomDirection = list.random()
+                list.remove(randomDirection)
+                val randomDepth = (2..5).random().toFloat()
+                Log.d("random", randomDepth.toString())
+                val node =
+                    createRandomLocationAnchorForModelRenderable(sphereRenderable!!, randomDirection, randomDepth)
+                        ?: return@setOnClickListener
+                node.setOnTapListener { hitTestResult, motionEvent ->
+                    node.setParent(null)
+                    node.renderable = null
+                    collectedSpheres++
+                    Toast.makeText(
+                        requireContext(),
+                        "Spheres collected $collectedSpheres/3",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+                    if (collectedSpheres == 3) {
+                        Toast.makeText(
+                            requireContext(),
+                            "3 COLLECTED!!!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        displayAnswerResult(node)
+                    }
+                }
+            }
+
+        }
+
 
 
         return view
@@ -381,7 +443,7 @@ class GameARFragment : Fragment() {
 
 
         /*
-        diamondRenderable?.let { createLocationAnchor(it) }
+        diamondRenderable?.let { createLocationAnchorForViewRenderable(it) }
             ?.setOnTapListener { hitTestResult, motionEvent ->
                 hitTestResult.node?.setParent(null)
                 hitTestResult.node?.renderable = null
@@ -392,7 +454,7 @@ class GameARFragment : Fragment() {
     /**
      * Build the ViewRenderables needed for the fragment
      */
-    private fun buildViewRenderables() {
+    private fun buildRenderables() {
         ViewRenderable.builder()
             .setView(requireContext(), R.layout.flag_question_layout)
             .build()
@@ -404,15 +466,21 @@ class GameARFragment : Fragment() {
             .thenAccept { quizQuestionRenderable = it }
 
         ViewRenderable.builder()
-            .setView(requireContext(), R.layout.reward_layout)
+            .setView(requireContext(), R.layout.game_ar_image_layout)
             .build()
-            .thenAccept { diamondRenderable = it }
+            .thenAccept { imageRenderable = it }
+
+        MaterialFactory.makeOpaqueWithColor(requireContext(), Color(255f, 0f, 0f))
+            .thenAccept { material: Material? ->
+                sphereRenderable =
+                    ShapeFactory.makeSphere(0.1f, Vector3(0.0f, 0.15f, 0.0f), material)
+            }
     }
 
     /**
-     * Create a location for the anchor, this is where the selected item (question or reward) will be placed
+     * Create a random location for an anchor, this is where the selected item (question or reward) will be placed
      */
-    private fun createLocationAnchor(viewRenderable: ViewRenderable): TransformableNode? {
+    private fun createLocationAnchorForViewRenderable(viewRenderable: ViewRenderable): TransformableNode? {
         // Find a position in front of the user.
         val cameraPos: Vector3 = arFrag.arSceneView.scene.camera.worldPosition
         val cameraForward: Vector3 = arFrag.arSceneView.scene.camera.forward
@@ -438,6 +506,52 @@ class GameARFragment : Fragment() {
         val node = TransformableNode(arFrag.transformationSystem)
         node.setParent(anchorNode)
         node.renderable = viewRenderable
+
+        return node
+    }
+
+    private fun createRandomLocationAnchorForModelRenderable(
+        modelRenderable: ModelRenderable,
+        randomDirection: Int,
+        randomDepth: Float
+    ): TransformableNode? {
+        // Random the spehere location
+
+        var cameraDirection: Vector3 = arFrag.arSceneView.scene.camera.forward
+
+        when (randomDirection) {
+            0 -> cameraDirection = arFrag.arSceneView.scene.camera.down
+            1 -> cameraDirection = arFrag.arSceneView.scene.camera.forward
+            2 -> cameraDirection = arFrag.arSceneView.scene.camera.back
+            3 -> cameraDirection = arFrag.arSceneView.scene.camera.left
+            4 -> cameraDirection = arFrag.arSceneView.scene.camera.right
+            5 -> cameraDirection = arFrag.arSceneView.scene.camera.up
+        }
+
+        val cameraPos: Vector3 = arFrag.arSceneView.scene.camera.worldPosition
+        //val cameraForward: Vector3 = arFrag.arSceneView.scene.camera.forward
+        val position = Vector3.add(cameraPos, cameraDirection.scaled(randomDepth))
+
+        // Create an ARCore Anchor at the position.
+        val pose = Pose.makeTranslation(position.x, position.y, position.z)
+
+        // Check if there is an active tracking session active
+        val frame = arFrag.arSceneView.session?.update()
+        if (frame?.camera?.trackingState.toString() == "PAUSED") {
+            return null
+        }
+
+        val anchor: Anchor = arFrag.arSceneView.session!!.createAnchor(pose)
+
+
+        // Create the Sceneform AnchorNode
+        val anchorNode = AnchorNode(anchor)
+        anchorNode.setParent(arFrag.arSceneView.scene)
+
+        // Create the node relative to the AnchorNode
+        val node = TransformableNode(arFrag.transformationSystem)
+        node.setParent(anchorNode)
+        node.renderable = modelRenderable
 
         return node
     }
