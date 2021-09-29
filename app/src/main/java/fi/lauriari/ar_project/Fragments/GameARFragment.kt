@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.ar.core.Anchor
@@ -38,7 +39,7 @@ class GameARFragment : Fragment() {
     private val mInventoryViewModel: InventoryViewModel by viewModels()
     private var latestMapDetails: MapDetails? = null
     private var selectedMapLatLngPoint: MapLatLng? = null
-    private var inventory: Inventory? = null
+    private var inventory: LiveData<Inventory>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -285,16 +286,16 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds + 1,
-                        inventory!!.rubies,
-                        inventory!!.sapphires,
-                        inventory!!.topazes,
-                        inventory!!.diamonds
-                    )
-                )
+               // mInventoryViewModel.updateInventory(
+//                    Inventory(
+//                        inventory!!.value!!.id,
+//                        inventory!!.value!!.emeralds + 1,
+//                        inventory!!.value!!.rubies,
+//                        inventory!!.value!!.sapphires,
+//                        inventory!!.value!!.topazes,
+//                        inventory!!.value!!.diamonds
+//                    )
+              //  )
             }
             "Ruby" -> {
                 mMapDetailsViewModel.updateMapDetails(
@@ -308,16 +309,16 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds,
-                        inventory!!.rubies + 1,
-                        inventory!!.sapphires,
-                        inventory!!.topazes,
-                        inventory!!.diamonds
-                    )
-                )
+               // mInventoryViewModel.updateInventory(
+//                    Inventory(
+//                        inventory!!.value!!.id,
+//                        inventory!!.value!!.emeralds,
+//                        inventory!!.value!!.rubies + 1,
+//                        inventory!!.value!!.sapphires,
+//                        inventory!!.value!!.topazes,
+//                        inventory!!.value!!.diamonds
+//                    )
+               // )
             }
             "Sapphire" -> {
                 mMapDetailsViewModel.updateMapDetails(
@@ -331,16 +332,16 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds,
-                        inventory!!.rubies,
-                        inventory!!.sapphires + 1,
-                        inventory!!.topazes,
-                        inventory!!.diamonds
-                    )
-                )
+              //  mInventoryViewModel.updateInventory(
+//                    Inventory(
+//                        inventory!!.value!!.id,
+//                        inventory!!.value!!.emeralds,
+//                        inventory!!.value!!.rubies,
+//                        inventory!!.value!!.sapphires + 1,
+//                        inventory!!.value!!.topazes,
+//                        inventory!!.value!!.diamonds
+//                    )
+                //)
             }
             "Topaz" -> {
                 mMapDetailsViewModel.updateMapDetails(
@@ -354,16 +355,16 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds,
-                        inventory!!.rubies,
-                        inventory!!.sapphires,
-                        inventory!!.topazes + 1,
-                        inventory!!.diamonds
-                    )
-                )
+              //  mInventoryViewModel.updateInventory(
+//                    Inventory(
+//                        inventory!!.value!!.id,
+//                        inventory!!.value!!.emeralds,
+//                        inventory!!.value!!.rubies,
+//                        inventory!!.value!!.sapphires,
+//                        inventory!!.value!!.topazes + 1,
+//                        inventory!!.value!!.diamonds
+//                    )
+                //)
             }
         }
 

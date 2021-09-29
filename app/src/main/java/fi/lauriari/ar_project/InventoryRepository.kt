@@ -1,5 +1,7 @@
 package fi.lauriari.ar_project
 
+import androidx.lifecycle.LiveData
+
 class InventoryRepository(private val inventoryDao: InventoryDao) {
 
     suspend fun insertInventory(inventory: Inventory):Long {
@@ -10,8 +12,12 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         inventoryDao.updateInventory(inventory)
     }
 
-    suspend fun getInventory(): Inventory {
+     fun getInventory(): LiveData<Inventory> {
         return inventoryDao.getInventory()
+    }
+
+    suspend fun getList():List<Inventory>{
+        return inventoryDao.getInventoryList()
     }
 
 }

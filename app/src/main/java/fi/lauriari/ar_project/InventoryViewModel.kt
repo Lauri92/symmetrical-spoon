@@ -2,6 +2,7 @@ package fi.lauriari.ar_project
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,12 +31,20 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun getInventory(): Inventory {
-        var inventory: Inventory
+    fun getInventory(): LiveData<Inventory> {
+        var inventory: LiveData<Inventory>
         runBlocking {
             inventory = inventoryRepository.getInventory()
         }
         return inventory
+    }
+
+    fun getInventoryList(): List<Inventory> {
+        var inventoryL: List<Inventory>
+        runBlocking {
+            inventoryL = inventoryRepository.getList()
+        }
+        return inventoryL
     }
 
 }
