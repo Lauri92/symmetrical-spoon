@@ -39,25 +39,25 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun updateRubies(ruby: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateEmeralds(ruby)
+            inventoryRepository.updateRubies(ruby)
         }
     }
 
     fun updateSapphires(sapphire: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateEmeralds(sapphire)
+            inventoryRepository.updateSapphires(sapphire)
         }
     }
 
     fun updateTopazes(topaz: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateEmeralds(topaz)
+            inventoryRepository.updateTopazes(topaz)
         }
     }
 
     fun updateDiamonds(diamond: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateEmeralds(diamond)
+            inventoryRepository.updateDiamonds(diamond)
         }
     }
 
