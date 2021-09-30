@@ -77,4 +77,12 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         return inventoryL
     }
 
+    fun getInventoryNormal(): Inventory {
+        var inventory: Inventory
+        runBlocking {
+            inventory = inventoryRepository.getInventoryNormal()
+        }
+        return inventory
+    }
+
 }

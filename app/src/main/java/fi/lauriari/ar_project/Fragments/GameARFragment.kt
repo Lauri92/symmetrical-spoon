@@ -64,7 +64,7 @@ class GameARFragment : Fragment() {
         Log.d("argstest", latestMapDetails.toString())
         selectedMapLatLngPoint = mMapDetailsViewModel.getMapLatPointLngById(args.id)
         Log.d("argstest", selectedMapLatLngPoint.toString())
-        inventory = mInventoryViewModel.getInventory()
+        inventory = mInventoryViewModel.getInventoryNormal()
 
         arFrag = childFragmentManager.findFragmentById(
             R.id.sceneform_fragment

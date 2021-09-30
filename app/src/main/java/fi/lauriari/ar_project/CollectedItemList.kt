@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project.Fragments
+package fi.lauriari.ar_project
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

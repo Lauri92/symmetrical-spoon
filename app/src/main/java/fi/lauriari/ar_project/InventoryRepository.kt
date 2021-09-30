@@ -36,6 +36,10 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         return inventoryDao.getInventory()
     }
 
+    suspend fun getInventoryNormal(): Inventory {
+        return inventoryDao.getInventoryNormal()
+    }
+
     suspend fun getList():List<Inventory>{
         return inventoryDao.getInventoryList()
     }

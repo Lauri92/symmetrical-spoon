@@ -32,6 +32,9 @@ interface InventoryDao {
     @Query("SELECT * FROM inventory_table")
      fun getInventory(): LiveData<Inventory>
 
+    @Query("SELECT * FROM inventory_table")
+    suspend fun getInventoryNormal(): Inventory
+
      // for checking if there is a row saved in the inventory table
     @Query("SELECT * FROM inventory_table")
     suspend fun getInventoryList(): List<Inventory>
