@@ -309,7 +309,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-               // mInventoryViewModel.updateInventory(
+                // mInventoryViewModel.updateInventory(
 //                    Inventory(
 //                        inventory!!.value!!.id,
 //                        inventory!!.value!!.emeralds,
@@ -318,7 +318,7 @@ class GameARFragment : Fragment() {
 //                        inventory!!.value!!.topazes,
 //                        inventory!!.value!!.diamonds
 //                    )
-               // )
+                // )
             }
             "Sapphire" -> {
                 mMapDetailsViewModel.updateMapDetails(
@@ -332,7 +332,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-              //  mInventoryViewModel.updateInventory(
+                //  mInventoryViewModel.updateInventory(
 //                    Inventory(
 //                        inventory!!.value!!.id,
 //                        inventory!!.value!!.emeralds,
@@ -355,7 +355,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedDiamonds
                     )
                 )
-              //  mInventoryViewModel.updateInventory(
+                //  mInventoryViewModel.updateInventory(
 //                    Inventory(
 //                        inventory!!.value!!.id,
 //                        inventory!!.value!!.emeralds,

@@ -12,6 +12,26 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         inventoryDao.updateInventory(inventory)
     }
 
+    suspend fun updateEmeralds(emerald: Int){
+        inventoryDao.updateEmeralds(emerald)
+    }
+
+    suspend fun updateRubies(ruby: Int){
+        inventoryDao.updateEmeralds(ruby)
+    }
+
+    suspend fun updateSapphires(sapphire: Int){
+        inventoryDao.updateEmeralds(sapphire)
+    }
+
+    suspend fun updateTopazes(topaz: Int){
+        inventoryDao.updateEmeralds(topaz)
+    }
+
+    suspend fun updateDiamonds(diamond: Int){
+        inventoryDao.updateEmeralds(diamond)
+    }
+
      fun getInventory(): LiveData<Inventory> {
         return inventoryDao.getInventory()
     }

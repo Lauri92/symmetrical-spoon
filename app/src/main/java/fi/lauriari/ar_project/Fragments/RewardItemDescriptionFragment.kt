@@ -1,5 +1,7 @@
 package fi.lauriari.ar_project.Fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -45,17 +47,26 @@ class RewardItemDescriptionFragment : Fragment() {
             binding.diamondAmount.text = inventory.diamonds.toString()
 
             binding.buyBtn.setOnClickListener {
-                Toast.makeText(activity, "you got ${currentItem.name}!!!", Toast.LENGTH_LONG).show()
-                inventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory.id,
-                        inventory.emeralds + 1,
-                        inventory.rubies + 1,
-                        inventory.sapphires + 1,
-                        inventory.topazes + 1,
-                        inventory.diamonds + 1
-                    )
-                )
+                val alertBuilder = AlertDialog.Builder(activity)
+                alertBuilder.setPositiveButton("Buy"){_,_->
+                    Toast.makeText(activity, "you got ${currentItem.name}!!!", Toast.LENGTH_LONG).show()
+                    inventoryViewModel.updateEmeralds(inventory.emeralds - 1)}
+                alertBuilder.setNegativeButton("Cancel"){_,_->}
+                alertBuilder.setTitle("Purchase confirmation")
+                alertBuilder.setMessage("Are you sure that you would buy ${currentItem.name}?")
+                alertBuilder.create().show()
+               // Toast.makeText(activity, "you got ${currentItem.name}!!!", Toast.LENGTH_LONG).show()
+//                inventoryViewModel.updateInventory(
+//                    Inventory(
+//                        inventory.id,
+//                        inventory.emeralds + 1,
+//                        inventory.rubies + 1,
+//                        inventory.sapphires + 1,
+//                        inventory.topazes + 1,
+//                        inventory.diamonds + 1
+//                    )
+//                )
+                //inventoryViewModel.updateEmeralds(inventory.emeralds +1)
             }
         })
         binding.name.text = currentItem.name
