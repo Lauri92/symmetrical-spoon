@@ -3,8 +3,8 @@ plugins {
     id 'kotlin-android'
     id("androidx.navigation.safeargs")
     //id 'kotlin-android-extensions'
-    id ("kotlin-parcelize")
- //   id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-parcelize")
+    //   id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -43,6 +43,13 @@ android {
 apply plugin: "kotlin-kapt"
 dependencies {
 
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
     // Nav graph
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
@@ -69,6 +76,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 
     // Kotlin components
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"

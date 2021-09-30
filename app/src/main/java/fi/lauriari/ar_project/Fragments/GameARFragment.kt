@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -47,6 +48,7 @@ class GameARFragment : Fragment() {
     private val args by navArgs<GameARFragmentArgs>()
     private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
     private val mInventoryViewModel: InventoryViewModel by viewModels()
+    private lateinit var mTriviaApiViewModel: TriviaApiViewModel
     private var latestMapDetails: MapDetails? = null
     private var selectedMapLatLngPoint: MapLatLng? = null
     private var inventory: Inventory? = null
@@ -70,32 +72,14 @@ class GameARFragment : Fragment() {
 
         buildRenderables()
 
-        //TODO: Obtain the lists of questions from elsewhere, change the structure to be something more meaningful
-        val questions = mutableListOf<QuizQuestion>(
-            QuizQuestion(
-                "How many legs does a spider have?",
-                "5",
-                "8",
-                "10", "8"
-            ),
-            QuizQuestion(
-                "What is the color of an emerald?",
-                "Red",
-                "Blue",
-                "Green", "Green"
-            ),
-            QuizQuestion(
-                "What is the name of the fairy in Peter Pan?",
-                "Tinkerbell",
-                "Harry Potter",
-                "Cinderella", "Tinkerbell"
-            ), QuizQuestion(
-                "If you freeze water, what do you get?",
-                "Steam",
-                "Coca-Cola",
-                "Ice", "Ice"
-            )
-        )
+        val repository = TriviaRepository()
+        val viewModelFactory = TriviaViewModelFactory(repository)
+        mTriviaApiViewModel =
+            ViewModelProvider(this, viewModelFactory).get(TriviaApiViewModel::class.java)
+        val quizQuestion = mTriviaApiViewModel.getQuiz()
+
+        Log.d("quiz", quizQuestion?.body()!!.results[0].toString())
+
 
         val flagQuestions =
             mutableListOf<FlagQuestion>(
@@ -222,31 +206,28 @@ class GameARFragment : Fragment() {
                 createLocationAnchorForViewRenderable(quizQuestionRenderable!!)
                     ?: return@setOnClickListener
 
-            // Randomize the questions and take the first one to be asked from the user
-            questions.shuffle()
-            val chosenQuestion = questions.take(1)
 
             val questionTv = quizQuestionRenderable!!.view.findViewById<TextView>(R.id.quiz_tv)
             val button1 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
             val button2 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
             val button3 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
 
+            val correctAnswer = quizQuestion.body()!!.results[0].correct_answer
             val answers = mutableListOf(
-                chosenQuestion[0].answer1,
-                chosenQuestion[0].answer2,
-                chosenQuestion[0].answer3
+                quizQuestion.body()!!.results[0].incorrect_answers[0],
+                quizQuestion.body()!!.results[0].incorrect_answers[1],
+                quizQuestion.body()!!.results[0].correct_answer
             )
-
-            // Randomize the answer locations
             answers.shuffle()
 
-            questionTv.text = chosenQuestion[0].question
+
+            questionTv.text = quizQuestion.body()!!.results[0].question
             button1.text = answers[0]
             button2.text = answers[1]
             button3.text = answers[2]
 
             button1.setOnClickListener {
-                if (button1.text == chosenQuestion[0].correctAnswer) {
+                if (button1.text == correctAnswer) {
                     displayAnswerResult(node)
                 } else {
                     Toast.makeText(
@@ -259,7 +240,7 @@ class GameARFragment : Fragment() {
             }
 
             button2.setOnClickListener {
-                if (button2.text == chosenQuestion[0].correctAnswer) {
+                if (button2.text == correctAnswer) {
                     displayAnswerResult(node)
                 } else {
                     Toast.makeText(
@@ -272,7 +253,7 @@ class GameARFragment : Fragment() {
             }
 
             button3.setOnClickListener {
-                if (button3.text == chosenQuestion[0].correctAnswer) {
+                if (button3.text == correctAnswer) {
                     displayAnswerResult(node)
                 } else {
                     Toast.makeText(
