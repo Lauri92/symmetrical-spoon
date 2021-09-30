@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_dailyQuestFragment"
             app:destination="@id/dailyQuestFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_collectedItemList"
+            app:destination="@id/collectedItemList" />
     </fragment>
     <fragment
         android:id="@+id/gameMapFragment"
@@ -62,7 +65,12 @@
         android:label="fragment_reward_item_description"
         tools:layout="@layout/fragment_reward_item_description" >
         <argument
-            android:name="rewardItem"
-            app:argType="fi.lauriari.ar_project.RewardItem" />
+            android:name="rewardItemDummy"
+            app:argType="fi.lauriari.ar_project.RewardItemDummy" />
     </fragment>
+    <fragment
+        android:id="@+id/collectedItemList"
+        android:name="fi.lauriari.ar_project.Fragments.CollectedItemList"
+        android:label="fragment_collected_item_list"
+        tools:layout="@layout/fragment_collected_item_list" />
 </navigation>

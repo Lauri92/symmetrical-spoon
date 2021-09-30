@@ -11,13 +11,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.viewModels
 import android.widget.ImageView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import fi.lauriari.ar_project.Inventory
 import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.R
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -30,7 +31,7 @@ class MainMenuFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val IMG_URL = URL("https://users.metropolia.fi/~minjic/AR_project/emerald.png")
+        //val IMG_URL = URL("https://users.metropolia.fi/~minjic/AR_project/emerald.png")
 
         val view = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
@@ -54,24 +55,22 @@ class MainMenuFragment : Fragment() {
             view.findViewById<ImageView>(R.id.logo).setImageBitmap(serverImg)
         }
 
-        lifecycleScope.launch(context = Dispatchers.Main) {
-            val img = async(Dispatchers.IO) { getImg(IMG_URL) }
-            //showImg(img.await())
-        }
+//        lifecycleScope.launch(context = Dispatchers.Main) {
+//            val img = async(Dispatchers.IO) { getImg(IMG_URL) }
+//            //showImg(img.await())
+//        }
 
-        var inventory: Inventory? = mInventoryViewModel.getInventory()
+        var inventory: LiveData<Inventory>? = mInventoryViewModel.getInventory()
 
-        if (inventory == null) {
+        var list: List<Inventory>? = mInventoryViewModel.getInventoryList()
+
+        if (list?.size == 0) {
             Log.d("inventory", "No inventory, creating one")
-            mInventoryViewModel.insertInventory(Inventory(0, 0, 0, 0, 0, 0))
-            inventory = mInventoryViewModel.getInventory()
-        } else {
-            Log.d("inventory", "There was an inventory")
+            mInventoryViewModel.insertInventory(Inventory(0, 2, 3, 4, 5, 0))
+
+        } else{
+            Log.d("inventory", "There was an inventory, $list")
         }
-
-
-        Log.d("inventory", "$inventory")
-
 
         return view
     }
