@@ -387,6 +387,14 @@ class GameARFragment : Fragment() {
         questionNode.setParent(null)
         questionNode.renderable = null
 
+        var diamondInsertable = 0
+        val random = (0..3).random()
+        if(random == 1) {
+            diamondInsertable = 1
+        }
+
+
+
         val updatedMapLatLng = MapLatLng(
             selectedMapLatLngPoint!!.id,
             selectedMapLatLngPoint!!.mapDetailsId,
@@ -408,7 +416,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedRubies,
                         latestMapDetails!!.collectedSapphires,
                         latestMapDetails!!.collectedTopazes,
-                        latestMapDetails!!.collectedDiamonds
+                        latestMapDetails!!.collectedDiamonds + diamondInsertable
                     )
                 )
                 mInventoryViewModel.updateInventory(
@@ -418,7 +426,7 @@ class GameARFragment : Fragment() {
                         inventory!!.rubies,
                         inventory!!.sapphires,
                         inventory!!.topazes,
-                        inventory!!.diamonds
+                        inventory!!.diamonds + diamondInsertable
                     )
                 )
             }
@@ -431,7 +439,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedRubies + 1,
                         latestMapDetails!!.collectedSapphires,
                         latestMapDetails!!.collectedTopazes,
-                        latestMapDetails!!.collectedDiamonds
+                        latestMapDetails!!.collectedDiamonds + diamondInsertable
                     )
                 )
                 mInventoryViewModel.updateInventory(
@@ -441,7 +449,7 @@ class GameARFragment : Fragment() {
                         inventory!!.rubies + 1,
                         inventory!!.sapphires,
                         inventory!!.topazes,
-                        inventory!!.diamonds
+                        inventory!!.diamonds + diamondInsertable
                     )
                 )
             }
@@ -454,7 +462,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedRubies,
                         latestMapDetails!!.collectedSapphires + 1,
                         latestMapDetails!!.collectedTopazes,
-                        latestMapDetails!!.collectedDiamonds
+                        latestMapDetails!!.collectedDiamonds + diamondInsertable
                     )
                 )
                 mInventoryViewModel.updateInventory(
@@ -464,7 +472,7 @@ class GameARFragment : Fragment() {
                         inventory!!.rubies,
                         inventory!!.sapphires + 1,
                         inventory!!.topazes,
-                        inventory!!.diamonds
+                        inventory!!.diamonds + diamondInsertable
                     )
                 )
             }
@@ -477,7 +485,7 @@ class GameARFragment : Fragment() {
                         latestMapDetails!!.collectedRubies,
                         latestMapDetails!!.collectedSapphires,
                         latestMapDetails!!.collectedTopazes + 1,
-                        latestMapDetails!!.collectedDiamonds
+                        latestMapDetails!!.collectedDiamonds + diamondInsertable
                     )
                 )
                 mInventoryViewModel.updateInventory(
@@ -487,7 +495,7 @@ class GameARFragment : Fragment() {
                         inventory!!.rubies,
                         inventory!!.sapphires,
                         inventory!!.topazes + 1,
-                        inventory!!.diamonds
+                        inventory!!.diamonds + diamondInsertable
                     )
                 )
             }
@@ -496,13 +504,15 @@ class GameARFragment : Fragment() {
         val gem = selectedMapLatLngPoint!!.reward
         val message =
             if (gem != "Emerald") "You were rewarded a" else "You were rewarded an"
+        val diamondMessage = if(diamondInsertable != 0) "You also got a diamond!" else ""
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("OK") { _, _ ->
             findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
         }
         builder.setTitle("Task completed")
-        builder.setMessage("$message $gem!")
+        builder.setMessage("$message $gem!\n$diamondMessage")
+        builder.setCancelable(false)
         builder.create().show()
 
 

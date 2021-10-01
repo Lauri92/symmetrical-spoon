@@ -48,6 +48,7 @@ class GameMapFragment : Fragment() {
     private var isInteractionsLocationsSet: Boolean = false
     private var activeDestination = Location("activeDestination")
     private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
+    private val mInventoryViewModel: InventoryViewModel by viewModels()
     private var locationIdAction: Long? = null
 
 
@@ -89,6 +90,8 @@ class GameMapFragment : Fragment() {
         }
 
         checkSelfPermissions()
+
+        setRemainingGemValues()
 
         view.findViewById<Button>(R.id.navigate_to_game_AR_btn).setOnClickListener {
             //findNavController().navigate(R.id.action_gameMapFragment_to_gameARFragment)
@@ -150,10 +153,6 @@ class GameMapFragment : Fragment() {
      * Check if permissions are granted
      */
     private fun checkSelfPermissions() {
-        val locationRequest = LocationRequest
-            .create()
-            .setInterval(1000)
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -177,6 +176,10 @@ class GameMapFragment : Fragment() {
 
         } else {
             // Permissions are granted so start requesting location updates
+            val locationRequest = LocationRequest
+                .create()
+                .setInterval(1000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             Log.i("test", "Passed")
             fusedLocationClient.requestLocationUpdates(
                 locationRequest,
@@ -296,7 +299,7 @@ class GameMapFragment : Fragment() {
                 when (it.reward) {
                     "Emerald" -> iconDrawable = R.drawable.emerald
                     "Ruby" -> iconDrawable = R.drawable.ruby
-                    "Sapphire" -> iconDrawable = R.drawable.ic_baseline_sapphire_24
+                    "Sapphire" -> iconDrawable = R.drawable.sapphire
                     "Topaz" -> iconDrawable = R.drawable.topaz
                 }
                 loopMarker.icon = AppCompatResources.getDrawable(
@@ -354,7 +357,7 @@ class GameMapFragment : Fragment() {
                         collectableReward = "Ruby"
                     }
                     in 50..75 -> {
-                        collectable = R.drawable.ic_baseline_sapphire_24
+                        collectable = R.drawable.sapphire
                         collectableReward = "Sapphire"
                     }
                     in 76..100 -> {
@@ -455,9 +458,31 @@ class GameMapFragment : Fragment() {
         map.invalidate()
     }
 
+    /**
+     * Geocoder used to get approximate address from given lat, lng values
+     */
     private fun getAddress(lat: Double, lon: Double): String {
         val addresses = geocoder.getFromLocation(lat, lon, 1)
         //Log.d("address", "List info: ${addresses}")
         return addresses[0].getAddressLine(0)
+    }
+
+    /**
+     * Display the remaining gems for today
+     */
+    private fun setRemainingGemValues() {
+        lifecycleScope.launch(context = Dispatchers.IO) {
+            val latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
+            val points = mMapDetailsViewModel.getMapLatLngPointsByMapDetailsId(latestMapDetails.id)
+            Log.d("details", points.toString())
+            view.findViewById<TextView>(R.id.emeralds_tv).text =
+                points.filter { it.reward == "Emerald" && it.isActive }.size.toString()
+            view.findViewById<TextView>(R.id.rubies_tv).text =
+                points.filter { it.reward == "Ruby" && it.isActive }.size.toString()
+            view.findViewById<TextView>(R.id.sapphires_tv).text =
+                points.filter { it.reward == "Sapphire" && it.isActive }.size.toString()
+            view.findViewById<TextView>(R.id.topazes_tv).text =
+                points.filter { it.reward == "Topaz" && it.isActive }.size.toString()
+        }
     }
 }
