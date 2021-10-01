@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import java.net.URL
 
 val SERVER_IMG_BASE_URL = URL("https://users.metropolia.fi/~lauriari/AR_project/")
@@ -52,6 +54,7 @@ class GameARFragment : Fragment() {
     private var latestMapDetails: MapDetails? = null
     private var selectedMapLatLngPoint: MapLatLng? = null
     private var inventory: Inventory? = null
+    private var quizQuestion: Response<QuizQuestion>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,9 +79,11 @@ class GameARFragment : Fragment() {
         val viewModelFactory = TriviaViewModelFactory(repository)
         mTriviaApiViewModel =
             ViewModelProvider(this, viewModelFactory).get(TriviaApiViewModel::class.java)
-        val quizQuestion = mTriviaApiViewModel.getQuiz()
+        lifecycleScope.launch(context = Dispatchers.IO) {
+            quizQuestion = mTriviaApiViewModel.getQuiz()
+        }
 
-        Log.d("quiz", quizQuestion?.body()!!.results[0].toString())
+
 
 
         val flagQuestions =
@@ -212,19 +217,32 @@ class GameARFragment : Fragment() {
             val button2 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
             val button3 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
 
-            val correctAnswer = quizQuestion.body()!!.results[0].correct_answer
+            val correctAnswer = quizQuestion?.body()!!.results[0].correct_answer
             val answers = mutableListOf(
-                quizQuestion.body()!!.results[0].incorrect_answers[0],
-                quizQuestion.body()!!.results[0].incorrect_answers[1],
-                quizQuestion.body()!!.results[0].correct_answer
+                quizQuestion?.body()!!.results[0].incorrect_answers[0],
+                quizQuestion?.body()!!.results[0].incorrect_answers[1],
+                quizQuestion?.body()!!.results[0].correct_answer
             )
             answers.shuffle()
 
 
-            questionTv.text = quizQuestion.body()!!.results[0].question
-            button1.text = answers[0]
-            button2.text = answers[1]
-            button3.text = answers[2]
+            val decodedQuestion: String = Html
+                .fromHtml(quizQuestion?.body()!!.results[0].question, Html.FROM_HTML_MODE_COMPACT)
+                .toString()
+            val decodedAnswers0: String = Html
+                .fromHtml(answers[0], Html.FROM_HTML_MODE_COMPACT)
+                .toString()
+            val decodedAnswers1: String = Html
+                .fromHtml(answers[1], Html.FROM_HTML_MODE_COMPACT)
+                .toString()
+            val decodedAnswers2: String = Html
+                .fromHtml(answers[2], Html.FROM_HTML_MODE_COMPACT)
+                .toString()
+
+            questionTv.text = decodedQuestion//quizQuestion.body()!!.results[0].question
+            button1.text = decodedAnswers0
+            button2.text = decodedAnswers1
+            button3.text = decodedAnswers2
 
             button1.setOnClickListener {
                 if (button1.text == correctAnswer) {
@@ -389,10 +407,9 @@ class GameARFragment : Fragment() {
 
         var diamondInsertable = 0
         val random = (0..3).random()
-        if(random == 1) {
+        if (random == 1) {
             diamondInsertable = 1
         }
-
 
 
         val updatedMapLatLng = MapLatLng(
@@ -504,7 +521,7 @@ class GameARFragment : Fragment() {
         val gem = selectedMapLatLngPoint!!.reward
         val message =
             if (gem != "Emerald") "You were rewarded a" else "You were rewarded an"
-        val diamondMessage = if(diamondInsertable != 0) "You also got a diamond!" else ""
+        val diamondMessage = if (diamondInsertable != 0) "You also got a diamond!" else ""
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("OK") { _, _ ->
