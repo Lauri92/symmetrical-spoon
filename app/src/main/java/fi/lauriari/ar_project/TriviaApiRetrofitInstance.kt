@@ -30,8 +30,8 @@ object ImageQuestionsRetrofitInstance {
             .build()
     }
 
-    val api: TriviaApi by lazy {
-        retrofit.create(TriviaApi::class.java)
+    val api: ImageQuestionsApi by lazy {
+        retrofit.create(ImageQuestionsApi::class.java)
     }
 
 }

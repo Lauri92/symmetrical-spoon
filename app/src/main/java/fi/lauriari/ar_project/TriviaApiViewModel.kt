@@ -18,10 +18,19 @@ class TriviaApiViewModel(private val triviaRepository: TriviaRepository) : ViewM
         return response
     }
 
-    fun getImageQuestions(): Response<List<ImageQuestion>> {
-        var response: Response<List<ImageQuestion>>
+    fun getImageQuestions(): MutableList<ImageQuestion> {
+        var response: MutableList<ImageQuestion>
         runBlocking {
             val apiResponse = triviaRepository.getImageQuestions()
+            response = apiResponse
+        }
+        return response
+    }
+
+    fun getImageSelectionQuestions(): MutableList<ImageSelectionQuestion> {
+        var response: MutableList<ImageSelectionQuestion>
+        runBlocking {
+            val apiResponse = triviaRepository.getImageSelectionQuestions()
             response = apiResponse
         }
         return response

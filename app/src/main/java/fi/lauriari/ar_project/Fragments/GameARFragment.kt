@@ -54,8 +54,9 @@ class GameARFragment : Fragment() {
     private var selectedMapLatLngPoint: MapLatLng? = null
     private var inventory: Inventory? = null
     private var quizQuestion: Response<QuizQuestion>? = null
-    private var imageQuestionsResponse: Response<List<ImageQuestion>>? = null
+    private var imageQuestionsResponse: MutableList<ImageQuestion>? = null
     private var imageQuestionList: MutableList<ImageQuestion>? = null
+    private var imageSelectionQuestionList: MutableList<ImageSelectionQuestion>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +84,9 @@ class GameARFragment : Fragment() {
         lifecycleScope.launch(context = Dispatchers.IO) {
             quizQuestion = mTriviaApiViewModel.getQuiz()
             imageQuestionsResponse = mTriviaApiViewModel.getImageQuestions()
-            imageQuestionList = (imageQuestionsResponse!!.body() as MutableList<ImageQuestion>?)!!
+            imageSelectionQuestionList = mTriviaApiViewModel.getImageSelectionQuestions()
+            //imageQuestionList = (imageQuestionsResponse!!.body() as MutableList<ImageQuestion>?)!!
+            Log.d("image",imageSelectionQuestionList!![0].correctAnswer)
         }
 
         val imageSelectionQuestions = mutableListOf<ImageSelectionQuestion>(
@@ -111,8 +114,8 @@ class GameARFragment : Fragment() {
                     ?: return@setOnClickListener
 
             // Randomize the questions
-            imageQuestionList?.shuffle()
-            val chosenQuestion = imageQuestionList?.take(1)
+            imageQuestionsResponse?.shuffle()
+            val chosenQuestion = imageQuestionsResponse?.take(1)
 
             val questionTv = imageQuestionRenderable!!.view.findViewById<TextView>(R.id.question_tv)
             val flagIv = imageQuestionRenderable!!.view.findViewById<ImageView>(R.id.flag_iv)
@@ -312,12 +315,13 @@ class GameARFragment : Fragment() {
             imageRenderable ?: return@setOnClickListener
             imageRenderable2 ?: return@setOnClickListener
             imageRenderable3 ?: return@setOnClickListener
+            //imageSelectionQuestionList ?: return@setOnClickListener
 
-            imageSelectionQuestions.shuffle()
-            val chosen = imageSelectionQuestions.take(1)
-            val chosenQuestion = chosen[0]
+            imageSelectionQuestionList?.shuffle()
+            val chosen = imageSelectionQuestionList?.take(1)
+            val chosenQuestion = chosen!![0]
             Log.d("chosenquestion", chosenQuestion.question)
-            val imageUrlEndigs = mutableListOf<String>(
+            val imageUrls = mutableListOf(
                 chosenQuestion.image1,
                 chosenQuestion.image2,
                 chosenQuestion.image3
@@ -345,7 +349,7 @@ class GameARFragment : Fragment() {
                     )
                         ?: return@setOnClickListener
 
-                node.name = imageUrlEndigs[i]
+                node.name = imageUrls[i]
 
                 node.setOnTapListener { hitTestResult, motionEvent ->
                     Log.d(
@@ -365,7 +369,7 @@ class GameARFragment : Fragment() {
                 }
 
 
-                val randomedImage: Bitmap = getWebImage(imageUrlEndigs[i])
+                val randomedImage: Bitmap = getWebImage(imageUrls[i])
                 viewRenderable.view.findViewById<ImageView>(R.id.image)
                     .setImageBitmap(randomedImage)
             }

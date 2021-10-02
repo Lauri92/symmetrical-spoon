@@ -10,7 +10,11 @@ class TriviaRepository {
         return TriviaApiRetrofitInstance.api.getQuiz()
     }
 
-    suspend fun getImageQuestions(): Response<List<ImageQuestion>> {
+    suspend fun getImageQuestions(): MutableList<ImageQuestion> {
         return ImageQuestionsRetrofitInstance.api.getImageQuestions()
+    }
+
+    suspend fun getImageSelectionQuestions(): MutableList<ImageSelectionQuestion> {
+        return ImageQuestionsRetrofitInstance.api.getImageSelectionQuestions()
     }
 }
