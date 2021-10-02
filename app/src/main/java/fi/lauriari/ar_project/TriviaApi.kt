@@ -7,4 +7,8 @@ interface TriviaApi {
 
     @GET("api.php?amount=5&type=multiple")
     suspend fun getQuiz(): Response<QuizQuestion>
+
+    @GET("imagequestions.json")
+    suspend fun getImageQuestions(): Response<List<ImageQuestion>>
+
 }

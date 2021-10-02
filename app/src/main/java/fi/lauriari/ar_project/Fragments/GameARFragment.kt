@@ -29,13 +29,12 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import fi.lauriari.ar_project.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.net.URL
 
-val SERVER_IMG_BASE_URL = URL("https://users.metropolia.fi/~lauriari/AR_project/")
+val SERVER_IMG_BASE_URL = URL("https://users.metropolia.fi/~lauriari/AR_project/images/")
 
 class GameARFragment : Fragment() {
 
@@ -45,7 +44,7 @@ class GameARFragment : Fragment() {
     private var imageRenderable: ViewRenderable? = null
     private var imageRenderable2: ViewRenderable? = null
     private var imageRenderable3: ViewRenderable? = null
-    private var flagQuestionRenderable: ViewRenderable? = null
+    private var imageQuestionRenderable: ViewRenderable? = null
     private var sphereRenderable: ModelRenderable? = null
     private val args by navArgs<GameARFragmentArgs>()
     private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
@@ -55,6 +54,8 @@ class GameARFragment : Fragment() {
     private var selectedMapLatLngPoint: MapLatLng? = null
     private var inventory: Inventory? = null
     private var quizQuestion: Response<QuizQuestion>? = null
+    private var imageQuestionsResponse: Response<List<ImageQuestion>>? = null
+    private var imageQuestionList: MutableList<ImageQuestion>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,35 +82,10 @@ class GameARFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(TriviaApiViewModel::class.java)
         lifecycleScope.launch(context = Dispatchers.IO) {
             quizQuestion = mTriviaApiViewModel.getQuiz()
+            imageQuestionsResponse = mTriviaApiViewModel.getImageQuestions()
+            imageQuestionList = (imageQuestionsResponse!!.body() as MutableList<ImageQuestion>?)!!
         }
 
-
-
-
-        val flagQuestions =
-            mutableListOf<FlagQuestion>(
-                FlagQuestion(
-                    "american-flag.png",
-                    "USA",
-                    "Canada",
-                    "Sweden",
-                    "USA"
-                ),
-                FlagQuestion(
-                    "japan-flag.png",
-                    "Japan",
-                    "South-Korea",
-                    "United Kingdom",
-                    "Japan"
-                ),
-                FlagQuestion(
-                    "finland-flag.png",
-                    "Sweden",
-                    "Norway",
-                    "Finland",
-                    "Finland"
-                ),
-            )
         val imageSelectionQuestions = mutableListOf<ImageSelectionQuestion>(
             ImageSelectionQuestion(
                 "Find the flag of Finland",
@@ -128,23 +104,24 @@ class GameARFragment : Fragment() {
         )
 
         view.findViewById<Button>(R.id.add_flag_question_btn).setOnClickListener {
-            flagQuestionRenderable ?: return@setOnClickListener
+            imageQuestionRenderable ?: return@setOnClickListener
 
             val node: TransformableNode =
-                createLocationAnchorForViewRenderable(flagQuestionRenderable!!)
+                createLocationAnchorForViewRenderable(imageQuestionRenderable!!)
                     ?: return@setOnClickListener
 
             // Randomize the questions
-            flagQuestions.shuffle()
-            val chosenQuestion = flagQuestions.take(1)
+            imageQuestionList?.shuffle()
+            val chosenQuestion = imageQuestionList?.take(1)
 
-            val flagIv = flagQuestionRenderable!!.view.findViewById<ImageView>(R.id.flag_iv)
-            val button1 = flagQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
-            val button2 = flagQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
-            val button3 = flagQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
+            val questionTv = imageQuestionRenderable!!.view.findViewById<TextView>(R.id.question_tv)
+            val flagIv = imageQuestionRenderable!!.view.findViewById<ImageView>(R.id.flag_iv)
+            val button1 = imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
+            val button2 = imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
+            val button3 = imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
 
             val answers = mutableListOf(
-                chosenQuestion[0].answer1,
+                chosenQuestion!![0].answer1,
                 chosenQuestion[0].answer2,
                 chosenQuestion[0].answer3
             )
@@ -157,8 +134,9 @@ class GameARFragment : Fragment() {
             //val drawable = Drawable.createFromStream(stream, null)
             //flagIv.setImageDrawable(drawable)
 
-            val image = getWebImage(chosenQuestion[0].flagSource)
+            val image = getWebImage(chosenQuestion[0].imageSource)
 
+            questionTv.text = chosenQuestion[0].question
             flagIv.setImageBitmap(image)
             button1.text = answers[0]
             button2.text = answers[1]
@@ -423,8 +401,10 @@ class GameARFragment : Fragment() {
         )
         mMapDetailsViewModel.updateMapLatLng(updatedMapLatLng)
 
+        var imageresource: Int = 123
         when (selectedMapLatLngPoint!!.reward) {
             "Emerald" -> {
+                imageresource = R.drawable.emerald
                 mMapDetailsViewModel.updateMapDetails(
                     MapDetails(
                         latestMapDetails!!.id,
@@ -448,6 +428,7 @@ class GameARFragment : Fragment() {
                 )
             }
             "Ruby" -> {
+                imageresource = R.drawable.ruby
                 mMapDetailsViewModel.updateMapDetails(
                     MapDetails(
                         latestMapDetails!!.id,
@@ -471,6 +452,7 @@ class GameARFragment : Fragment() {
                 )
             }
             "Sapphire" -> {
+                imageresource = R.drawable.sapphire
                 mMapDetailsViewModel.updateMapDetails(
                     MapDetails(
                         latestMapDetails!!.id,
@@ -494,6 +476,7 @@ class GameARFragment : Fragment() {
                 )
             }
             "Topaz" -> {
+                imageresource = R.drawable.topaz
                 mMapDetailsViewModel.updateMapDetails(
                     MapDetails(
                         latestMapDetails!!.id,
@@ -527,8 +510,9 @@ class GameARFragment : Fragment() {
         builder.setPositiveButton("OK") { _, _ ->
             findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
         }
-        builder.setTitle("Task completed")
+        builder.setTitle("Task completed!")
         builder.setMessage("$message $gem!\n$diamondMessage")
+        builder.setIcon(imageresource)
         builder.setCancelable(false)
         builder.create().show()
 
@@ -549,7 +533,7 @@ class GameARFragment : Fragment() {
         ViewRenderable.builder()
             .setView(requireContext(), R.layout.flag_question_layout)
             .build()
-            .thenAccept { flagQuestionRenderable = it }
+            .thenAccept { imageQuestionRenderable = it }
 
         ViewRenderable.builder()
             .setView(requireContext(), R.layout.quiz_question_layout)
@@ -716,7 +700,7 @@ class GameARFragment : Fragment() {
     /**
      * Get Image from website
      */
-    private fun getWebImage(urlEndPart: String): Bitmap {
+    private fun getWebImage(Url: String): Bitmap {
 
         fun getImg(imgUrl: URL): Bitmap {
             val inputStream = imgUrl.openStream()
@@ -724,10 +708,9 @@ class GameARFragment : Fragment() {
         }
 
 
-        val serverImagePath = "$SERVER_IMG_BASE_URL${urlEndPart}"
         var img: Bitmap
         runBlocking(Dispatchers.IO) {
-            img = getImg(URL(serverImagePath))
+            img = getImg(URL(Url))
         }
         return img
     }
