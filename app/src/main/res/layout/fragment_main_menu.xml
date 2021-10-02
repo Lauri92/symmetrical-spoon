@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@color/container"
         android:orientation="vertical"
         android:paddingLeft="16dp"
@@ -27,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="#5287CC"
             android:text="@string/go_to_game_map" />
 
         <Button
@@ -37,7 +39,7 @@
             android:text="@string/daily_quests" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/my_collections"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -55,7 +57,6 @@
         android:id="@+id/logo"
         android:layout_width="272dp"
         android:layout_height="270dp"
-        android:layout_marginTop="32dp"
         android:src="@drawable/game_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

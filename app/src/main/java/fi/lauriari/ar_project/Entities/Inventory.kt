@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

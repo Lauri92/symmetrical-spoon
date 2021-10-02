@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="fill_horizontal|fill_vertical"
         android:background="@drawable/ic_background"
-        tools:context=".CollectedItemList">
+        tools:context=".Fragments.CollectedItemListFragment">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/back_btn"

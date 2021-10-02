@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import fi.lauriari.ar_project.Inventory
-import fi.lauriari.ar_project.InventoryViewModel
-import fi.lauriari.ar_project.R
+import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
 import java.util.Observer
 
@@ -27,14 +26,12 @@ class RewardListFragment : Fragment() {
     ): View? {
 
         val inventoryViewModel: InventoryViewModel by viewModels()
-        //val view = inflater.inflate(R.layout.fragment_reward_list, container, false)
         val binding: FragmentRewardListBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_reward_list, container, false)
         binding.viewmodel = inventoryViewModel
-//       binding.lifecycleOwner = viewLifecycleOwner
         val view = binding.root
 
-        val inventory = inventoryViewModel.getInventory()
+        // display current amount of gems that the user has collected
         inventoryViewModel.getInventory().observe(viewLifecycleOwner, {
             binding.emeraldAmount.text = it.emeralds.toString()
             binding.rubyAmount.text = it.rubies.toString()
@@ -47,9 +44,24 @@ class RewardListFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+
+        val repo = RewardsRepository()
+        val viewModelFactory = RewardsApiViewModelFactory(repo)
+
+        val rewardsApiViewModel =
+            ViewModelProvider(this, viewModelFactory).get(RewardsApiViewModel::class.java)
+        rewardsApiViewModel.getItems()
+
+
+
         val itemList = view.findViewById<RecyclerView>(R.id.rewards_list)
         itemList.layoutManager = GridLayoutManager(activity, 2)
-        itemList.adapter = RewardListAdapter()
+
+
+        rewardsApiViewModel.response.observe(viewLifecycleOwner,{
+            Log.d("DQF","${it.get(0).description}")
+            itemList.adapter = RewardListAdapter(it)
+        })
         return view
     }
 

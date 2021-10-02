@@ -1,7 +1,8 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import fi.lauriari.ar_project.Entities.Inventory
 
 @Dao
 interface InventoryDao {

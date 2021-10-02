@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import fi.lauriari.ar_project.Dao.InventoryDao
+import fi.lauriari.ar_project.Entities.Inventory
 
 
 @Database(entities = [(MapDetails::class), (MapLatLng::class), (Inventory::class)], version = 1, exportSchema = false)

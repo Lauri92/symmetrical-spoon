@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/collectedItemList"
-        android:name="fi.lauriari.ar_project.CollectedItemList"
+        android:name="fi.lauriari.ar_project.Fragments.CollectedItemListFragment"
         android:label="fragment_collected_item_list"
         tools:layout="@layout/fragment_collected_item_list" />
 </navigation>

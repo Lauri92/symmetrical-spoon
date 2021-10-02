@@ -11,16 +11,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.viewModels
 import android.widget.ImageView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import fi.lauriari.ar_project.Inventory
+import fi.lauriari.ar_project.Entities.Inventory
 import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.net.URL
 
 class MainMenuFragment : Fragment() {
@@ -44,6 +38,9 @@ class MainMenuFragment : Fragment() {
         view.findViewById<Button>(R.id.daily_quest).setOnClickListener {
             findNavController().navigate(R.id.action_mainMenuFragment_to_dailyQuestFragment)
         }
+        view.findViewById<Button>(R.id.my_collections).setOnClickListener {
+            findNavController().navigate(R.id.action_mainMenuFragment_to_collectedItemList)
+        }
 
         fun getImg(imgUrl: URL): Bitmap {
             val inputStream = imgUrl.openStream()
@@ -60,7 +57,7 @@ class MainMenuFragment : Fragment() {
 //            //showImg(img.await())
 //        }
 
-        var inventory: LiveData<Inventory>? = mInventoryViewModel.getInventory()
+        // var inventory: LiveData<Inventory>? = mInventoryViewModel.getInventory()
 
         var list: List<Inventory>? = mInventoryViewModel.getInventoryList()
 

@@ -1,26 +1,19 @@
 package fi.lauriari.ar_project.Fragments
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import fi.lauriari.ar_project.Inventory
 import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.databinding.FragmentRewardItemDescriptionBinding
-import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
 
 class RewardItemDescriptionFragment : Fragment() {
     private val args by navArgs<RewardItemDescriptionFragmentArgs>()
@@ -53,7 +46,7 @@ class RewardItemDescriptionFragment : Fragment() {
                     inventoryViewModel.updateEmeralds(inventory.emeralds - 1)}
                 alertBuilder.setNegativeButton("Cancel"){_,_->}
                 alertBuilder.setTitle("Purchase confirmation")
-                alertBuilder.setMessage("Are you sure that you would buy ${currentItem.name}?")
+                alertBuilder.setMessage("Are you sure that you would buy ${currentItem.name} (-1 Emerald) ?")
                 alertBuilder.create().show()
                // Toast.makeText(activity, "you got ${currentItem.name}!!!", Toast.LENGTH_LONG).show()
 //                inventoryViewModel.updateInventory(
