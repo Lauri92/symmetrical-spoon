@@ -1,28 +1,30 @@
 package fi.lauriari.ar_project
 
+import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-
+@Parcelize
 class Item(
-    @SerializedName("id") val itemId: Int,
+    @SerializedName("id") val itemId: Long,
     @SerializedName("name") val itemName: String,
     @SerializedName("description") val description: String,
     @SerializedName("thumbnail") val thumbnail: String,
-    @SerializedName("emerald") val emerald: Int,
+    @SerializedName("emerald") val itemEmerald: Int,
     @SerializedName("ruby") val itemRuby: Int,
     @SerializedName("sapphire") val itemSapphire: Int,
     @SerializedName("topaz") val itemTopaz: Int,
     @SerializedName("diamond") val itemDiamond: Int
-)
+) : Parcelable
 
 
 object RewardsRetrofit {

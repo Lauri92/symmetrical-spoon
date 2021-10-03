@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
-import java.util.Observer
 
 class RewardListFragment : Fragment() {
 
@@ -26,10 +24,13 @@ class RewardListFragment : Fragment() {
     ): View? {
 
         val inventoryViewModel: InventoryViewModel by viewModels()
+        val collectedItemViewModel: CollectedItemViewModel by viewModels()
         val binding: FragmentRewardListBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_reward_list, container, false)
         binding.viewmodel = inventoryViewModel
         val view = binding.root
+
+       val collectedItems = collectedItemViewModel.getCollectedItems().map { it -> it.name }
 
         // display current amount of gems that the user has collected
         inventoryViewModel.getInventory().observe(viewLifecycleOwner, {
@@ -60,7 +61,7 @@ class RewardListFragment : Fragment() {
 
         rewardsApiViewModel.response.observe(viewLifecycleOwner,{
             Log.d("DQF","${it.get(0).description}")
-            itemList.adapter = RewardListAdapter(it)
+            itemList.adapter = RewardListAdapter(it, collectedItems)
         })
         return view
     }

@@ -65,8 +65,8 @@
         android:label="fragment_reward_item_description"
         tools:layout="@layout/fragment_reward_item_description" >
         <argument
-            android:name="rewardItemDummy"
-            app:argType="fi.lauriari.ar_project.RewardItemDummy" />
+            android:name="rewardItem"
+            app:argType="fi.lauriari.ar_project.Item" />
     </fragment>
     <fragment
         android:id="@+id/collectedItemList"

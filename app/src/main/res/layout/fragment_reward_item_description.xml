@@ -22,8 +22,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@color/container"
+        android:elevation="8dp"
         android:orientation="horizontal"
-        android:padding="4dp"
+        android:padding="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/back_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -172,28 +174,38 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/container"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/back_btn">
 
         <ImageView
             android:id="@+id/thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:src="@drawable/diamond" />
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="false"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_reward_item_placeholder" />
 
         <LinearLayout
             android:id="@+id/price_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/description"
 
             android:layout_centerInParent="true"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:gravity="center"
@@ -210,7 +222,7 @@
 
                 <ImageView
                     android:id="@+id/emerald_price"
-                    android:layout_width="15dp"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
@@ -223,7 +235,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="1"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -236,7 +248,7 @@
 
                 <ImageView
                     android:id="@+id/ruby_price"
-                    android:layout_width="15dp"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
@@ -248,7 +260,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="0"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -261,7 +273,7 @@
 
                 <ImageView
                     android:id="@+id/sapphire_price"
-                    android:layout_width="15dp"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
@@ -273,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="0"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -287,7 +299,7 @@
 
                 <ImageView
                     android:id="@+id/topaz_price"
-                    android:layout_width="15dp"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
@@ -299,7 +311,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="0"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -311,7 +323,7 @@
 
                 <ImageView
                     android:id="@+id/diamond_price"
-                    android:layout_width="15dp"
+                    android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
@@ -323,7 +335,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="0"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -334,7 +346,7 @@
             android:layout_below="@id/thumbnail"
             android:layout_centerInParent="true"
             android:text="name"
-            android:textSize="48sp"
+            android:textSize="40sp"
             android:textStyle="bold" />
 
         <TextView
@@ -352,6 +364,7 @@
         android:id="@+id/buy_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#C62828"
         android:padding="24dp"
         android:text="@string/buy_item"
         android:textSize="20sp"

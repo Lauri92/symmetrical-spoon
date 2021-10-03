@@ -8,7 +8,6 @@ data class CollectedItem(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val name: String,
-    // should preview image be a saved image or fetched by internet?
     val thumbnail: String,
     val description: String,
     val collectedTime: Long

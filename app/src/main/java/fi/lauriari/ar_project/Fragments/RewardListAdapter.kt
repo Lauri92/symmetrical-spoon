@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fi.lauriari.ar_project.Entities.CollectedItem
 import fi.lauriari.ar_project.Item
 import fi.lauriari.ar_project.R
 
-class RewardListAdapter(private val items: List<Item>?) :
+
+class RewardListAdapter(private val items: List<Item>?, private val collectedItems: List<String>) :
     RecyclerView.Adapter<RewardListAdapter.RewardListViewHolder>() {
 
     class RewardListViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview)
@@ -23,50 +26,61 @@ class RewardListAdapter(private val items: List<Item>?) :
     }
 
     override fun onBindViewHolder(holder: RewardListViewHolder, position: Int) {
+        Log.d("adapter collection","$collectedItems")
+
+        items?.forEach { item ->
+            collectedItems.forEach {
+                if (it == item.itemName){
+                    holder.itemView.isEnabled = false
+                }
+            }
+        }
+
+        // reward item list fetched from the JSON file
         val item = items?.get(position)
 
-        holder.itemView.findViewById<TextView>(R.id.item_name).text = item?.itemName
-        if (item?.emerald == 0) {
-            holder.itemView.findViewById<LinearLayout>(R.id.emerald_counter).visibility = View.GONE
-        } else {
-            holder.itemView.findViewById<TextView>(R.id.emerald_amount).text =
-                item?.emerald.toString()
-        }
-        Glide.with(holder.itemView.context).load(item?.thumbnail).placeholder(R.drawable.ic_reward_item_placeholder)
+        // set a preview image of the reward item by using Glide library
+        Glide.with(holder.itemView.context).load(item?.thumbnail)
+            .placeholder(R.drawable.ic_reward_item_placeholder)
+            .error(R.drawable.ic_reward_item_placeholder)
             .into(holder.itemView.findViewById(R.id.item_thumbnail))
-//        holder.itemView.findViewById<ImageView>(R.id.game_money)
-//            .setImageResource(currentItem.currency)
-//        holder.itemView.findViewById<TextView>(R.id.item_price).text = currentItem.price.toString()
+
+        // set a name of the reward item
+        holder.itemView.findViewById<TextView>(R.id.item_name).text = item?.itemName
+
+        // set price of the item with gems
+        // If the value of a gem is 0, a price container of the gem is gone from the view holder.
+        val gemValues = arrayOf(
+            Gems(item?.itemEmerald, R.id.emerald_counter, R.id.emerald_amount),
+            Gems(item?.itemRuby, R.id.ruby_counter, R.id.ruby_amount),
+            Gems(item?.itemSapphire, R.id.sapphire_counter, R.id.sapphire_amount),
+            Gems(item?.itemTopaz, R.id.topaz_counter, R.id.topaz_amount),
+            Gems(item?.itemDiamond, R.id.diamond_counter, R.id.diamond_amount)
+        )
+        gemValues.forEach { gem -> gem.initPriceText(holder.itemView) }
+
+        // move to the description(purchase) view for each items
         holder.itemView.findViewById<View>(R.id.reward_item_layout).setOnClickListener {
-//            val action =
-//                RewardListFragmentDirections.actionRewardListFragmentToRewardItemDescription(
-//                    currentItem
-//                )
-//            it.findNavController().navigate(action)
-            Log.d("clicked", "clicked ${item?.itemName}")
+            val action =
+                RewardListFragmentDirections.actionRewardListFragmentToRewardItemDescription(item!!)
+            it.findNavController().navigate(action)
+//            Log.d("clicked", "clicked ${item?.itemName}")
         }
-        holder.itemView.isEnabled = false
+        // holder.itemView.isEnabled = false
     }
 
     override fun getItemCount(): Int {
         return items?.size ?: 0
     }
 
-//    private fun hideCounter(counter:String){
-//        if (item[counter] == 0) {
-//            holder.itemView.findViewById<LinearLayout>(id[counter]).visibility = View.GONE
-//        } else {
-//            holder.itemView.findViewById<TextView>(id.emerald_amount).text =
-//                item?.emerald.toString()
-//        }
-//
-//        if (item?.(counter) == 0) {
-//            holder.itemView.findViewById<LinearLayout>(id.topaz_counter).visibility = View.GONE
-//        } else {
-//            val selector = id._amount
-//            holder.itemView.findViewById<TextView>(selector).text =
-//                item?.topaz.toString()
-//        }
-//    }
+}
 
+class Gems(val value: Int?, val layoutId: Int, val textViewId: Int) {
+    fun initPriceText(view: View) {
+        if (value == 0) {
+            view.findViewById<LinearLayout>(layoutId).visibility = View.GONE
+        } else {
+            view.findViewById<TextView>(textViewId).text = value.toString()
+        }
+    }
 }
