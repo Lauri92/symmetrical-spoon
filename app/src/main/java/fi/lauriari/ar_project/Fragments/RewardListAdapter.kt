@@ -1,13 +1,13 @@
 package fi.lauriari.ar_project.Fragments
 
-import android.graphics.drawable.ColorDrawable
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -27,8 +27,6 @@ class RewardListAdapter(private val items: List<Item>?, private val collectedIte
     }
 
     override fun onBindViewHolder(holder: RewardListViewHolder, position: Int) {
-        Log.d("adapter collection", "$collectedItems")
-
         // reward item list fetched from the JSON file
         val item = items?.get(position)
 
@@ -52,29 +50,26 @@ class RewardListAdapter(private val items: List<Item>?, private val collectedIte
         )
         gemValues.forEach { gem -> gem.initPriceText(holder.itemView) }
 
-        // move to the description(purchase) view for each items
+        // move to the detailed description(purchase) view for each items
         holder.itemView.findViewById<View>(R.id.reward_item_layout).setOnClickListener {
             val action =
                 RewardListFragmentDirections.actionRewardListFragmentToRewardItemDescription(item!!)
             it.findNavController().navigate(action)
-//            Log.d("clicked", "clicked ${item?.itemName}")
         }
-        // holder.itemView.isEnabled = false
 
+        // If there are items that the user already purchased, disable clicking those items with the foreground image
         collectedItems.forEach {
             if (it == item?.itemName) {
                 holder.itemView.isClickable = false
                 holder.itemView.findViewById<ConstraintLayout>(R.id.reward_item_layout).foreground =
-                    ColorDrawable(R.color.black_overlay)
+                    ContextCompat.getDrawable(holder.itemView.context, R.drawable.sold_out_filter)
             }
         }
-
     }
 
     override fun getItemCount(): Int {
         return items?.size ?: 0
     }
-
 }
 
 class Gems(val value: Int?, val layoutId: Int, val textViewId: Int) {
