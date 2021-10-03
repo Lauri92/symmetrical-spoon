@@ -23,6 +23,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.ux.ArFragment
@@ -82,29 +83,13 @@ class GameARFragment : Fragment() {
         mTriviaApiViewModel =
             ViewModelProvider(this, viewModelFactory).get(TriviaApiViewModel::class.java)
         lifecycleScope.launch(context = Dispatchers.IO) {
+            // TODO: Check that these exist on click listeners else return ! ! !
             quizQuestion = mTriviaApiViewModel.getQuiz()
             imageQuestionsResponse = mTriviaApiViewModel.getImageQuestions()
             imageSelectionQuestionList = mTriviaApiViewModel.getImageSelectionQuestions()
             //imageQuestionList = (imageQuestionsResponse!!.body() as MutableList<ImageQuestion>?)!!
-            Log.d("image",imageSelectionQuestionList!![0].correctAnswer)
+            Log.d("image", imageSelectionQuestionList!![0].correctAnswer)
         }
-
-        val imageSelectionQuestions = mutableListOf<ImageSelectionQuestion>(
-            ImageSelectionQuestion(
-                "Find the flag of Finland",
-                "japan-flag.png",
-                "american-flag.png",
-                "finland-flag.png",
-                "finland-flag.png"
-            ),
-            ImageSelectionQuestion(
-                "Find the flag of USA",
-                "japan-flag.png",
-                "american-flag.png",
-                "finland-flag.png",
-                "american-flag.png"
-            )
-        )
 
         view.findViewById<Button>(R.id.add_flag_question_btn).setOnClickListener {
             imageQuestionRenderable ?: return@setOnClickListener
@@ -697,6 +682,10 @@ class GameARFragment : Fragment() {
         val node = TransformableNode(arFrag.transformationSystem)
         node.setParent(anchorNode)
         node.renderable = viewRenderable
+        if (randomDirection == 2 || randomDirection == 3) {
+            // Rotate viewrenderable so that text is facing towards the user
+            node.localRotation = Quaternion(0f, 0.7399401f, 0f, 0.67267275f)
+        }
 
         return node
     }
