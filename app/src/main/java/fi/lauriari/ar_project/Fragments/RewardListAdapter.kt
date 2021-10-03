@@ -1,15 +1,16 @@
 package fi.lauriari.ar_project.Fragments
 
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import fi.lauriari.ar_project.Entities.CollectedItem
 import fi.lauriari.ar_project.Item
 import fi.lauriari.ar_project.R
 
@@ -26,15 +27,7 @@ class RewardListAdapter(private val items: List<Item>?, private val collectedIte
     }
 
     override fun onBindViewHolder(holder: RewardListViewHolder, position: Int) {
-        Log.d("adapter collection","$collectedItems")
-
-        items?.forEach { item ->
-            collectedItems.forEach {
-                if (it == item.itemName){
-                    holder.itemView.isEnabled = false
-                }
-            }
-        }
+        Log.d("adapter collection", "$collectedItems")
 
         // reward item list fetched from the JSON file
         val item = items?.get(position)
@@ -67,6 +60,15 @@ class RewardListAdapter(private val items: List<Item>?, private val collectedIte
 //            Log.d("clicked", "clicked ${item?.itemName}")
         }
         // holder.itemView.isEnabled = false
+
+        collectedItems.forEach {
+            if (it == item?.itemName) {
+                holder.itemView.isClickable = false
+                holder.itemView.findViewById<ConstraintLayout>(R.id.reward_item_layout).foreground =
+                    ColorDrawable(R.color.black_overlay)
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {
