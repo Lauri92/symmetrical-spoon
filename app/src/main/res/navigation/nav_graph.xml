@@ -72,5 +72,17 @@
         android:id="@+id/collectedItemList"
         android:name="fi.lauriari.ar_project.Fragments.CollectedItemListFragment"
         android:label="fragment_collected_item_list"
-        tools:layout="@layout/fragment_collected_item_list" />
+        tools:layout="@layout/fragment_collected_item_list" >
+        <action
+            android:id="@+id/action_collectedItemList_to_collectionDescriptionFragment"
+            app:destination="@id/collectionDescriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionDescriptionFragment"
+        android:name="fi.lauriari.ar_project.Fragments.CollectionDescriptionFragment"
+        android:label="CollectionDescriptionFragment" >
+        <argument
+            android:name="collectedItem"
+            app:argType="fi.lauriari.ar_project.Entities.CollectedItem" />
+    </fragment>
 </navigation>

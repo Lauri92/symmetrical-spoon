@@ -1,6 +1,5 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.repositories
 
-import androidx.lifecycle.LiveData
 import fi.lauriari.ar_project.Dao.CollectedItemDao
 import fi.lauriari.ar_project.Entities.CollectedItem
 

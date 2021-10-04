@@ -2,7 +2,7 @@ package fi.lauriari.ar_project
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import fi.lauriari.ar_project.repositories.CollectedItemRepository
 import fi.lauriari.ar_project.Entities.CollectedItem
 import kotlinx.coroutines.runBlocking
 

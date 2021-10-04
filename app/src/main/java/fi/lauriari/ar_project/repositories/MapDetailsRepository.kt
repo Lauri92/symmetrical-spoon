@@ -1,4 +1,9 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.repositories
+
+import fi.lauriari.ar_project.MapDetails
+import fi.lauriari.ar_project.Dao.MapDetailsDao
+import fi.lauriari.ar_project.MapDetailsWithAllLatLngValues
+import fi.lauriari.ar_project.MapLatLng
 
 class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
 

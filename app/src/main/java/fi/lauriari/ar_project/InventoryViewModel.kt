@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.repositories.InventoryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -85,5 +86,4 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         }
         return inventory
     }
-
 }

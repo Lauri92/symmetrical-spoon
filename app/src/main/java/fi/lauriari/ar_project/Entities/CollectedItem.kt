@@ -1,8 +1,11 @@
 package fi.lauriari.ar_project.Entities
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "collected_item_table")
 data class CollectedItem(
     @PrimaryKey(autoGenerate = true)
@@ -11,4 +14,4 @@ data class CollectedItem(
     val thumbnail: String,
     val description: String,
     val collectedTime: Long
-)
+):Parcelable

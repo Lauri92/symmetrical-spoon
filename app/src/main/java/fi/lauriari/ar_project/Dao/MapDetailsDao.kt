@@ -1,6 +1,9 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Dao
 
 import androidx.room.*
+import fi.lauriari.ar_project.MapDetails
+import fi.lauriari.ar_project.MapDetailsWithAllLatLngValues
+import fi.lauriari.ar_project.MapLatLng
 
 @Dao
 interface MapDetailsDao {

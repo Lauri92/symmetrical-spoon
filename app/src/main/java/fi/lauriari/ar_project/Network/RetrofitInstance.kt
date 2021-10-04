@@ -1,5 +1,6 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Network
 
+import fi.lauriari.ar_project.TriviaApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

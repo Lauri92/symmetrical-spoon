@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.lauriari.ar_project.*
+import fi.lauriari.ar_project.CollectedItemViewModel
+import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
 
 class RewardListFragment : Fragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
         val inventoryViewModel: InventoryViewModel by viewModels()
@@ -30,7 +31,7 @@ class RewardListFragment : Fragment() {
         binding.viewmodel = inventoryViewModel
         val view = binding.root
 
-       val collectedItems = collectedItemViewModel.getCollectedItems().map { it -> it.name }
+        val collectedItems = collectedItemViewModel.getCollectedItems().map { it.name }
 
         // display current amount of gems that the user has collected
         inventoryViewModel.getInventory().observe(viewLifecycleOwner, {
@@ -45,7 +46,6 @@ class RewardListFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-
         val repo = RewardsRepository()
         val viewModelFactory = RewardsApiViewModelFactory(repo)
 
@@ -53,14 +53,10 @@ class RewardListFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(RewardsApiViewModel::class.java)
         rewardsApiViewModel.getItems()
 
-
-
-        val itemList = view.findViewById<RecyclerView>(R.id.rewards_list)
+        val itemList = binding.rewardsList
         itemList.layoutManager = GridLayoutManager(activity, 2)
 
-
-        rewardsApiViewModel.response.observe(viewLifecycleOwner,{
-            Log.d("DQF","${it.get(0).description}")
+        rewardsApiViewModel.response.observe(viewLifecycleOwner, {
             itemList.adapter = RewardListAdapter(it, collectedItems)
         })
         return view

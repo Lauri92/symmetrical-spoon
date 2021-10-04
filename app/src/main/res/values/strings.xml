@@ -12,4 +12,6 @@
     <string name="reward_shop">Reward Shop</string>
     <string name="buy_item">Buy this item</string>
     <string name="my_collections">My Collections</string>
+    <string name="play_with">Play with %s!</string>
+    <string name="collected_time">Collected time: %s</string>
 </resources>

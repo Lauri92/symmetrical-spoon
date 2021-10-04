@@ -39,8 +39,10 @@
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/drawable/topaz.xml" value="0.26979166666666665" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/font/nuntino.xml" value="0.2838541666666667" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/activity_main.xml" value="0.22864583333333333" />
+        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/collected_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/flag_question_layout.xml" value="0.25364583333333335" />
-        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collected_item_list.xml" value="0.24947916666666667" />
+        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collected_item_list.xml" value="0.2" />
+        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collection_description.xml" value="0.2" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_daily_quest.xml" value="0.2" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_game_map.xml" value="0.25364583333333335" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_game_menu.xml" value="0.264" />

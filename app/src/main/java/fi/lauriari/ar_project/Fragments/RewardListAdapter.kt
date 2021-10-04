@@ -4,16 +4,15 @@ package fi.lauriari.ar_project.Fragments
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fi.lauriari.ar_project.Gems
 import fi.lauriari.ar_project.Item
 import fi.lauriari.ar_project.R
-
 
 class RewardListAdapter(private val items: List<Item>?, private val collectedItems: List<String>) :
     RecyclerView.Adapter<RewardListAdapter.RewardListViewHolder>() {
@@ -69,15 +68,5 @@ class RewardListAdapter(private val items: List<Item>?, private val collectedIte
 
     override fun getItemCount(): Int {
         return items?.size ?: 0
-    }
-}
-
-class Gems(val value: Int?, val layoutId: Int, val textViewId: Int) {
-    fun initPriceText(view: View) {
-        if (value == 0) {
-            view.findViewById<LinearLayout>(layoutId).visibility = View.GONE
-        } else {
-            view.findViewById<TextView>(textViewId).text = value.toString()
-        }
     }
 }

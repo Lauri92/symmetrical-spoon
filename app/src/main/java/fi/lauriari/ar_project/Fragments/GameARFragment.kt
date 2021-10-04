@@ -27,6 +27,10 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.repositories.TriviaRepository
+import fi.lauriari.ar_project.InventoryViewModel
+import fi.lauriari.ar_project.MapDetailsViewModel
+import fi.lauriari.ar_project.TriviaApiViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.net.URL
