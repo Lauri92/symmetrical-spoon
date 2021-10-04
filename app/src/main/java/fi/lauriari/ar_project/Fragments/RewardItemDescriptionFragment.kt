@@ -87,6 +87,7 @@ class RewardItemDescriptionFragment : Fragment() {
                                 0,
                                 currentItem.itemName,
                                 currentItem.thumbnail,
+                                currentItem.objectUrl,
                                 currentItem.description,
                                 dateNow
                             )

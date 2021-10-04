@@ -12,6 +12,7 @@ data class CollectedItem(
     val id: Long,
     val name: String,
     val thumbnail: String,
+    val objectUrl: String,
     val description: String,
     val collectedTime: Long
 ):Parcelable

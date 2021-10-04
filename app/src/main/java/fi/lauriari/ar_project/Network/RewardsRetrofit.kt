@@ -19,6 +19,7 @@ class Item(
     @SerializedName("name") val itemName: String,
     @SerializedName("description") val description: String,
     @SerializedName("thumbnail") val thumbnail: String,
+    @SerializedName("objectUrl") val objectUrl: String,
     @SerializedName("emerald") val itemEmerald: Int,
     @SerializedName("ruby") val itemRuby: Int,
     @SerializedName("sapphire") val itemSapphire: Int,

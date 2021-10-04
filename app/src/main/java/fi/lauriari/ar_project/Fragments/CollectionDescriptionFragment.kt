@@ -1,6 +1,7 @@
 package fi.lauriari.ar_project.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class CollectionDescriptionFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_collection_description, container, false)
         val item = args.collectedItem
+        Log.d("current item","$item")
         val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         val collectedTimeString = simpleDateFormat.format(item.collectedTime)
 
