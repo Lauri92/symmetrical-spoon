@@ -1,6 +1,7 @@
 package fi.lauriari.ar_project.Dao
 
 import androidx.room.*
+import fi.lauriari.ar_project.DailyQuest
 import fi.lauriari.ar_project.MapDetails
 import fi.lauriari.ar_project.MapDetailsWithAllLatLngValues
 import fi.lauriari.ar_project.MapLatLng
@@ -36,5 +37,14 @@ interface MapDetailsDao {
 
     @Query("SELECT * FROM maplatlng_table WHERE mapDetailsId = :mapDetailsId")
     suspend fun getMapLatLngPointsByMapDetailsId(mapDetailsId: Long): List<MapLatLng>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertDailyQuest(dailyQuest: DailyQuest)
+
+    @Update
+    suspend fun updateDailyQuest(dailyQuest: DailyQuest)
+
+    @Query("SELECT * FROM dailyquest_table WHERE mapDetailsId= :mapDetailsId")
+    suspend fun getDailyQuestsByMapDetailsId(mapDetailsId: Long): List<DailyQuest>
 
 }

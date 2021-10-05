@@ -34,16 +34,16 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/distance_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Distance"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/navigate_to_game_AR_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:text="Distance to destinationation: " />
 
     <Button
         android:id="@+id/navigate_to_game_AR_btn"
@@ -55,98 +55,143 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:clickable="true"
-        android:src="@drawable/emerald"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/container"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/emerald_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:clickable="true"
+            android:src="@drawable/emerald"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ruby_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:clickable="true"
+            android:src="@drawable/ruby"
+            app:layout_constraintBottom_toBottomOf="@+id/emeralds_tv"
+            app:layout_constraintStart_toEndOf="@+id/emeralds_tv"
+            app:layout_constraintTop_toTopOf="@+id/emeralds_tv" />
+
+        <ImageView
+            android:id="@+id/sapphire_iv"
+            android:layout_width="31dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="24dp"
+            android:clickable="true"
+            android:src="@drawable/sapphire"
+            app:layout_constraintBottom_toBottomOf="@+id/rubies_tv"
+            app:layout_constraintStart_toEndOf="@+id/rubies_tv"
+            app:layout_constraintTop_toTopOf="@+id/rubies_tv"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/topaz_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:clickable="true"
+            android:src="@drawable/topaz"
+            app:layout_constraintBottom_toBottomOf="@+id/sapphires_tv"
+            app:layout_constraintStart_toEndOf="@+id/sapphires_tv"
+            app:layout_constraintTop_toTopOf="@+id/sapphires_tv"
+            app:layout_constraintVertical_bias="0.666" />
+
+        <ImageView
+            android:id="@+id/diamond_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:clickable="true"
+            android:src="@drawable/ic_diamond"
+            app:layout_constraintBottom_toBottomOf="@+id/topazes_tv"
+            app:layout_constraintStart_toEndOf="@+id/topazes_tv"
+            app:layout_constraintTop_toTopOf="@+id/topazes_tv"
+            app:layout_constraintVertical_bias="0.666" />
+
+        <TextView
+            android:id="@+id/emeralds_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="1"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/emerald_iv"
+            app:layout_constraintStart_toEndOf="@+id/emerald_iv"
+            app:layout_constraintTop_toTopOf="@+id/emerald_iv" />
+
+        <TextView
+            android:id="@+id/rubies_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ruby_iv"
+            app:layout_constraintStart_toEndOf="@+id/ruby_iv"
+            app:layout_constraintTop_toTopOf="@+id/ruby_iv" />
+
+        <TextView
+            android:id="@+id/sapphires_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="3"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sapphire_iv"
+            app:layout_constraintStart_toEndOf="@+id/sapphire_iv"
+            app:layout_constraintTop_toTopOf="@+id/sapphire_iv"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/topazes_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="4"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/topaz_iv"
+            app:layout_constraintStart_toEndOf="@+id/topaz_iv"
+            app:layout_constraintTop_toTopOf="@+id/topaz_iv" />
+
+        <TextView
+            android:id="@+id/diamonds_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="5"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/diamond_iv"
+            app:layout_constraintStart_toEndOf="@+id/diamond_iv"
+            app:layout_constraintTop_toTopOf="@+id/diamond_iv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/floatingActionButton2"
+        android:id="@+id/daily_quest_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
-        android:src="@drawable/ruby"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/floatingActionButton" />
-
-    <ImageView
-        android:id="@+id/floatingActionButton3"
-        android:layout_width="31dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:src="@drawable/sapphire"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/floatingActionButton2" />
-
-    <ImageView
-        android:id="@+id/floatingActionButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:src="@drawable/topaz"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/floatingActionButton3" />
-
-    <TextView
-        android:id="@+id/emeralds_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="1"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton" />
-
-    <TextView
-        android:id="@+id/rubies_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="2"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton2"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButton2"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton2" />
-
-    <TextView
-        android:id="@+id/sapphires_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="3"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton3"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButton3"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton3"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/topazes_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="4"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton4"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButton4"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton4" />
-
+        android:src="@mipmap/ic_quest_round"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

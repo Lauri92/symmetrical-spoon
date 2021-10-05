@@ -11,7 +11,11 @@ import fi.lauriari.ar_project.Entities.CollectedItem
 import fi.lauriari.ar_project.Entities.Inventory
 
 
-@Database(entities = [(MapDetails::class), (MapLatLng::class), (Inventory::class), (CollectedItem::class)], version = 1, exportSchema = false)
+@Database(
+    entities = [(MapDetails::class), (MapLatLng::class), (Inventory::class), (CollectedItem::class), (DailyQuest::class)],
+    version = 1,
+    exportSchema = false
+)
 abstract class SpoonDB : RoomDatabase() {
 
     abstract fun mapDetailsDao(): MapDetailsDao

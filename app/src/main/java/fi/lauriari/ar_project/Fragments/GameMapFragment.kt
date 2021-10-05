@@ -25,10 +25,13 @@ import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.MapDetailsViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
@@ -92,7 +95,16 @@ class GameMapFragment : Fragment() {
 
         checkSelfPermissions()
 
-        setRemainingGemValues()
+        setUserCollectedGems()
+
+        view.findViewById<ImageView>(R.id.daily_quest_fab).setOnClickListener {
+            //Toast.makeText(requireContext(), "Clicked daily quest fab!", Toast.LENGTH_SHORT).show()
+            val mapDetailsId = mMapDetailsViewModel.getLatestMapDetails().id
+            val dailyQuests = mMapDetailsViewModel.getDailyQuestsByMapDetailsId(mapDetailsId)
+            dailyQuests.forEach {
+                Log.d("dailyquest", it.toString())
+            }
+        }
 
         view.findViewById<Button>(R.id.navigate_to_game_AR_btn).setOnClickListener {
             //findNavController().navigate(R.id.action_gameMapFragment_to_gameARFragment)
@@ -201,7 +213,7 @@ class GameMapFragment : Fragment() {
             }
         }
 
-        val geoPoints = ArrayList<GeoPoint>();
+        val geoPoints = ArrayList<GeoPoint>()
         val polygon = Polygon()
         val radius = 10.0
         for (i in 1..360) {
@@ -221,6 +233,7 @@ class GameMapFragment : Fragment() {
     private fun setMap(geoPoint: GeoPoint, firstcall: Boolean = false) {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
+        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         map.controller.setZoom(13.0)
         map.controller.setCenter(geoPoint)
 
@@ -341,72 +354,193 @@ class GameMapFragment : Fragment() {
         val minutes = calendar.get(Calendar.MINUTE) * 60_000
         val seconds = calendar.get(Calendar.SECOND) * 1000
         // Do calculation to set time to mid day 43200000ms -> 12hours
-        dateNow = dateNow - hours - minutes - seconds //+ 43_200_000
+        //dateNow = dateNow - hours - minutes - seconds //+ 43_200_000
         // Returns the inserted rowId as well
         val newMapDetailsId =
             mMapDetailsViewModel.insertMapDetails(MapDetails(0, dateNow, 0, 0, 0, 0, 0))
-        chosenPoints.forEach {
-            lifecycleScope.launch(context = Dispatchers.IO) {
-                val address = getAddress(it.latitude, it.longitude)
-                if (address.contains("Unnamed Road")) {
-                    return@launch
-                }
-
-                var collectableReward = ""
-                var collectable = R.drawable.ic_baseline_pets_24
-                when (val random = (0..100).random()) {
-                    in 0..24 -> {
-                        collectable = R.drawable.topaz
-                        collectableReward = "Topaz"
+        lifecycleScope.launch {
+            val addLatLng = async(Dispatchers.IO) {
+                chosenPoints.forEach {
+                    val address = getAddress(it.latitude, it.longitude)
+                    if (address.contains("Unnamed Road")) {
+                        Log.d("Leave", "Leaving the loop!")
+                        return@async
                     }
-                    in 25..49 -> {
-                        collectable = R.drawable.ruby
-                        collectableReward = "Ruby"
+                    var collectableReward = ""
+                    var collectable = R.drawable.ic_baseline_pets_24
+                    when (val random = (0..100).random()) {
+                        in 0..24 -> {
+                            collectable = R.drawable.topaz
+                            collectableReward = "Topaz"
+                        }
+                        in 25..49 -> {
+                            collectable = R.drawable.ruby
+                            collectableReward = "Ruby"
+                        }
+                        in 50..75 -> {
+                            collectable = R.drawable.sapphire
+                            collectableReward = "Sapphire"
+                        }
+                        in 76..100 -> {
+                            collectable = R.drawable.emerald
+                            collectableReward = "Emerald"
+                        }
                     }
-                    in 50..75 -> {
-                        collectable = R.drawable.sapphire
-                        collectableReward = "Sapphire"
-                    }
-                    in 76..100 -> {
-                        collectable = R.drawable.emerald
-                        collectableReward = "Emerald"
-                    }
-                }
-                Log.d("random", "Collectable: $collectable")
-                val insertedId = mMapDetailsViewModel.insertMapLatLng(
-                    MapLatLng(
-                        0,
-                        newMapDetailsId,
-                        it.latitude,
-                        it.longitude,
-                        address,
-                        collectableReward,
-                        true
+                    Log.d("random", "Collectable: $collectable")
+                    val insertedId = mMapDetailsViewModel.insertMapLatLng(
+                        MapLatLng(
+                            0,
+                            newMapDetailsId,
+                            it.latitude,
+                            it.longitude,
+                            address,
+                            collectableReward,
+                            true
+                        )
                     )
-                )
-                locationIdAction = insertedId
-                val loopMarker = Marker(map)
-                loopMarker.icon = AppCompatResources.getDrawable(
-                    requireContext(),
-                    collectable
-                )
-                loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                loopMarker.position = GeoPoint(it.latitude, it.longitude)
+                    locationIdAction = insertedId
+                    val loopMarker = Marker(map)
+                    loopMarker.icon = AppCompatResources.getDrawable(
+                        requireContext(),
+                        collectable
+                    )
+                    loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                    loopMarker.position = GeoPoint(it.latitude, it.longitude)
 
-                loopMarker.setOnMarkerClickListener { marker, mapView ->
-                    Log.d("test", marker.position.latitude.toString())
-                    activeDestination.latitude = marker.position.latitude
-                    activeDestination.longitude = marker.position.longitude
-                    // Draw a Polygon around it
-                    drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
-                    getDistanceToMarker(activeDestination)
-                    map.invalidate()
-                    marker.showInfoWindow()
-                    return@setOnMarkerClickListener true
+                    loopMarker.setOnMarkerClickListener { marker, mapView ->
+                        Log.d("test", marker.position.latitude.toString())
+                        activeDestination.latitude = marker.position.latitude
+                        activeDestination.longitude = marker.position.longitude
+                        // Draw a Polygon around it
+                        drawPolygon(
+                            GeoPoint(
+                                marker.position.latitude,
+                                marker.position.longitude
+                            )
+                        )
+                        getDistanceToMarker(activeDestination)
+                        map.invalidate()
+                        marker.showInfoWindow()
+                        return@setOnMarkerClickListener true
+                    }
+
+                    loopMarker.title = address
+                    map.overlays.add(loopMarker)
                 }
+            }
+            addLatLng.join()
 
-                loopMarker.title = address
-                map.overlays.add(loopMarker)
+            //TODO  Construct the daily quests here!!
+
+            val newest = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(newMapDetailsId)
+            val latLngValues = newest.latLngValues
+            val totalEmeralds = latLngValues?.filter {
+                it.reward == "Emerald"
+            }
+            val totalRubies = latLngValues?.filter {
+                it.reward == "Ruby"
+            }
+            val totalSapphires = latLngValues?.filter {
+                it.reward == "Sapphire"
+            }
+            val totalTopazes = latLngValues?.filter {
+                it.reward == "Topaz"
+            }
+
+            val taskList = mutableListOf<DailyQuest>()
+
+            val taskCollectAllEmeralds = DailyQuest(
+                id = 0,
+                mapDetailsId = newMapDetailsId,
+                requiredEmeralds = totalEmeralds!!.size,
+                requiredRubies = 0,
+                requiredSapphires = 0,
+                requiredTopazes = 0,
+                requiredSteps = 0,
+                description = "Collect all Emeralds from the map!",
+                rewardString = "Reward: 3 Diamonds",
+                rewardAmount = 3,
+                isCompleted = false
+            )
+            if (totalEmeralds.isNotEmpty()) taskList.add(taskCollectAllEmeralds)
+
+            val taskCollectAllRubies = DailyQuest(
+                id = 0,
+                mapDetailsId = newMapDetailsId,
+                requiredEmeralds = 0,
+                requiredRubies = totalRubies!!.size,
+                requiredSapphires = 0,
+                requiredTopazes = 0,
+                requiredSteps = 0,
+                description = "Collect all Rubies from the map!",
+                rewardString = "Reward: 3 Diamonds",
+                rewardAmount = 3,
+                isCompleted = false
+            )
+            if (totalRubies.isNotEmpty()) taskList.add(taskCollectAllRubies)
+
+            val taskCollectAllSapphires = DailyQuest(
+                id = 0,
+                mapDetailsId = newMapDetailsId,
+                requiredEmeralds = 0,
+                requiredRubies = 0,
+                requiredSapphires = totalSapphires!!.size,
+                requiredTopazes = 0,
+                requiredSteps = 0,
+                description = "Collect all Saphires from the map!",
+                rewardString = "Reward: 3 Diamonds",
+                rewardAmount = 3,
+                isCompleted = false
+            )
+            if (totalSapphires.isNotEmpty()) taskList.add(taskCollectAllSapphires)
+
+            val taskCollectAllTopazes = DailyQuest(
+                id = 0,
+                mapDetailsId = newMapDetailsId,
+                requiredEmeralds = 0,
+                requiredRubies = 0,
+                requiredSapphires = 0,
+                requiredTopazes = totalTopazes!!.size,
+                requiredSteps = 0,
+                description = "Collect all Topazes from the map!",
+                rewardString = "Reward: 3 Diamonds",
+                rewardAmount = 3,
+                isCompleted = false
+            )
+            if (totalTopazes.isNotEmpty()) taskList.add(taskCollectAllTopazes)
+
+            val taskCollectOneOfEachGem = DailyQuest(
+                id = 0,
+                mapDetailsId = newMapDetailsId,
+                requiredEmeralds = 1,
+                requiredRubies = 1,
+                requiredSapphires = 1,
+                requiredTopazes = 1,
+                requiredSteps = 0,
+                description = "Collect one of each gems!",
+                rewardString = "Reward: 3 Diamonds",
+                rewardAmount = 3,
+                isCompleted = false
+            )
+            if (totalEmeralds.isNotEmpty() && totalRubies.isNotEmpty() &&
+                totalSapphires.isNotEmpty() && totalTopazes.isNotEmpty()
+            ) {
+                taskList.add(taskCollectOneOfEachGem)
+            }
+
+            val chosenDailyQuests = mutableListOf<DailyQuest>()
+            for (i in 1..2) {
+                Log.d("testrnd", "Full list: $taskList")
+                val random = taskList.random()
+                chosenDailyQuests.add(random)
+                Log.d("testrnd", "Randomed item: $random")
+                taskList.remove(random)
+                Log.d("testrnd", "Tasklist after removal: $taskList")
+            }
+            lifecycleScope.launch(context = Dispatchers.IO) {
+                chosenDailyQuests.forEach {
+                    mMapDetailsViewModel.insertDailyQuest(it)
+                }
             }
         }
     }
@@ -419,9 +553,9 @@ class GameMapFragment : Fragment() {
         currentLocation.latitude = ownLocationmarker.position.latitude
         currentLocation.longitude = ownLocationmarker.position.longitude
 
-        val distance = currentLocation.distanceTo(destinationLocation)
+        val distance = currentLocation.distanceTo(destinationLocation).toInt()
 
-        view.findViewById<TextView>(R.id.textView).text = distance.toString()
+        view.findViewById<TextView>(R.id.distance_tv).text = "Distance to destination: ${distance}m"
 
         // Set isEnable to true or false
         view.findViewById<Button>(R.id.navigate_to_game_AR_btn).isEnabled = distance < 5000
@@ -477,19 +611,14 @@ class GameMapFragment : Fragment() {
     /**
      * Display the remaining gems for today
      */
-    private fun setRemainingGemValues() {
+    private fun setUserCollectedGems() {
         lifecycleScope.launch(context = Dispatchers.IO) {
-            val latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
-            val points = mMapDetailsViewModel.getMapLatLngPointsByMapDetailsId(latestMapDetails.id)
-            Log.d("details", points.toString())
-            view.findViewById<TextView>(R.id.emeralds_tv).text =
-                points.filter { it.reward == "Emerald" && it.isActive }.size.toString()
-            view.findViewById<TextView>(R.id.rubies_tv).text =
-                points.filter { it.reward == "Ruby" && it.isActive }.size.toString()
-            view.findViewById<TextView>(R.id.sapphires_tv).text =
-                points.filter { it.reward == "Sapphire" && it.isActive }.size.toString()
-            view.findViewById<TextView>(R.id.topazes_tv).text =
-                points.filter { it.reward == "Topaz" && it.isActive }.size.toString()
+            val gems = mInventoryViewModel.getInventoryNormal()
+            view.findViewById<TextView>(R.id.emeralds_tv).text = gems.emeralds.toString()
+            view.findViewById<TextView>(R.id.rubies_tv).text = gems.rubies.toString()
+            view.findViewById<TextView>(R.id.sapphires_tv).text = gems.sapphires.toString()
+            view.findViewById<TextView>(R.id.topazes_tv).text = gems.topazes.toString()
+            view.findViewById<TextView>(R.id.diamonds_tv).text = gems.diamonds.toString()
         }
     }
 }
