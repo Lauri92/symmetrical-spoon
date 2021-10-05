@@ -341,7 +341,7 @@ class GameMapFragment : Fragment() {
         val minutes = calendar.get(Calendar.MINUTE) * 60_000
         val seconds = calendar.get(Calendar.SECOND) * 1000
         // Do calculation to set time to mid day 43200000ms -> 12hours
-        dateNow = dateNow - hours - minutes - seconds + 43_200_000
+        dateNow = dateNow - hours - minutes - seconds //+ 43_200_000
         // Returns the inserted rowId as well
         val newMapDetailsId =
             mMapDetailsViewModel.insertMapDetails(MapDetails(0, dateNow, 0, 0, 0, 0, 0))
