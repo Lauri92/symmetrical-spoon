@@ -44,6 +44,9 @@ android {
 apply plugin: "kotlin-kapt"
 dependencies {
 
+    // Graphview
+    implementation 'com.jjoe64:graphview:4.2.2'
+
     // Gson
     implementation 'com.google.code.gson:gson:2.8.8'
 

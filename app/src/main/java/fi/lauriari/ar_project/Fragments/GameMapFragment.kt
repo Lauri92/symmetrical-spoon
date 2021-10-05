@@ -334,7 +334,13 @@ class GameMapFragment : Fragment() {
      */
     private fun setNewLocationsOnMap(chosenPoints: List<GeoPoint>) {
         Log.d("locationsset", "Setting new locations")
-        val dateNow = Calendar.getInstance().timeInMillis
+        var dateNow = Calendar.getInstance().timeInMillis
+        val calendar: Calendar = Calendar.getInstance()
+        val hours = calendar.get(Calendar.HOUR) * 3_600_000
+        val minutes = calendar.get(Calendar.MINUTE) * 60_000
+        val seconds = calendar.get(Calendar.SECOND) * 1000
+        // Do subtraction to set time to midnight
+        dateNow = dateNow - hours - minutes - seconds
         // Returns the inserted rowId as well
         val newMapDetailsId =
             mMapDetailsViewModel.insertMapDetails(MapDetails(0, dateNow, 0, 0, 0, 0, 0))

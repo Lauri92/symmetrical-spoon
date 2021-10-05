@@ -16,6 +16,13 @@ class MapDetailsViewModel(application: Application) : AndroidViewModel(applicati
         mapDetailsRepository = MapDetailsRepository(mapDetailsDao)
     }
 
+    fun getAllMapDetails(): List<MapDetails> {
+        var allMapDetails: List<MapDetails>
+        runBlocking {
+            allMapDetails = mapDetailsRepository.getAllMapDetails()
+        }
+        return allMapDetails
+    }
 
     fun insertMapDetails(mapDetails: MapDetails): Long {
         var insertedRowId: Long
