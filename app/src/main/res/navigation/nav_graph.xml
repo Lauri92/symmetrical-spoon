@@ -72,12 +72,6 @@
         android:id="@+id/collectedItemList"
         android:name="fi.lauriari.ar_project.Fragments.CollectedItemListFragment"
         android:label="fragment_collected_item_list"
-        tools:layout="@layout/fragment_collected_item_list" />
-    <fragment
-        android:id="@+id/graphsFragment"
-        android:name="fi.lauriari.ar_project.GraphsFragment"
-        android:label="fragment_graphs"
-        tools:layout="@layout/fragment_graphs" />
         tools:layout="@layout/fragment_collected_item_list" >
         <action
             android:id="@+id/action_collectedItemList_to_collectionDescriptionFragment"
