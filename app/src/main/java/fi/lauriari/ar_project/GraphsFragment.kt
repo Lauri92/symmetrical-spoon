@@ -69,25 +69,25 @@ class GraphsFragment : Fragment() {
 
         val emeraldsBar = BarGraphSeries(arrayOf<DataPoint>())
         emeralds.forEach {
-            emeraldsBar.appendData(DataPoint(it.x, it.y), false, emeralds.size)
+            emeraldsBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
         }
         emeraldsBar.color = Color.GREEN
 
         val rubiesBar = BarGraphSeries(arrayOf<DataPoint>())
         rubies.forEach {
-            rubiesBar.appendData(DataPoint(it.x, it.y), false, emeralds.size)
+            rubiesBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
         }
         rubiesBar.color = Color.RED
 
         val sapphiresBar = BarGraphSeries(arrayOf<DataPoint>())
         sapphires.forEach {
-            sapphiresBar.appendData(DataPoint(it.x, it.y), false, emeralds.size)
+            sapphiresBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
         }
         sapphiresBar.color = Color.BLUE
 
         val topazesBar = BarGraphSeries(arrayOf<DataPoint>())
         topazes.forEach {
-            topazesBar.appendData(DataPoint(it.x, it.y), false, emeralds.size)
+            topazesBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
         }
         topazesBar.color = Color.YELLOW
 
