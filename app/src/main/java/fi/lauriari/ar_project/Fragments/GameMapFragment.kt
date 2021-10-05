@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.R
+import fi.lauriari.ar_project.MapDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration

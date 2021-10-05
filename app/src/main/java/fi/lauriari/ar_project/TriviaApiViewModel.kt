@@ -1,8 +1,7 @@
 package fi.lauriari.ar_project
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import fi.lauriari.ar_project.repositories.TriviaRepository
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 

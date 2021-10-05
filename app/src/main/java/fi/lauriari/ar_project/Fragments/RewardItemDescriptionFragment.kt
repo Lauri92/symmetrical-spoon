@@ -1,79 +1,148 @@
 package fi.lauriari.ar_project.Fragments
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import fi.lauriari.ar_project.Inventory
+import com.bumptech.glide.Glide
+import fi.lauriari.ar_project.CollectedItemViewModel
+import fi.lauriari.ar_project.Entities.CollectedItem
+import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.Gems
 import fi.lauriari.ar_project.InventoryViewModel
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.databinding.FragmentRewardItemDescriptionBinding
-import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
+import java.util.*
 
 class RewardItemDescriptionFragment : Fragment() {
     private val args by navArgs<RewardItemDescriptionFragmentArgs>()
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val inventoryViewModel: InventoryViewModel by viewModels()
+        val collectedItemViewModel: CollectedItemViewModel by viewModels()
         val binding: FragmentRewardItemDescriptionBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_reward_item_description,
-            container,
-            false
+            inflater, R.layout.fragment_reward_item_description, container, false
         )
         binding.viewmodel = inventoryViewModel
         val view = binding.root
-        val currentItem = args.rewardItemDummy
+        val currentItem = args.rewardItem
+
+        val emeraldCost = currentItem.itemEmerald
+        val rubyCost = currentItem.itemRuby
+        val sapphireCost = currentItem.itemSapphire
+        val topazCost = currentItem.itemTopaz
+        val diamondCost = currentItem.itemDiamond
+
+        // set image
+        Glide.with(activity!!).load(currentItem.thumbnail)
+            .placeholder(R.drawable.ic_reward_item_placeholder)
+            .error(R.drawable.ic_reward_item_placeholder)
+            .into(view.findViewById(R.id.thumbnail))
+
+        val itemGemsPrice = arrayOf(
+            Gems(emeraldCost, R.id.emerald_price_counter, R.id.emerald_price_amount),
+            Gems(rubyCost, R.id.ruby_price_counter, R.id.ruby_price_amount),
+            Gems(sapphireCost, R.id.sapphire_price_counter, R.id.sapphire_price_amount),
+            Gems(topazCost, R.id.topaz_price_counter, R.id.topaz_price_amount),
+            Gems(diamondCost, R.id.diamond_price_counter, R.id.diamond_price_amount)
+        )
 
         inventoryViewModel.getInventory().observe(viewLifecycleOwner, { inventory ->
-            binding.emeraldAmount.text = inventory.emeralds.toString()
-            binding.rubyAmount.text = inventory.rubies.toString()
-            binding.sapphireAmount.text = inventory.sapphires.toString()
-            binding.topazAmount.text = inventory.topazes.toString()
-            binding.diamondAmount.text = inventory.diamonds.toString()
+
+            val userEmeralds = inventory.emeralds
+            val userRubies = inventory.rubies
+            val userSapphires = inventory.sapphires
+            val userTopazes = inventory.topazes
+            val userDiamonds = inventory.diamonds
+            val userGems =
+                arrayOf(userEmeralds, userRubies, userSapphires, userTopazes, userDiamonds)
+
+            binding.emeraldAmount.text = userEmeralds.toString()
+            binding.rubyAmount.text = userRubies.toString()
+            binding.sapphireAmount.text = userSapphires.toString()
+            binding.topazAmount.text = userTopazes.toString()
+            binding.diamondAmount.text = userDiamonds.toString()
 
             binding.buyBtn.setOnClickListener {
-                val alertBuilder = AlertDialog.Builder(activity)
-                alertBuilder.setPositiveButton("Buy"){_,_->
-                    Toast.makeText(activity, "you got ${currentItem.name}!!!", Toast.LENGTH_LONG).show()
-                    inventoryViewModel.updateEmeralds(inventory.emeralds - 1)}
-                alertBuilder.setNegativeButton("Cancel"){_,_->}
-                alertBuilder.setTitle("Purchase confirmation")
-                alertBuilder.setMessage("Are you sure that you would buy ${currentItem.name}?")
-                alertBuilder.create().show()
-               // Toast.makeText(activity, "you got ${currentItem.name}!!!", Toast.LENGTH_LONG).show()
-//                inventoryViewModel.updateInventory(
-//                    Inventory(
-//                        inventory.id,
-//                        inventory.emeralds + 1,
-//                        inventory.rubies + 1,
-//                        inventory.sapphires + 1,
-//                        inventory.topazes + 1,
-//                        inventory.diamonds + 1
-//                    )
-//                )
-                //inventoryViewModel.updateEmeralds(inventory.emeralds +1)
+                if (!checkEnoughGems(userGems, itemGemsPrice)) {
+                    makeGemNotification(currentItem.itemName)
+                } else {
+                    val alertBuilder = AlertDialog.Builder(activity)
+                    alertBuilder.setPositiveButton("Buy") { _, _ ->
+
+                        val dateNow = Calendar.getInstance().timeInMillis
+
+                        collectedItemViewModel.insertCollectedItem(
+                            CollectedItem(
+                                0,
+                                currentItem.itemName,
+                                currentItem.thumbnail,
+                                currentItem.objectUrl,
+                                currentItem.description,
+                                dateNow
+                            )
+                        )
+                        inventoryViewModel.updateInventory(
+                            Inventory(
+                                inventory.id,
+                                userEmeralds - emeraldCost,
+                                userRubies - rubyCost,
+                                userSapphires - sapphireCost,
+                                userTopazes - topazCost,
+                                userDiamonds - diamondCost
+                            )
+                        )
+                        makeConfirmationToast(currentItem.itemName)
+                        findNavController().popBackStack()
+                    }
+                    alertBuilder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+                    alertBuilder.setTitle("Purchase confirmation")
+                    alertBuilder.setMessage("Are you sure that you would buy ${currentItem.itemName}?")
+                    alertBuilder.create().show()
+                }
             }
         })
-        binding.name.text = currentItem.name
-        binding.description.text = currentItem.descriptions
+
+        itemGemsPrice.forEach { gem -> gem.initPriceText(view) }
+        binding.name.text = currentItem.itemName
+        binding.description.text = currentItem.description
         binding.backBtn.setOnClickListener { findNavController().popBackStack() }
 
         return view
     }
 
+    private fun checkEnoughGems(userGems: Array<Int>, priceGems: Array<Gems>): Boolean {
+        for (i in userGems.indices) {
+            if (userGems[i] < priceGems[i].gemValue!!) {
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun makeGemNotification(itemName: String) {
+        val priceAlertBuilder = AlertDialog.Builder(activity)
+        priceAlertBuilder.setPositiveButton("Got it") { dialog, _ ->
+            dialog.dismiss()
+        }
+        priceAlertBuilder.setTitle("Oops")
+        priceAlertBuilder.setMessage("You don't have enough gems to get ${itemName}")
+        priceAlertBuilder.create().show()
+    }
+
+    private fun makeConfirmationToast(itemName: String) {
+        Toast.makeText(
+            activity, "you got ${itemName}!!!", Toast.LENGTH_LONG
+        ).show()
+    }
 }

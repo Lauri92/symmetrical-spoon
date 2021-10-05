@@ -1,6 +1,8 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.repositories
 
 import android.util.Log
+import fi.lauriari.ar_project.QuizQuestion
+import fi.lauriari.ar_project.Network.RetrofitInstance
 import retrofit2.Response
 
 class TriviaRepository {

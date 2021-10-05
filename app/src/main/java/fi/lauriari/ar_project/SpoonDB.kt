@@ -4,13 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import fi.lauriari.ar_project.Dao.CollectedItemDao
+import fi.lauriari.ar_project.Dao.InventoryDao
+import fi.lauriari.ar_project.Dao.MapDetailsDao
+import fi.lauriari.ar_project.Entities.CollectedItem
+import fi.lauriari.ar_project.Entities.Inventory
 
 
-@Database(entities = [(MapDetails::class), (MapLatLng::class), (Inventory::class)], version = 1, exportSchema = false)
+@Database(entities = [(MapDetails::class), (MapLatLng::class), (Inventory::class), (CollectedItem::class)], version = 1, exportSchema = false)
 abstract class SpoonDB : RoomDatabase() {
 
     abstract fun mapDetailsDao(): MapDetailsDao
     abstract fun inventoryDao(): InventoryDao
+    abstract fun collectedItemDao(): CollectedItemDao
 
     companion object {
         @Volatile
