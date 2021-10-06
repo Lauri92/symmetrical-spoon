@@ -499,6 +499,42 @@ class GameARFragment : Fragment() {
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("OK") { _, _ ->
+            val dailyQuest =
+                mMapDetailsViewModel.getDailyQuestsByMapDetailsId(latestMapDetails!!.id)
+            val latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
+            Log.d("daily", dailyQuest.toString())
+            if (latestMapDetails.collectedEmeralds >= dailyQuest[0].requiredEmeralds &&
+                latestMapDetails.collectedRubies >= dailyQuest[0].requiredRubies &&
+                latestMapDetails.collectedSapphires >= dailyQuest[0].requiredSapphires &&
+                latestMapDetails.collectedTopazes >= dailyQuest[0].requiredTopazes
+            ) {
+                Log.d("daily", "UPDATING!!")
+                mMapDetailsViewModel.updateDailyQuest(
+                    DailyQuest(
+                        dailyQuest[0].id,
+                        dailyQuest[0].mapDetailsId,
+                        dailyQuest[0].requiredEmeralds,
+                        dailyQuest[0].requiredRubies,
+                        dailyQuest[0].requiredSapphires,
+                        dailyQuest[0].requiredTopazes,
+                        dailyQuest[0].requiredSteps,
+                        dailyQuest[0].description,
+                        dailyQuest[0].rewardString,
+                        dailyQuest[0].rewardAmount,
+                        true,
+                    )
+                )
+                mInventoryViewModel.updateInventory(
+                    Inventory(
+                        inventory!!.id,
+                        inventory!!.emeralds,
+                        inventory!!.rubies,
+                        inventory!!.sapphires,
+                        inventory!!.topazes,
+                        inventory!!.diamonds + dailyQuest[0].rewardAmount
+                    )
+                )
+            }
             findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
         }
         builder.setTitle("Task completed!")
@@ -507,14 +543,6 @@ class GameARFragment : Fragment() {
         builder.setCancelable(false)
         builder.create().show()
 
-
-        /*
-        diamondRenderable?.let { createLocationAnchorForViewRenderable(it) }
-            ?.setOnTapListener { hitTestResult, motionEvent ->
-                hitTestResult.node?.setParent(null)
-                hitTestResult.node?.renderable = null
-            }
-         */
     }
 
     /**

@@ -2,6 +2,9 @@ package fi.lauriari.ar_project.Fragments
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -12,6 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -101,9 +105,51 @@ class GameMapFragment : Fragment() {
             //Toast.makeText(requireContext(), "Clicked daily quest fab!", Toast.LENGTH_SHORT).show()
             val mapDetailsId = mMapDetailsViewModel.getLatestMapDetails().id
             val dailyQuests = mMapDetailsViewModel.getDailyQuestsByMapDetailsId(mapDetailsId)
-            dailyQuests.forEach {
-                Log.d("dailyquest", it.toString())
+            val mapDetails = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(mapDetailsId)
+            Log.d("daily", dailyQuests.toString())
+
+            val dialog = Dialog(requireContext())
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.daily_quest_dialog)
+            val descriptionTv = dialog.findViewById<TextView>(R.id.task1_description_tv)
+            val progressTv = dialog.findViewById<TextView>(R.id.task1_progress_tv)
+            val rewardTv = dialog.findViewById<TextView>(R.id.task1_reward_tv)
+            val completeTv = dialog.findViewById<ImageView>(R.id.task1_complete_tv)
+            val helper = DailyQuestHelper(
+                dailyQuests[0].requiredEmeralds,
+                dailyQuests[0].requiredRubies,
+                dailyQuests[0].requiredSapphires,
+                dailyQuests[0].requiredTopazes,
+                mapDetails.mapDetails!!.collectedEmeralds,
+                mapDetails.mapDetails!!.collectedRubies,
+                mapDetails.mapDetails!!.collectedSapphires,
+                mapDetails.mapDetails!!.collectedTopazes,
+                dailyQuests[0].description,
+                dailyQuests[0].rewardString,
+                dailyQuests[0].isCompleted
+            )
+
+            val progressLabel = "Progress\n"
+            val emeraldProgress =
+                if (helper.hasEmeralds) "Emeralds collected: ${helper.collectedEmeralds}/${helper.requiredEmeralds}\n" else ""
+            val rubiesProgress =
+                if (helper.hasRubies) "Rubies collected: ${helper.collectedRubies}/${helper.requiredRubies}\n" else ""
+            val sapphiresProgress =
+                if (helper.hasSapphires) "Sapphires collected: ${helper.collectedSapphires}/${helper.requiredSapphires}\n" else ""
+            val topazesProgress =
+                if (helper.hasTopazes) "Topazes collected: ${helper.collectedTopazes}/${helper.requiredTopazes}\n" else ""
+
+            val progressString =
+                progressLabel + emeraldProgress + rubiesProgress + sapphiresProgress + topazesProgress
+            descriptionTv.text = helper.description
+            progressTv.text = progressString
+            rewardTv.text = helper.rewardString
+            if (helper.isCompleted) {
+                completeTv.setBackgroundResource(R.drawable.ic_baseline_check_24)
+            } else {
+                completeTv.setBackgroundResource(R.drawable.ic_baseline_close_24)
             }
+            dialog.show()
         }
 
         view.findViewById<Button>(R.id.navigate_to_game_AR_btn).setOnClickListener {
@@ -430,7 +476,7 @@ class GameMapFragment : Fragment() {
             }
             addLatLng.join()
 
-            //TODO  Construct the daily quests here!!
+            //TODO  Construct the daily quest here!!
 
             val newest = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(newMapDetailsId)
             val latLngValues = newest.latLngValues
@@ -528,20 +574,8 @@ class GameMapFragment : Fragment() {
                 taskList.add(taskCollectOneOfEachGem)
             }
 
-            val chosenDailyQuests = mutableListOf<DailyQuest>()
-            for (i in 1..2) {
-                Log.d("testrnd", "Full list: $taskList")
-                val random = taskList.random()
-                chosenDailyQuests.add(random)
-                Log.d("testrnd", "Randomed item: $random")
-                taskList.remove(random)
-                Log.d("testrnd", "Tasklist after removal: $taskList")
-            }
-            lifecycleScope.launch(context = Dispatchers.IO) {
-                chosenDailyQuests.forEach {
-                    mMapDetailsViewModel.insertDailyQuest(it)
-                }
-            }
+            val chosenDailyQuest = taskList.random()
+            mMapDetailsViewModel.insertDailyQuest(chosenDailyQuest)
         }
     }
 
