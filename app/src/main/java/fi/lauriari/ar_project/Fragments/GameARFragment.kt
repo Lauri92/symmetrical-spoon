@@ -498,42 +498,45 @@ class GameARFragment : Fragment() {
 
             updateDb.await()
 
-            val dailyQuest =
-                mMapDetailsViewModel.getDailyQuestsByMapDetailsId(latestMapDetails!!.id)
-            val updatedLatestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
-            val updatedInventory = mInventoryViewModel.getInventoryNormal()
-            Log.d("daily", dailyQuest.toString())
-            if (updatedLatestMapDetails.collectedEmeralds >= dailyQuest[0].requiredEmeralds &&
-                updatedLatestMapDetails.collectedRubies >= dailyQuest[0].requiredRubies &&
-                updatedLatestMapDetails.collectedSapphires >= dailyQuest[0].requiredSapphires &&
-                updatedLatestMapDetails.collectedTopazes >= dailyQuest[0].requiredTopazes
-            ) {
-                Log.d("daily", "UPDATING!!")
-                mMapDetailsViewModel.updateDailyQuest(
-                    DailyQuest(
-                        dailyQuest[0].id,
-                        dailyQuest[0].mapDetailsId,
-                        dailyQuest[0].requiredEmeralds,
-                        dailyQuest[0].requiredRubies,
-                        dailyQuest[0].requiredSapphires,
-                        dailyQuest[0].requiredTopazes,
-                        dailyQuest[0].requiredSteps,
-                        dailyQuest[0].description,
-                        dailyQuest[0].rewardString,
-                        dailyQuest[0].rewardAmount,
-                        true,
+            lifecycleScope.launch {
+                val dailyQuest =
+                    mMapDetailsViewModel.getDailyQuestsByMapDetailsId(latestMapDetails!!.id)
+                val updatedLatestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
+                val updatedInventory = mInventoryViewModel.getInventoryNormal()
+                Log.d("daily", dailyQuest.toString())
+                if (updatedLatestMapDetails.collectedEmeralds >= dailyQuest[0].requiredEmeralds &&
+                    updatedLatestMapDetails.collectedRubies >= dailyQuest[0].requiredRubies &&
+                    updatedLatestMapDetails.collectedSapphires >= dailyQuest[0].requiredSapphires &&
+                    updatedLatestMapDetails.collectedTopazes >= dailyQuest[0].requiredTopazes &&
+                    !dailyQuest[0].isCompleted
+                ) {
+                    Log.d("daily", "UPDATING!!")
+                    mMapDetailsViewModel.updateDailyQuest(
+                        DailyQuest(
+                            dailyQuest[0].id,
+                            dailyQuest[0].mapDetailsId,
+                            dailyQuest[0].requiredEmeralds,
+                            dailyQuest[0].requiredRubies,
+                            dailyQuest[0].requiredSapphires,
+                            dailyQuest[0].requiredTopazes,
+                            dailyQuest[0].requiredSteps,
+                            dailyQuest[0].description,
+                            dailyQuest[0].rewardString,
+                            dailyQuest[0].rewardAmount,
+                            true,
+                        )
                     )
-                )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        updatedInventory.id,
-                        updatedInventory.emeralds,
-                        updatedInventory.rubies,
-                        updatedInventory.sapphires,
-                        updatedInventory.topazes,
-                        updatedInventory.diamonds + dailyQuest[0].rewardAmount
+                    mInventoryViewModel.updateInventory(
+                        Inventory(
+                            updatedInventory.id,
+                            updatedInventory.emeralds,
+                            updatedInventory.rubies,
+                            updatedInventory.sapphires,
+                            updatedInventory.topazes,
+                            updatedInventory.diamonds + dailyQuest[0].rewardAmount
+                        )
                     )
-                )
+                }
             }
 
             val gem = selectedMapLatLngPoint!!.reward

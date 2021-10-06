@@ -100,8 +100,10 @@ class GameMapFragment : Fragment() {
         checkSelfPermissions()
 
         setUserCollectedGems()
+        val dailyQuestButton = view.findViewById<ImageView>(R.id.daily_quest_fab)
+        val navigateToARButton = view.findViewById<Button>(R.id.navigate_to_game_AR_btn)
 
-        view.findViewById<ImageView>(R.id.daily_quest_fab).setOnClickListener {
+        dailyQuestButton.setOnClickListener {
             //Toast.makeText(requireContext(), "Clicked daily quest fab!", Toast.LENGTH_SHORT).show()
             val mapDetailsId = mMapDetailsViewModel.getLatestMapDetails().id
             val dailyQuests = mMapDetailsViewModel.getDailyQuestsByMapDetailsId(mapDetailsId)
@@ -152,7 +154,7 @@ class GameMapFragment : Fragment() {
             dialog.show()
         }
 
-        view.findViewById<Button>(R.id.navigate_to_game_AR_btn).setOnClickListener {
+        navigateToARButton.setOnClickListener {
             //findNavController().navigate(R.id.action_gameMapFragment_to_gameARFragment)
             val action = GameMapFragmentDirections.actionGameMapFragmentToGameARFragment(
                 locationIdAction!!
@@ -328,6 +330,7 @@ class GameMapFragment : Fragment() {
             setOldLocationsOnMap(latLngList)
         } else {
             // Dates don't match -> generate new values
+            view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = false
             val interactionLocations = ArrayList<GeoPoint>()
             val radius = 5000
             for (i in 1..360) {
@@ -478,104 +481,108 @@ class GameMapFragment : Fragment() {
 
             //TODO  Construct the daily quest here!!
 
-            val newest = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(newMapDetailsId)
-            val latLngValues = newest.latLngValues
-            val totalEmeralds = latLngValues?.filter {
-                it.reward == "Emerald"
+            val addDailyQuestToDb = async {
+                val newest = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(newMapDetailsId)
+                val latLngValues = newest.latLngValues
+                val totalEmeralds = latLngValues?.filter {
+                    it.reward == "Emerald"
+                }
+                val totalRubies = latLngValues?.filter {
+                    it.reward == "Ruby"
+                }
+                val totalSapphires = latLngValues?.filter {
+                    it.reward == "Sapphire"
+                }
+                val totalTopazes = latLngValues?.filter {
+                    it.reward == "Topaz"
+                }
+
+                val taskList = mutableListOf<DailyQuest>()
+
+                val taskCollectAllEmeralds = DailyQuest(
+                    id = 0,
+                    mapDetailsId = newMapDetailsId,
+                    requiredEmeralds = totalEmeralds!!.size,
+                    requiredRubies = 0,
+                    requiredSapphires = 0,
+                    requiredTopazes = 0,
+                    requiredSteps = 0,
+                    description = "Collect all Emeralds from the map!",
+                    rewardString = "Reward: 3 Diamonds",
+                    rewardAmount = 3,
+                    isCompleted = false
+                )
+                if (totalEmeralds.isNotEmpty()) taskList.add(taskCollectAllEmeralds)
+
+                val taskCollectAllRubies = DailyQuest(
+                    id = 0,
+                    mapDetailsId = newMapDetailsId,
+                    requiredEmeralds = 0,
+                    requiredRubies = totalRubies!!.size,
+                    requiredSapphires = 0,
+                    requiredTopazes = 0,
+                    requiredSteps = 0,
+                    description = "Collect all Rubies from the map!",
+                    rewardString = "Reward: 3 Diamonds",
+                    rewardAmount = 3,
+                    isCompleted = false
+                )
+                if (totalRubies.isNotEmpty()) taskList.add(taskCollectAllRubies)
+
+                val taskCollectAllSapphires = DailyQuest(
+                    id = 0,
+                    mapDetailsId = newMapDetailsId,
+                    requiredEmeralds = 0,
+                    requiredRubies = 0,
+                    requiredSapphires = totalSapphires!!.size,
+                    requiredTopazes = 0,
+                    requiredSteps = 0,
+                    description = "Collect all Sapphires from the map!",
+                    rewardString = "Reward: 3 Diamonds",
+                    rewardAmount = 3,
+                    isCompleted = false
+                )
+                if (totalSapphires.isNotEmpty()) taskList.add(taskCollectAllSapphires)
+
+                val taskCollectAllTopazes = DailyQuest(
+                    id = 0,
+                    mapDetailsId = newMapDetailsId,
+                    requiredEmeralds = 0,
+                    requiredRubies = 0,
+                    requiredSapphires = 0,
+                    requiredTopazes = totalTopazes!!.size,
+                    requiredSteps = 0,
+                    description = "Collect all Topazes from the map!",
+                    rewardString = "Reward: 3 Diamonds",
+                    rewardAmount = 3,
+                    isCompleted = false
+                )
+                if (totalTopazes.isNotEmpty()) taskList.add(taskCollectAllTopazes)
+
+                val taskCollectOneOfEachGem = DailyQuest(
+                    id = 0,
+                    mapDetailsId = newMapDetailsId,
+                    requiredEmeralds = 1,
+                    requiredRubies = 1,
+                    requiredSapphires = 1,
+                    requiredTopazes = 1,
+                    requiredSteps = 0,
+                    description = "Collect one of each gems!",
+                    rewardString = "Reward: 3 Diamonds",
+                    rewardAmount = 3,
+                    isCompleted = false
+                )
+                if (totalEmeralds.isNotEmpty() && totalRubies.isNotEmpty() &&
+                    totalSapphires.isNotEmpty() && totalTopazes.isNotEmpty()
+                ) {
+                    taskList.add(taskCollectOneOfEachGem)
+                }
+
+                val chosenDailyQuest = taskList.random()
+                mMapDetailsViewModel.insertDailyQuest(chosenDailyQuest)
             }
-            val totalRubies = latLngValues?.filter {
-                it.reward == "Ruby"
-            }
-            val totalSapphires = latLngValues?.filter {
-                it.reward == "Sapphire"
-            }
-            val totalTopazes = latLngValues?.filter {
-                it.reward == "Topaz"
-            }
-
-            val taskList = mutableListOf<DailyQuest>()
-
-            val taskCollectAllEmeralds = DailyQuest(
-                id = 0,
-                mapDetailsId = newMapDetailsId,
-                requiredEmeralds = totalEmeralds!!.size,
-                requiredRubies = 0,
-                requiredSapphires = 0,
-                requiredTopazes = 0,
-                requiredSteps = 0,
-                description = "Collect all Emeralds from the map!",
-                rewardString = "Reward: 3 Diamonds",
-                rewardAmount = 3,
-                isCompleted = false
-            )
-            if (totalEmeralds.isNotEmpty()) taskList.add(taskCollectAllEmeralds)
-
-            val taskCollectAllRubies = DailyQuest(
-                id = 0,
-                mapDetailsId = newMapDetailsId,
-                requiredEmeralds = 0,
-                requiredRubies = totalRubies!!.size,
-                requiredSapphires = 0,
-                requiredTopazes = 0,
-                requiredSteps = 0,
-                description = "Collect all Rubies from the map!",
-                rewardString = "Reward: 3 Diamonds",
-                rewardAmount = 3,
-                isCompleted = false
-            )
-            if (totalRubies.isNotEmpty()) taskList.add(taskCollectAllRubies)
-
-            val taskCollectAllSapphires = DailyQuest(
-                id = 0,
-                mapDetailsId = newMapDetailsId,
-                requiredEmeralds = 0,
-                requiredRubies = 0,
-                requiredSapphires = totalSapphires!!.size,
-                requiredTopazes = 0,
-                requiredSteps = 0,
-                description = "Collect all Sapphires from the map!",
-                rewardString = "Reward: 3 Diamonds",
-                rewardAmount = 3,
-                isCompleted = false
-            )
-            if (totalSapphires.isNotEmpty()) taskList.add(taskCollectAllSapphires)
-
-            val taskCollectAllTopazes = DailyQuest(
-                id = 0,
-                mapDetailsId = newMapDetailsId,
-                requiredEmeralds = 0,
-                requiredRubies = 0,
-                requiredSapphires = 0,
-                requiredTopazes = totalTopazes!!.size,
-                requiredSteps = 0,
-                description = "Collect all Topazes from the map!",
-                rewardString = "Reward: 3 Diamonds",
-                rewardAmount = 3,
-                isCompleted = false
-            )
-            if (totalTopazes.isNotEmpty()) taskList.add(taskCollectAllTopazes)
-
-            val taskCollectOneOfEachGem = DailyQuest(
-                id = 0,
-                mapDetailsId = newMapDetailsId,
-                requiredEmeralds = 1,
-                requiredRubies = 1,
-                requiredSapphires = 1,
-                requiredTopazes = 1,
-                requiredSteps = 0,
-                description = "Collect one of each gems!",
-                rewardString = "Reward: 3 Diamonds",
-                rewardAmount = 3,
-                isCompleted = false
-            )
-            if (totalEmeralds.isNotEmpty() && totalRubies.isNotEmpty() &&
-                totalSapphires.isNotEmpty() && totalTopazes.isNotEmpty()
-            ) {
-                taskList.add(taskCollectOneOfEachGem)
-            }
-
-            val chosenDailyQuest = taskList.random()
-            mMapDetailsViewModel.insertDailyQuest(chosenDailyQuest)
+            addDailyQuestToDb.await()
+            view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = true
         }
     }
 
