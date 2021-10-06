@@ -102,6 +102,7 @@ class GameMapFragment : Fragment() {
         setUserCollectedGems()
         val dailyQuestButton = view.findViewById<ImageView>(R.id.daily_quest_fab)
         val navigateToARButton = view.findViewById<Button>(R.id.navigate_to_game_AR_btn)
+        dailyQuestButton.isEnabled = false
 
         dailyQuestButton.setOnClickListener {
             //Toast.makeText(requireContext(), "Clicked daily quest fab!", Toast.LENGTH_SHORT).show()
@@ -330,7 +331,6 @@ class GameMapFragment : Fragment() {
             setOldLocationsOnMap(latLngList)
         } else {
             // Dates don't match -> generate new values
-            view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = false
             val interactionLocations = ArrayList<GeoPoint>()
             val radius = 5000
             for (i in 1..360) {
@@ -355,6 +355,7 @@ class GameMapFragment : Fragment() {
      */
     private fun setOldLocationsOnMap(chosenPoints: List<MapLatLng>) {
         Log.d("locationsset", "Setting old locations")
+        view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = true
         chosenPoints.forEach {
             if (it.isActive) {
                 val loopMarker = Marker(map)
