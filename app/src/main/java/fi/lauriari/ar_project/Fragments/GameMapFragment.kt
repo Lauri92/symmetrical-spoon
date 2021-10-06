@@ -448,7 +448,7 @@ class GameMapFragment : Fragment() {
                             true
                         )
                     )
-                    locationIdAction = insertedId
+
                     val loopMarker = Marker(map)
                     loopMarker.icon = AppCompatResources.getDrawable(
                         requireContext(),
@@ -458,6 +458,7 @@ class GameMapFragment : Fragment() {
                     loopMarker.position = GeoPoint(it.latitude, it.longitude)
 
                     loopMarker.setOnMarkerClickListener { marker, mapView ->
+                        locationIdAction = insertedId
                         Log.d("test", marker.position.latitude.toString())
                         activeDestination.latitude = marker.position.latitude
                         activeDestination.longitude = marker.position.longitude
