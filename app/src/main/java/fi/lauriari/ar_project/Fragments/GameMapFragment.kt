@@ -533,7 +533,7 @@ class GameMapFragment : Fragment() {
                 requiredSapphires = totalSapphires!!.size,
                 requiredTopazes = 0,
                 requiredSteps = 0,
-                description = "Collect all Saphires from the map!",
+                description = "Collect all Sapphires from the map!",
                 rewardString = "Reward: 3 Diamonds",
                 rewardAmount = 3,
                 isCompleted = false
