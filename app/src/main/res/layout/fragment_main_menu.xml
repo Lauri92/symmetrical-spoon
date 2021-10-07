@@ -32,11 +32,11 @@
             android:text="@string/go_to_game_map" />
 
         <Button
-            android:id="@+id/daily_quest"
+            android:id="@+id/graphs_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="@string/daily_quests" />
+            android:text="@string/graphs" />
 
         <Button
             android:id="@+id/my_collections"

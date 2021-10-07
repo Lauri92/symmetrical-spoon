@@ -17,11 +17,11 @@
             android:id="@+id/action_mainMenuFragment_to_rewardListFragment"
             app:destination="@id/rewardListFragment" />
         <action
-            android:id="@+id/action_mainMenuFragment_to_dailyQuestFragment"
-            app:destination="@id/dailyQuestFragment" />
-        <action
             android:id="@+id/action_mainMenuFragment_to_collectedItemList"
             app:destination="@id/collectedItemList" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_graphsFragment"
+            app:destination="@id/graphsFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameMapFragment"
@@ -55,11 +55,6 @@
             app:destination="@id/rewardItemDescription" />
     </fragment>
     <fragment
-        android:id="@+id/dailyQuestFragment"
-        android:name="fi.lauriari.ar_project.Fragments.DailyQuestFragment"
-        android:label="fragment_daily_quest"
-        tools:layout="@layout/fragment_daily_quest" />
-    <fragment
         android:id="@+id/rewardItemDescription"
         android:name="fi.lauriari.ar_project.Fragments.RewardItemDescriptionFragment"
         android:label="fragment_reward_item_description"
@@ -85,4 +80,9 @@
             android:name="collectedItem"
             app:argType="fi.lauriari.ar_project.Entities.CollectedItem" />
     </fragment>
+    <fragment
+        android:id="@+id/graphsFragment"
+        android:name="fi.lauriari.ar_project.GraphsFragment"
+        android:label="fragment_graphs"
+        tools:layout="@layout/fragment_graphs" />
 </navigation>

@@ -53,7 +53,7 @@ class GraphsFragment : Fragment() {
         graph.viewport.isScalable = true
         graph.viewport.setMinX(emeralds[0].x - 86400000 - 30000000)
         graph.viewport.setMaxX(emeralds[emeralds.lastIndex].x + 86400000 + 150000000)
-        graph.gridLabelRenderer.numHorizontalLabels = 5
+        graph.gridLabelRenderer.numHorizontalLabels = allMapDetails.size
         Log.d("emeraldsd", emeralds[0].x.toString())
 
         graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
