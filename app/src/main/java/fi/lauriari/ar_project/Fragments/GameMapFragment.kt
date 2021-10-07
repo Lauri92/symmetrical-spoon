@@ -2,6 +2,7 @@ package fi.lauriari.ar_project.Fragments
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -18,6 +19,7 @@ import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -37,6 +39,7 @@ import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -56,13 +59,14 @@ class GameMapFragment : Fragment() {
     private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
     private val mInventoryViewModel: InventoryViewModel by viewModels()
     private var locationIdAction: Long? = null
+    private var locationRequest: LocationRequest? = null
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-        requestPermissions()
+        //requestPermissions()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         Configuration.getInstance().load(
             requireContext(),
@@ -76,11 +80,17 @@ class GameMapFragment : Fragment() {
 
         setMap(GeoPoint(60.2238005, 24.7589279), firstcall = true)
 
+        locationRequest = LocationRequest
+            .create()
+            .setInterval(1000)
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
 
                 for (location in locationResult.locations) {
+                    Log.d("test", "requesting..")
                     val geoPoint = GeoPoint(location.latitude, location.longitude)
                     if (!isMapSet) {
                         setMap(geoPoint)
@@ -170,22 +180,21 @@ class GameMapFragment : Fragment() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
         activeDestination.latitude = 0.0
         activeDestination.longitude = 0.0
-        isInteractionsLocationsSet = false
-        isMapSet = false
+        //isInteractionsLocationsSet = false
+        //isMapSet = false
     }
 
     /**
      * Request user permissions to access locations
      */
     private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            requireContext() as Activity,
+        requestPermissions(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             0
         )
         // similar for ACCESS_COARSE_LOCATION,
 
-
+/*
         ActivityCompat.requestPermissions(
             requireContext() as Activity,
             arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -206,7 +215,7 @@ class GameMapFragment : Fragment() {
                 )
             } ${PackageManager.PERMISSION_GRANTED}"
         )
-
+*/
     }
 
     /**
@@ -233,20 +242,61 @@ class GameMapFragment : Fragment() {
             // for ActivityCompat#requestPermissions for more details.
 
             //requestPermissions()
+            AlertDialog.Builder(requireContext())
+                .setTitle("Location Permission Needed")
+                .setMessage("This application needs the Location permission, please accept to use location functionality")
+                .setPositiveButton(
+                    "OK"
+                ) { _, _ ->
+                    //Prompt the user once explanation has been shown
+                    requestPermissions()
+                }
+                .create()
+                .show()
 
         } else {
             // Permissions are granted so start requesting location updates
-            val locationRequest = LocationRequest
-                .create()
-                .setInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             Log.i("test", "Passed")
             fusedLocationClient.requestLocationUpdates(
-                locationRequest,
+                locationRequest!!,
                 locationCallback, Looper.getMainLooper()
             )
 
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_LOCATION -> {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                    val contextt = ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+                    if (ContextCompat.checkSelfPermission(
+                            requireContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        fusedLocationClient.requestLocationUpdates(
+                            locationRequest!!,
+                            locationCallback, Looper.getMainLooper()
+                        )
+
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val MY_PERMISSIONS_REQUEST_LOCATION = 0
     }
 
     /**
@@ -402,7 +452,7 @@ class GameMapFragment : Fragment() {
         val minutes = calendar.get(Calendar.MINUTE) * 60_000
         val seconds = calendar.get(Calendar.SECOND) * 1000
         // Do calculation to set time to mid day 43200000ms -> 12hours
-        dateNow = dateNow - hours - minutes - seconds + 43_200_000
+        dateNow = dateNow - hours - minutes - seconds //+ 43_200_000
         // Returns the inserted rowId as well
         val newMapDetailsId =
             mMapDetailsViewModel.insertMapDetails(MapDetails(0, dateNow, 0, 0, 0, 0, 0))
@@ -412,7 +462,7 @@ class GameMapFragment : Fragment() {
                     val address = getAddress(it.latitude, it.longitude)
                     if (address.contains("Unnamed Road")) {
                         Log.d("Leave", "Leaving the loop!")
-                        return@async
+                        return@forEach
                     }
                     var collectableReward = ""
                     var collectable = R.drawable.ic_baseline_pets_24
@@ -644,9 +694,13 @@ class GameMapFragment : Fragment() {
      * Geocoder used to get approximate address from given lat, lng values
      */
     private fun getAddress(lat: Double, lon: Double): String {
-        val addresses = geocoder.getFromLocation(lat, lon, 1)
-        //Log.d("address", "List info: ${addresses}")
-        return addresses[0].getAddressLine(0)
+        return try {
+            val addresses = geocoder.getFromLocation(lat, lon, 1)
+            //Log.d("address", "List info: ${addresses}")
+            addresses[0].getAddressLine(0)
+        } catch (e: IOException) {
+            "No address available"
+        }
     }
 
     /**
