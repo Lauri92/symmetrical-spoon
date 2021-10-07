@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Fragments
 
 import android.graphics.Color
 import android.os.Bundle
@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
-import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.series.BarGraphSeries
+import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
+import fi.lauriari.ar_project.R
 import java.text.Format
 import java.text.SimpleDateFormat
 

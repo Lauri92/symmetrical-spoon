@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import fi.lauriari.ar_project.CollectedItemViewModel
+import fi.lauriari.ar_project.viewmodels.CollectedItemViewModel
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.databinding.FragmentCollectedItemListBinding
 

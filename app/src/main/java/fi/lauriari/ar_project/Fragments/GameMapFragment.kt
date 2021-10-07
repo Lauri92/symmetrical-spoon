@@ -2,9 +2,7 @@ package fi.lauriari.ar_project.Fragments
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -27,11 +25,11 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.R
-import fi.lauriari.ar_project.MapDetailsViewModel
+import fi.lauriari.ar_project.viewmodels.InventoryViewModel
+import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint

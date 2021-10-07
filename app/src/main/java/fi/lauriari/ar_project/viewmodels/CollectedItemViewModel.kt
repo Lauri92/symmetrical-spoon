@@ -1,9 +1,10 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import fi.lauriari.ar_project.repositories.CollectedItemRepository
 import fi.lauriari.ar_project.Entities.CollectedItem
+import fi.lauriari.ar_project.SpoonDB
 import kotlinx.coroutines.runBlocking
 
 class CollectedItemViewModel(application: Application):AndroidViewModel(application) {

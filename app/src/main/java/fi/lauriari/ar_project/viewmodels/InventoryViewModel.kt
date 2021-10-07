@@ -1,10 +1,11 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.SpoonDB
 import fi.lauriari.ar_project.repositories.InventoryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

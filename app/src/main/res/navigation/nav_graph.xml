@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/graphsFragment"
-        android:name="fi.lauriari.ar_project.GraphsFragment"
+        android:name="fi.lauriari.ar_project.Fragments.GraphsFragment"
         android:label="fragment_graphs"
         tools:layout="@layout/fragment_graphs" />
 </navigation>

@@ -30,7 +30,12 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.datamodels.ImageQuestion
+import fi.lauriari.ar_project.datamodels.ImageSelectionQuestion
 import fi.lauriari.ar_project.repositories.TriviaRepository
+import fi.lauriari.ar_project.viewmodels.InventoryViewModel
+import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
+import fi.lauriari.ar_project.viewmodels.TriviaApiViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

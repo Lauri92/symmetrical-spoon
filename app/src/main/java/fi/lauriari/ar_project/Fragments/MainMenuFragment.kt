@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import fi.lauriari.ar_project.Entities.Inventory
-import fi.lauriari.ar_project.InventoryViewModel
+import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.R
 import java.net.URL
 
