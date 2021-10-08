@@ -181,7 +181,7 @@
         android:background="@color/container"
         android:elevation="8dp"
         android:gravity="center"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="12dp"
         android:paddingVertical="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -346,7 +346,8 @@
             android:layout_below="@id/thumbnail"
             android:layout_centerInParent="true"
             android:text="name"
-            android:textSize="40sp"
+            android:textAlignment="center"
+            android:textSize="34sp"
             android:textStyle="bold" />
 
         <TextView
@@ -357,6 +358,7 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="16dp"
             android:text="some description.."
+            android:textAlignment="center"
             android:textSize="24sp" />
     </RelativeLayout>
 

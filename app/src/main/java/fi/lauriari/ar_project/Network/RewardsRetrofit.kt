@@ -20,6 +20,7 @@ class Item(
     @SerializedName("description") val description: String,
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("objectUrl") val objectUrl: String,
+    @SerializedName("isAnimated") val isAnimated:Boolean,
     @SerializedName("emerald") val itemEmerald: Int,
     @SerializedName("ruby") val itemRuby: Int,
     @SerializedName("sapphire") val itemSapphire: Int,
@@ -63,7 +64,7 @@ class RewardsApiViewModel(private val repository: RewardsRepository) : ViewModel
         viewModelScope.launch {
             response.value = repository.getItems()
             response?.value?.forEach {
-                Log.d("response","${it.itemId}: $it")
+                Log.d("response","${it.itemId}: ${it.itemName}")
             }
         }
     }

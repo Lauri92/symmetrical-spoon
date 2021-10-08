@@ -12,10 +12,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.StepCounter
+import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
 
-    val stepCounter = StepCounter()
+    val stepCounter = StepCounter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,8 @@ class MainActivity : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions (this,arrayOf (Manifest.permission.ACTIVITY_RECOGNITION) , 1) ;
         }
-        stepCounter.initSensor(this)
+        stepCounter.initSensorManager()
+        Log.d("time","${LocalDate.now()}")
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -43,12 +45,15 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         stepCounter.getStepCounterSensor().also {
             stepCounter.getSensorManager()
-                .registerListener(stepCounter, it, SensorManager.SENSOR_DELAY_NORMAL)
+                .registerListener(stepCounter, it, SensorManager.SENSOR_DELAY_UI)
         }
+        stepCounter.loadData()
     }
 
     override fun onPause() {
         super.onPause()
         stepCounter.getSensorManager().unregisterListener(stepCounter)
+        stepCounter.savePreviousTotalSteps()
+        stepCounter.saveCurrentDate()
     }
 }

@@ -58,7 +58,9 @@ class RewardListAdapter(private val items: List<Item>?, private val collectedIte
 
         // If there are items that the user already purchased, disable clicking those items with the foreground image
         collectedItems.forEach {
-            if (it == item?.itemName) {
+            // to prevent showing wrong data when the recyclerview recycles its views
+            holder.itemView.findViewById<ConstraintLayout>(R.id.reward_item_layout).foreground = null
+            if (item?.itemName == it) {
                 holder.itemView.isClickable = false
                 holder.itemView.findViewById<ConstraintLayout>(R.id.reward_item_layout).foreground =
                     ContextCompat.getDrawable(holder.itemView.context, R.drawable.sold_out_filter)

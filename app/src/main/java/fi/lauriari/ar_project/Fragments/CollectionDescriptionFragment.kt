@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -42,7 +43,8 @@ class CollectionDescriptionFragment : Fragment() {
         val playBtn = view.findViewById<Button>(R.id.play_btn)
         playBtn.text = getString(R.string.play_with, item.name)
         playBtn.setOnClickListener {
-
+            val action = CollectionDescriptionFragmentDirections.actionCollectionDescriptionFragmentToCollectedItemARFragment(item.objectUrl)
+            it.findNavController().navigate(action)
         }
 
         return view

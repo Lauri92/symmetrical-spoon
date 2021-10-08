@@ -84,5 +84,17 @@
         <argument
             android:name="collectedItem"
             app:argType="fi.lauriari.ar_project.Entities.CollectedItem" />
+        <action
+            android:id="@+id/action_collectionDescriptionFragment_to_collectedItemARFragment"
+            app:destination="@id/collectedItemARFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectedItemARFragment"
+        android:name="fi.lauriari.ar_project.Fragments.CollectedItemARFragment"
+        android:label="fragment_collected_item_ar"
+        tools:layout="@layout/fragment_collected_item_ar" >
+        <argument
+            android:name="objectUrl"
+            app:argType="string" />
     </fragment>
 </navigation>
