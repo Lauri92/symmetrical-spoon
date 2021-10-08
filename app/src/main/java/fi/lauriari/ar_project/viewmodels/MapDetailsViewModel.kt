@@ -1,8 +1,9 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.repositories.MapDetailsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,6 +84,26 @@ class MapDetailsViewModel(application: Application) : AndroidViewModel(applicati
             mapInfoWithAllLtLngValues = mapDetailsRepository.getMapDetailsWithAllLatLngValues(id)
         }
         return mapInfoWithAllLtLngValues
+    }
+
+    fun insertDailyQuest(dailyQuest: DailyQuest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mapDetailsRepository.insertDailyQuest(dailyQuest)
+        }
+    }
+
+    fun updateDailyQuest(dailyQuest: DailyQuest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mapDetailsRepository.updateDailyQuest(dailyQuest)
+        }
+    }
+
+    fun getDailyQuestsByMapDetailsId(mapDetailsId: Long): List<DailyQuest> {
+        var dailyQuests: List<DailyQuest>
+        runBlocking {
+            dailyQuests = mapDetailsRepository.getDailyQuestsByMapDetailsId(mapDetailsId)
+        }
+        return dailyQuests
     }
 
 }

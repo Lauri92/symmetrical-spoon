@@ -1,6 +1,7 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Network
 
-import retrofit2.Response
+import fi.lauriari.ar_project.datamodels.ImageQuestion
+import fi.lauriari.ar_project.datamodels.ImageSelectionQuestion
 import retrofit2.http.GET
 
 interface ImageQuestionsApi {

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="fi.lauriari.ar_project.CollectedItemViewModel" />
+            type="fi.lauriari.ar_project.viewmodels.CollectedItemViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

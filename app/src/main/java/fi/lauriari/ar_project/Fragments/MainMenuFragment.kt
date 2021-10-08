@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import fi.lauriari.ar_project.Entities.Inventory
-import fi.lauriari.ar_project.InventoryViewModel
+import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.R
 import java.net.URL
 
@@ -35,8 +35,8 @@ class MainMenuFragment : Fragment() {
         view.findViewById<Button>(R.id.reward_list).setOnClickListener {
             findNavController().navigate(R.id.action_mainMenuFragment_to_rewardListFragment)
         }
-        view.findViewById<Button>(R.id.daily_quest).setOnClickListener {
-            findNavController().navigate(R.id.action_mainMenuFragment_to_dailyQuestFragment)
+        view.findViewById<Button>(R.id.graphs_btn).setOnClickListener {
+            findNavController().navigate(R.id.action_mainMenuFragment_to_graphsFragment)
         }
         view.findViewById<Button>(R.id.my_collections).setOnClickListener {
             findNavController().navigate(R.id.action_mainMenuFragment_to_collectedItemList)

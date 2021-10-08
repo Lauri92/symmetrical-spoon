@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.datamodels
 
 import com.google.gson.annotations.SerializedName
 

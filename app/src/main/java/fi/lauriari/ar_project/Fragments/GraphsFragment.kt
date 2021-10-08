@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Fragments
 
 import android.graphics.Color
 import android.os.Bundle
@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
-import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.series.BarGraphSeries
+import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
+import fi.lauriari.ar_project.R
 import java.text.Format
 import java.text.SimpleDateFormat
 
@@ -53,7 +54,7 @@ class GraphsFragment : Fragment() {
         graph.viewport.isScalable = true
         graph.viewport.setMinX(emeralds[0].x - 86400000 - 30000000)
         graph.viewport.setMaxX(emeralds[emeralds.lastIndex].x + 86400000 + 150000000)
-        graph.gridLabelRenderer.numHorizontalLabels = 5
+        graph.gridLabelRenderer.numHorizontalLabels = allMapDetails.size
         Log.d("emeraldsd", emeralds[0].x.toString())
 
         graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {

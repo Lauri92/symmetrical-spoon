@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.lauriari.ar_project.*
-import fi.lauriari.ar_project.CollectedItemViewModel
-import fi.lauriari.ar_project.InventoryViewModel
+import fi.lauriari.ar_project.viewmodels.CollectedItemViewModel
+import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
 
 class RewardListFragment : Fragment() {

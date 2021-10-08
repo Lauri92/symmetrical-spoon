@@ -1,5 +1,6 @@
 package fi.lauriari.ar_project.repositories
 
+import fi.lauriari.ar_project.DailyQuest
 import fi.lauriari.ar_project.MapDetails
 import fi.lauriari.ar_project.Dao.MapDetailsDao
 import fi.lauriari.ar_project.MapDetailsWithAllLatLngValues
@@ -43,4 +44,15 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
         return mapDetailsDao.getMapLatLngPointsByMapDetailsId(mapdetailsId)
     }
 
+    suspend fun insertDailyQuest(dailyQuest: DailyQuest) {
+        mapDetailsDao.insertDailyQuest(dailyQuest)
+    }
+
+    suspend fun updateDailyQuest(dailyQuest: DailyQuest) {
+        mapDetailsDao.updateDailyQuest(dailyQuest)
+    }
+
+    suspend fun getDailyQuestsByMapDetailsId(mapdetailsId: Long): List<DailyQuest> {
+        return mapDetailsDao.getDailyQuestsByMapDetailsId(mapdetailsId)
+    }
 }

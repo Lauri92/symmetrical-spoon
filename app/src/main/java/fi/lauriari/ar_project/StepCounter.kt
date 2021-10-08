@@ -52,14 +52,14 @@ class StepCounter(private val activity: Activity) : SensorEventListener {
     fun loadData() {
         //val sharedPreferences = activity.getSharedPreferences(SHARED_PREF_NAME,Context.MODE_PRIVATE)
         val savedValue = sharedPreferences.getFloat(PREF_VALUE, 0f)
-        val savedDateString = sharedPreferences.getString(CURRENT_DATE_VALUE, "")
-        val savedDate = LocalDate.parse(savedDateString, DateTimeFormatter.ISO_DATE)
+//        val savedDateString = sharedPreferences.getString(CURRENT_DATE_VALUE, "")
+//        val savedDate = LocalDate.parse(savedDateString, DateTimeFormatter.ISO_DATE)
 
         // when the date is changed
-        if (totalSteps != 0f && savedDate.compareTo(LocalDate.now()) != 0) {
-            saveCurrentDate()
-            previousTotalSteps = savedValue
-        }
+//        if (totalSteps != 0f && savedDate.compareTo(LocalDate.now()) != 0) {
+//            saveCurrentDate()
+//            previousTotalSteps = savedValue
+//        }
         Log.d("saved", "$savedValue, ${previousTotalSteps}")
     }
 

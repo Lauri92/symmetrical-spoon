@@ -30,14 +30,19 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.datamodels.ImageQuestion
+import fi.lauriari.ar_project.datamodels.ImageSelectionQuestion
 import fi.lauriari.ar_project.repositories.TriviaRepository
+import fi.lauriari.ar_project.viewmodels.InventoryViewModel
+import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
+import fi.lauriari.ar_project.viewmodels.TriviaApiViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.net.URL
 
-val SERVER_IMG_BASE_URL = URL("https://users.metropolia.fi/~lauriari/AR_project/images/")
 
 class GameARFragment : Fragment() {
 
@@ -89,8 +94,6 @@ class GameARFragment : Fragment() {
             quizQuestion = mTriviaApiViewModel.getQuiz()
             imageQuestionsResponse = mTriviaApiViewModel.getImageQuestions()
             imageSelectionQuestionList = mTriviaApiViewModel.getImageSelectionQuestions()
-            //imageQuestionList = (imageQuestionsResponse!!.body() as MutableList<ImageQuestion>?)!!
-            Log.d("image", imageSelectionQuestionList!![0].correctAnswer)
         }
 
         view.findViewById<Button>(R.id.add_flag_question_btn).setOnClickListener {
@@ -374,147 +377,185 @@ class GameARFragment : Fragment() {
         questionNode.setParent(null)
         questionNode.renderable = null
 
-        var diamondInsertable = 0
-        val random = (0..3).random()
-        if (random == 1) {
-            diamondInsertable = 1
+        lifecycleScope.launch {
+            var diamondInsertable = 0
+            val random = (0..3).random()
+            if (random == 1) {
+                diamondInsertable = 1
+            }
+
+            var imageresource: Int = 123
+            val updateDb = async {
+                val updatedMapLatLng = MapLatLng(
+                    selectedMapLatLngPoint!!.id,
+                    selectedMapLatLngPoint!!.mapDetailsId,
+                    selectedMapLatLngPoint!!.lat,
+                    selectedMapLatLngPoint!!.lng,
+                    selectedMapLatLngPoint!!.address,
+                    selectedMapLatLngPoint!!.reward,
+                    false
+                )
+                mMapDetailsViewModel.updateMapLatLng(updatedMapLatLng)
+
+
+                when (selectedMapLatLngPoint!!.reward) {
+                    "Emerald" -> {
+                        imageresource = R.drawable.emerald
+                        mMapDetailsViewModel.updateMapDetails(
+                            MapDetails(
+                                latestMapDetails!!.id,
+                                latestMapDetails!!.time,
+                                latestMapDetails!!.collectedEmeralds + 1,
+                                latestMapDetails!!.collectedRubies,
+                                latestMapDetails!!.collectedSapphires,
+                                latestMapDetails!!.collectedTopazes,
+                                latestMapDetails!!.collectedDiamonds + diamondInsertable
+                            )
+                        )
+                        mInventoryViewModel.updateInventory(
+                            Inventory(
+                                inventory!!.id,
+                                inventory!!.emeralds + 1,
+                                inventory!!.rubies,
+                                inventory!!.sapphires,
+                                inventory!!.topazes,
+                                inventory!!.diamonds + diamondInsertable
+                            )
+                        )
+                    }
+                    "Ruby" -> {
+                        imageresource = R.drawable.ruby
+                        mMapDetailsViewModel.updateMapDetails(
+                            MapDetails(
+                                latestMapDetails!!.id,
+                                latestMapDetails!!.time,
+                                latestMapDetails!!.collectedEmeralds,
+                                latestMapDetails!!.collectedRubies + 1,
+                                latestMapDetails!!.collectedSapphires,
+                                latestMapDetails!!.collectedTopazes,
+                                latestMapDetails!!.collectedDiamonds + diamondInsertable
+                            )
+                        )
+                        mInventoryViewModel.updateInventory(
+                            Inventory(
+                                inventory!!.id,
+                                inventory!!.emeralds,
+                                inventory!!.rubies + 1,
+                                inventory!!.sapphires,
+                                inventory!!.topazes,
+                                inventory!!.diamonds + diamondInsertable
+                            )
+                        )
+                    }
+                    "Sapphire" -> {
+                        imageresource = R.drawable.sapphire
+                        mMapDetailsViewModel.updateMapDetails(
+                            MapDetails(
+                                latestMapDetails!!.id,
+                                latestMapDetails!!.time,
+                                latestMapDetails!!.collectedEmeralds,
+                                latestMapDetails!!.collectedRubies,
+                                latestMapDetails!!.collectedSapphires + 1,
+                                latestMapDetails!!.collectedTopazes,
+                                latestMapDetails!!.collectedDiamonds + diamondInsertable
+                            )
+                        )
+                        mInventoryViewModel.updateInventory(
+                            Inventory(
+                                inventory!!.id,
+                                inventory!!.emeralds,
+                                inventory!!.rubies,
+                                inventory!!.sapphires + 1,
+                                inventory!!.topazes,
+                                inventory!!.diamonds + diamondInsertable
+                            )
+                        )
+                    }
+                    "Topaz" -> {
+                        imageresource = R.drawable.topaz
+                        mMapDetailsViewModel.updateMapDetails(
+                            MapDetails(
+                                latestMapDetails!!.id,
+                                latestMapDetails!!.time,
+                                latestMapDetails!!.collectedEmeralds,
+                                latestMapDetails!!.collectedRubies,
+                                latestMapDetails!!.collectedSapphires,
+                                latestMapDetails!!.collectedTopazes + 1,
+                                latestMapDetails!!.collectedDiamonds + diamondInsertable
+                            )
+                        )
+                        mInventoryViewModel.updateInventory(
+                            Inventory(
+                                inventory!!.id,
+                                inventory!!.emeralds,
+                                inventory!!.rubies,
+                                inventory!!.sapphires,
+                                inventory!!.topazes + 1,
+                                inventory!!.diamonds + diamondInsertable
+                            )
+                        )
+                    }
+                }
+            }
+
+            updateDb.await()
+
+            lifecycleScope.launch {
+                val dailyQuest =
+                    mMapDetailsViewModel.getDailyQuestsByMapDetailsId(latestMapDetails!!.id)
+                val updatedLatestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
+                val updatedInventory = mInventoryViewModel.getInventoryNormal()
+                Log.d("daily", dailyQuest.toString())
+                if (updatedLatestMapDetails.collectedEmeralds >= dailyQuest[0].requiredEmeralds &&
+                    updatedLatestMapDetails.collectedRubies >= dailyQuest[0].requiredRubies &&
+                    updatedLatestMapDetails.collectedSapphires >= dailyQuest[0].requiredSapphires &&
+                    updatedLatestMapDetails.collectedTopazes >= dailyQuest[0].requiredTopazes &&
+                    !dailyQuest[0].isCompleted
+                ) {
+                    Log.d("daily", "UPDATING!!")
+                    mMapDetailsViewModel.updateDailyQuest(
+                        DailyQuest(
+                            dailyQuest[0].id,
+                            dailyQuest[0].mapDetailsId,
+                            dailyQuest[0].requiredEmeralds,
+                            dailyQuest[0].requiredRubies,
+                            dailyQuest[0].requiredSapphires,
+                            dailyQuest[0].requiredTopazes,
+                            dailyQuest[0].requiredSteps,
+                            dailyQuest[0].description,
+                            dailyQuest[0].rewardString,
+                            dailyQuest[0].rewardAmount,
+                            true,
+                        )
+                    )
+                    mInventoryViewModel.updateInventory(
+                        Inventory(
+                            updatedInventory.id,
+                            updatedInventory.emeralds,
+                            updatedInventory.rubies,
+                            updatedInventory.sapphires,
+                            updatedInventory.topazes,
+                            updatedInventory.diamonds + dailyQuest[0].rewardAmount
+                        )
+                    )
+                }
+            }
+
+            val gem = selectedMapLatLngPoint!!.reward
+            val message =
+                if (gem != "Emerald") "You were rewarded a" else "You were rewarded an"
+            val diamondMessage = if (diamondInsertable != 0) "You also got a diamond!" else ""
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton("OK") { _, _ ->
+                findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
+            }
+            builder.setTitle("Task completed!")
+            builder.setMessage("$message $gem!\n$diamondMessage")
+            builder.setIcon(imageresource)
+            builder.setCancelable(false)
+            builder.create().show()
         }
-
-
-        val updatedMapLatLng = MapLatLng(
-            selectedMapLatLngPoint!!.id,
-            selectedMapLatLngPoint!!.mapDetailsId,
-            selectedMapLatLngPoint!!.lat,
-            selectedMapLatLngPoint!!.lng,
-            selectedMapLatLngPoint!!.address,
-            selectedMapLatLngPoint!!.reward,
-            false
-        )
-        mMapDetailsViewModel.updateMapLatLng(updatedMapLatLng)
-
-        var imageresource: Int = 123
-        when (selectedMapLatLngPoint!!.reward) {
-            "Emerald" -> {
-                imageresource = R.drawable.emerald
-                mMapDetailsViewModel.updateMapDetails(
-                    MapDetails(
-                        latestMapDetails!!.id,
-                        latestMapDetails!!.time,
-                        latestMapDetails!!.collectedEmeralds + 1,
-                        latestMapDetails!!.collectedRubies,
-                        latestMapDetails!!.collectedSapphires,
-                        latestMapDetails!!.collectedTopazes,
-                        latestMapDetails!!.collectedDiamonds + diamondInsertable
-                    )
-                )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds + 1,
-                        inventory!!.rubies,
-                        inventory!!.sapphires,
-                        inventory!!.topazes,
-                        inventory!!.diamonds + diamondInsertable
-                    )
-                )
-            }
-            "Ruby" -> {
-                imageresource = R.drawable.ruby
-                mMapDetailsViewModel.updateMapDetails(
-                    MapDetails(
-                        latestMapDetails!!.id,
-                        latestMapDetails!!.time,
-                        latestMapDetails!!.collectedEmeralds,
-                        latestMapDetails!!.collectedRubies + 1,
-                        latestMapDetails!!.collectedSapphires,
-                        latestMapDetails!!.collectedTopazes,
-                        latestMapDetails!!.collectedDiamonds + diamondInsertable
-                    )
-                )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds,
-                        inventory!!.rubies + 1,
-                        inventory!!.sapphires,
-                        inventory!!.topazes,
-                        inventory!!.diamonds + diamondInsertable
-                    )
-                )
-            }
-            "Sapphire" -> {
-                imageresource = R.drawable.sapphire
-                mMapDetailsViewModel.updateMapDetails(
-                    MapDetails(
-                        latestMapDetails!!.id,
-                        latestMapDetails!!.time,
-                        latestMapDetails!!.collectedEmeralds,
-                        latestMapDetails!!.collectedRubies,
-                        latestMapDetails!!.collectedSapphires + 1,
-                        latestMapDetails!!.collectedTopazes,
-                        latestMapDetails!!.collectedDiamonds + diamondInsertable
-                    )
-                )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds,
-                        inventory!!.rubies,
-                        inventory!!.sapphires + 1,
-                        inventory!!.topazes,
-                        inventory!!.diamonds + diamondInsertable
-                    )
-                )
-            }
-            "Topaz" -> {
-                imageresource = R.drawable.topaz
-                mMapDetailsViewModel.updateMapDetails(
-                    MapDetails(
-                        latestMapDetails!!.id,
-                        latestMapDetails!!.time,
-                        latestMapDetails!!.collectedEmeralds,
-                        latestMapDetails!!.collectedRubies,
-                        latestMapDetails!!.collectedSapphires,
-                        latestMapDetails!!.collectedTopazes + 1,
-                        latestMapDetails!!.collectedDiamonds + diamondInsertable
-                    )
-                )
-                mInventoryViewModel.updateInventory(
-                    Inventory(
-                        inventory!!.id,
-                        inventory!!.emeralds,
-                        inventory!!.rubies,
-                        inventory!!.sapphires,
-                        inventory!!.topazes + 1,
-                        inventory!!.diamonds + diamondInsertable
-                    )
-                )
-            }
-        }
-
-        val gem = selectedMapLatLngPoint!!.reward
-        val message =
-            if (gem != "Emerald") "You were rewarded a" else "You were rewarded an"
-        val diamondMessage = if (diamondInsertable != 0) "You also got a diamond!" else ""
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("OK") { _, _ ->
-            findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
-        }
-        builder.setTitle("Task completed!")
-        builder.setMessage("$message $gem!\n$diamondMessage")
-        builder.setIcon(imageresource)
-        builder.setCancelable(false)
-        builder.create().show()
-
-
-        /*
-        diamondRenderable?.let { createLocationAnchorForViewRenderable(it) }
-            ?.setOnTapListener { hitTestResult, motionEvent ->
-                hitTestResult.node?.setParent(null)
-                hitTestResult.node?.renderable = null
-            }
-         */
     }
 
     /**
