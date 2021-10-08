@@ -16,6 +16,7 @@ import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
 import fi.lauriari.ar_project.R
 import java.text.Format
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 class GraphsFragment : Fragment() {
@@ -52,51 +53,52 @@ class GraphsFragment : Fragment() {
 
         graph.title = "Collected gems"
         graph.viewport.isScalable = true
-        graph.viewport.setMinX(emeralds[0].x - 86400000 - 30000000)
-        graph.viewport.setMaxX(emeralds[emeralds.lastIndex].x + 86400000 + 150000000)
-        graph.gridLabelRenderer.numHorizontalLabels = allMapDetails.size
-        Log.d("emeraldsd", emeralds[0].x.toString())
+        if (emeralds.isNotEmpty()) {
+            graph.viewport.setMinX(emeralds[0].x - 86400000 - 30000000)
+            graph.viewport.setMaxX(emeralds[emeralds.lastIndex].x + 86400000 + 150000000)
+            graph.gridLabelRenderer.numHorizontalLabels = allMapDetails.size
+            Log.d("emeraldsd", emeralds[0].x.toString())
 
-        graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
-            override fun formatLabel(value: Double, isValueX: Boolean): String {
-                if (isValueX) {
-                    val formatter: Format = SimpleDateFormat("dd/MM\nyyyy")
-                    return formatter.format(value)
+            graph.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter() {
+                override fun formatLabel(value: Double, isValueX: Boolean): String {
+                    if (isValueX) {
+                        val formatter: Format = SimpleDateFormat("dd/MM\nyyyy", Locale.getDefault())
+                        return formatter.format(value)
+                    }
+                    return super.formatLabel(value, isValueX)
                 }
-                return super.formatLabel(value, isValueX)
             }
+
+
+            val emeraldsBar = BarGraphSeries(arrayOf<DataPoint>())
+            emeralds.forEach {
+                emeraldsBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
+            }
+            emeraldsBar.color = Color.GREEN
+
+            val rubiesBar = BarGraphSeries(arrayOf<DataPoint>())
+            rubies.forEach {
+                rubiesBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
+            }
+            rubiesBar.color = Color.RED
+
+            val sapphiresBar = BarGraphSeries(arrayOf<DataPoint>())
+            sapphires.forEach {
+                sapphiresBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
+            }
+            sapphiresBar.color = Color.BLUE
+
+            val topazesBar = BarGraphSeries(arrayOf<DataPoint>())
+            topazes.forEach {
+                topazesBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
+            }
+            topazesBar.color = Color.YELLOW
+
+            graph.addSeries(emeraldsBar)
+            graph.addSeries(rubiesBar)
+            graph.addSeries(topazesBar)
+            graph.addSeries(sapphiresBar)
         }
-
-
-        val emeraldsBar = BarGraphSeries(arrayOf<DataPoint>())
-        emeralds.forEach {
-            emeraldsBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
-        }
-        emeraldsBar.color = Color.GREEN
-
-        val rubiesBar = BarGraphSeries(arrayOf<DataPoint>())
-        rubies.forEach {
-            rubiesBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
-        }
-        rubiesBar.color = Color.RED
-
-        val sapphiresBar = BarGraphSeries(arrayOf<DataPoint>())
-        sapphires.forEach {
-            sapphiresBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
-        }
-        sapphiresBar.color = Color.BLUE
-
-        val topazesBar = BarGraphSeries(arrayOf<DataPoint>())
-        topazes.forEach {
-            topazesBar.appendData(DataPoint(it.x, it.y), true, emeralds.size)
-        }
-        topazesBar.color = Color.YELLOW
-
-        graph.addSeries(emeraldsBar)
-        graph.addSeries(rubiesBar)
-        graph.addSeries(topazesBar)
-        graph.addSeries(sapphiresBar)
-
 
         return view
     }

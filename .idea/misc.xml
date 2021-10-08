@@ -27,13 +27,20 @@
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/drawable/ic_splash_screen.xml" value="0.15885416666666666" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/drawable/ruby.xml" value="0.18125" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/activity_main.xml" value="0.13802083333333334" />
-        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/daily_quest_dialog.xml" value="0.36" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/daily_quest_dialog.xml" value="0.6" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/flag_question_layout.xml" value="0.268" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_ar_fragment.xml" value="0.1421875" />
-        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_map.xml" value="0.36" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_map.xml" value="0.3" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_graphs.xml" value="0.15364583333333334" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_main_menu.xml" value="0.2" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_reward_item_description.xml" value="0.16875" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_reward_list.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/game_ar_image_layout2.xml" value="0.12135416666666667" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/game_ar_image_layout3.xml" value="0.12135416666666667" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/game_ar_image_tv_layout.xml" value="0.12135416666666667" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/quiz_question_layout.xml" value="0.2546875" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/reward_item.xml" value="0.16510416666666666" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/reward_layout.xml" value="0.2390625" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.24010416666666667" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/drawable/diamond.xml" value="0.26979166666666665" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/drawable/emerald.xml" value="0.26979166666666665" />
@@ -49,10 +56,6 @@
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/drawable/topaz.xml" value="0.26979166666666665" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/activity_main.xml" value="0.22864583333333333" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/flag_question_layout.xml" value="0.25364583333333335" />
-        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collected_item_ar.xml" value="0.264" />
-        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collected_item_list.xml" value="0.2" />
-        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collection_description.xml" value="0.2" />
-        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_daily_quest.xml" value="0.536" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_collected_item_list.xml" value="0.24947916666666667" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_daily_quest.xml" value="0.2" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/fragment_game_map.xml" value="0.25364583333333335" />
@@ -67,7 +70,6 @@
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/layout/splash_screen.xml" value="0.21603260869565216" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.15260416666666668" />
         <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.15364583333333334" />
-        <entry key="..\:/Windows.old/Users/Heimin/AndroidStudioProjects/symmetrical-spoon-main/app/src/main/res/mipmap-anydpi-v26/ic_quest.xml" value="0.24351851851851852" />
       </map>
     </option>
   </component>

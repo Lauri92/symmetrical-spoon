@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="380dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_background"
     android:padding="12dp">
@@ -22,34 +22,39 @@
 
     <TextView
         android:id="@+id/task1_description_tv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        tools:text="Task description goes here"
+        android:layout_marginTop="32dp"
         android:textColor="@color/black"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:text="Task description goes here" />
 
     <TextView
         android:id="@+id/task1_progress_tv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:textColor="@color/black"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task1_description_tv"
         tools:text="Progress goes here" />
 
     <TextView
         android:id="@+id/task1_reward_tv"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:textColor="@color/black"
         android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task1_progress_tv"
         tools:text="Reward string goes here" />
@@ -58,11 +63,12 @@
         android:id="@+id/task1_complete_tv"
         android:layout_width="66dp"
         android:layout_height="67dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="-10dp"
         app:layout_constraintBottom_toBottomOf="@+id/task1_reward_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/task1_reward_tv"
-        app:layout_constraintTop_toTopOf="@+id/task1_reward_tv"
-        app:layout_constraintVertical_bias="1.0"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 

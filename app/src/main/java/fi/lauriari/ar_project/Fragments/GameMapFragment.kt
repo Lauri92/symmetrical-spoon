@@ -504,7 +504,6 @@ class GameMapFragment : Fragment() {
                     )
                     loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                     loopMarker.position = GeoPoint(it.latitude, it.longitude)
-
                     loopMarker.setOnMarkerClickListener { marker, mapView ->
                         locationIdAction = insertedId
                         Log.d("test", marker.position.latitude.toString())

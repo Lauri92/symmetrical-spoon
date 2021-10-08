@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         getSupportActionBar()?.hide()
-        setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
+        //setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
 
         if (ContextCompat.checkSelfPermission(
                 this@MainActivity,
