@@ -1,7 +1,6 @@
 package fi.lauriari.ar_project.Fragments
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.pm.PackageManager
@@ -64,9 +63,8 @@ class GameMapFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        //requestPermissions()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         Configuration.getInstance().load(
             requireContext(),
@@ -113,54 +111,7 @@ class GameMapFragment : Fragment() {
         dailyQuestButton.isEnabled = false
 
         dailyQuestButton.setOnClickListener {
-            //Toast.makeText(requireContext(), "Clicked daily quest fab!", Toast.LENGTH_SHORT).show()
-            val mapDetailsId = mMapDetailsViewModel.getLatestMapDetails().id
-            val dailyQuests = mMapDetailsViewModel.getDailyQuestsByMapDetailsId(mapDetailsId)
-            val mapDetails = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(mapDetailsId)
-            Log.d("daily", dailyQuests.toString())
-
-            val dialog = Dialog(requireContext())
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialog.setContentView(R.layout.daily_quest_dialog)
-            val descriptionTv = dialog.findViewById<TextView>(R.id.task1_description_tv)
-            val progressTv = dialog.findViewById<TextView>(R.id.task1_progress_tv)
-            val rewardTv = dialog.findViewById<TextView>(R.id.task1_reward_tv)
-            val completeTv = dialog.findViewById<ImageView>(R.id.task1_complete_tv)
-            val helper = DailyQuestHelper(
-                dailyQuests[0].requiredEmeralds,
-                dailyQuests[0].requiredRubies,
-                dailyQuests[0].requiredSapphires,
-                dailyQuests[0].requiredTopazes,
-                mapDetails.mapDetails!!.collectedEmeralds,
-                mapDetails.mapDetails!!.collectedRubies,
-                mapDetails.mapDetails!!.collectedSapphires,
-                mapDetails.mapDetails!!.collectedTopazes,
-                dailyQuests[0].description,
-                dailyQuests[0].rewardString,
-                dailyQuests[0].isCompleted
-            )
-
-            val progressLabel = "Progress\n"
-            val emeraldProgress =
-                if (helper.hasEmeralds) "Emeralds collected: ${helper.collectedEmeralds}/${helper.requiredEmeralds}\n" else ""
-            val rubiesProgress =
-                if (helper.hasRubies) "Rubies collected: ${helper.collectedRubies}/${helper.requiredRubies}\n" else ""
-            val sapphiresProgress =
-                if (helper.hasSapphires) "Sapphires collected: ${helper.collectedSapphires}/${helper.requiredSapphires}\n" else ""
-            val topazesProgress =
-                if (helper.hasTopazes) "Topazes collected: ${helper.collectedTopazes}/${helper.requiredTopazes}\n" else ""
-
-            val progressString =
-                progressLabel + emeraldProgress + rubiesProgress + sapphiresProgress + topazesProgress
-            descriptionTv.text = helper.description
-            progressTv.text = progressString
-            rewardTv.text = helper.rewardString
-            if (helper.isCompleted) {
-                completeTv.setBackgroundResource(R.drawable.ic_baseline_check_24)
-            } else {
-                completeTv.setBackgroundResource(R.drawable.ic_baseline_close_24)
-            }
-            dialog.show()
+            openDailyQuestDialog()
         }
 
         navigateToARButton.setOnClickListener {
@@ -175,13 +126,66 @@ class GameMapFragment : Fragment() {
         return view
     }
 
+    /**
+     * Function for creating and opening dialog to display daily quest for the active day
+     */
+    private fun openDailyQuestDialog() {
+        val mapDetailsId = mMapDetailsViewModel.getLatestMapDetails().id
+        val dailyQuests = mMapDetailsViewModel.getDailyQuestsByMapDetailsId(mapDetailsId)
+        val mapDetails = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(mapDetailsId)
+        Log.d("daily", dailyQuests.toString())
+
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.daily_quest_dialog)
+        val descriptionTv = dialog.findViewById<TextView>(R.id.task1_description_tv)
+        val progressTv = dialog.findViewById<TextView>(R.id.task1_progress_tv)
+        val rewardTv = dialog.findViewById<TextView>(R.id.task1_reward_tv)
+        val completeTv = dialog.findViewById<ImageView>(R.id.task1_complete_tv)
+        val helper = DailyQuestHelper(
+            dailyQuests[0].requiredEmeralds,
+            dailyQuests[0].requiredRubies,
+            dailyQuests[0].requiredSapphires,
+            dailyQuests[0].requiredTopazes,
+            mapDetails.mapDetails!!.collectedEmeralds,
+            mapDetails.mapDetails!!.collectedRubies,
+            mapDetails.mapDetails!!.collectedSapphires,
+            mapDetails.mapDetails!!.collectedTopazes,
+            dailyQuests[0].description,
+            dailyQuests[0].rewardString,
+            dailyQuests[0].isCompleted
+        )
+
+        val progressLabel = "Progress\n"
+        val emeraldProgress =
+            if (helper.hasEmeralds) "Emeralds collected: ${helper.collectedEmeralds}/${helper.requiredEmeralds}\n" else ""
+        val rubiesProgress =
+            if (helper.hasRubies) "Rubies collected: ${helper.collectedRubies}/${helper.requiredRubies}\n" else ""
+        val sapphiresProgress =
+            if (helper.hasSapphires) "Sapphires collected: ${helper.collectedSapphires}/${helper.requiredSapphires}\n" else ""
+        val topazesProgress =
+            if (helper.hasTopazes) "Topazes collected: ${helper.collectedTopazes}/${helper.requiredTopazes}\n" else ""
+
+        val progressString =
+            progressLabel + emeraldProgress + rubiesProgress + sapphiresProgress + topazesProgress
+        descriptionTv.text = helper.description
+        progressTv.text = progressString
+        rewardTv.text = helper.rewardString
+        if (helper.isCompleted) {
+            completeTv.setBackgroundResource(R.drawable.ic_baseline_check_24)
+        } else {
+            completeTv.setBackgroundResource(R.drawable.ic_baseline_close_24)
+        }
+        dialog.show()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         fusedLocationClient.removeLocationUpdates(locationCallback)
         activeDestination.latitude = 0.0
         activeDestination.longitude = 0.0
-        //isInteractionsLocationsSet = false
-        //isMapSet = false
+        isInteractionsLocationsSet = false
+        isMapSet = false
     }
 
     /**
@@ -190,7 +194,7 @@ class GameMapFragment : Fragment() {
     private fun requestPermissions() {
         requestPermissions(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            0
+            PERMISSIONS_REQUEST_LOCATION
         )
         // similar for ACCESS_COARSE_LOCATION,
 
@@ -271,14 +275,10 @@ class GameMapFragment : Fragment() {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_LOCATION -> {
+            PERMISSIONS_REQUEST_LOCATION -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted
-                    val contextt = ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
                     if (ContextCompat.checkSelfPermission(
                             requireContext(),
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -296,7 +296,7 @@ class GameMapFragment : Fragment() {
     }
 
     companion object {
-        private const val MY_PERMISSIONS_REQUEST_LOCATION = 0
+        private const val PERMISSIONS_REQUEST_LOCATION = 0
     }
 
     /**
@@ -365,7 +365,7 @@ class GameMapFragment : Fragment() {
         val latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
 
 
-        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val latestDbDate = simpleDateFormat.format(latestMapDetails.time)
         val dateNowString = simpleDateFormat.format(dateNow)
 
@@ -466,7 +466,7 @@ class GameMapFragment : Fragment() {
                     }
                     var collectableReward = ""
                     var collectable = R.drawable.ic_baseline_pets_24
-                    when (val random = (0..100).random()) {
+                    when ((0..100).random()) {
                         in 0..24 -> {
                             collectable = R.drawable.topaz
                             collectableReward = "Topaz"
@@ -646,7 +646,10 @@ class GameMapFragment : Fragment() {
 
         val distance = currentLocation.distanceTo(destinationLocation).toInt()
 
-        view.findViewById<TextView>(R.id.distance_tv).text = "Distance to destination: ${distance}m"
+        view.findViewById<TextView>(R.id.distance_tv).text = getString(
+            R.string.distance_to_destination,
+            distance
+        )//"Distance to destination: ${distance}m"
 
         // Set isEnable to true or false
         view.findViewById<Button>(R.id.navigate_to_game_AR_btn).isEnabled = distance < 5000

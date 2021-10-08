@@ -43,7 +43,6 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.net.URL
 
-val SERVER_IMG_BASE_URL = URL("https://users.metropolia.fi/~lauriari/AR_project/images/")
 
 class GameARFragment : Fragment() {
 
@@ -95,8 +94,6 @@ class GameARFragment : Fragment() {
             quizQuestion = mTriviaApiViewModel.getQuiz()
             imageQuestionsResponse = mTriviaApiViewModel.getImageQuestions()
             imageSelectionQuestionList = mTriviaApiViewModel.getImageSelectionQuestions()
-            //imageQuestionList = (imageQuestionsResponse!!.body() as MutableList<ImageQuestion>?)!!
-            Log.d("image", imageSelectionQuestionList!![0].correctAnswer)
         }
 
         view.findViewById<Button>(R.id.add_flag_question_btn).setOnClickListener {

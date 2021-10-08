@@ -15,4 +15,5 @@
     <string name="my_collections">My Collections</string>
     <string name="play_with">Play with %s!</string>
     <string name="collected_time">Collected time: %s</string>
+    <string name="distance_to_destination">Distance to destination: %dm</string>
 </resources>
