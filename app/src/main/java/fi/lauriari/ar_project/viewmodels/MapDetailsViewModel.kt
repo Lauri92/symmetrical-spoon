@@ -86,10 +86,12 @@ class MapDetailsViewModel(application: Application) : AndroidViewModel(applicati
         return mapInfoWithAllLtLngValues
     }
 
-    fun insertDailyQuest(dailyQuest: DailyQuest) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mapDetailsRepository.insertDailyQuest(dailyQuest)
+    fun insertDailyQuest(dailyQuest: DailyQuest): Long {
+        val insertedDailyQuestId: Long
+        runBlocking {
+            insertedDailyQuestId = mapDetailsRepository.insertDailyQuest(dailyQuest)
         }
+        return insertedDailyQuestId
     }
 
     fun updateDailyQuest(dailyQuest: DailyQuest) {
@@ -104,6 +106,14 @@ class MapDetailsViewModel(application: Application) : AndroidViewModel(applicati
             dailyQuests = mapDetailsRepository.getDailyQuestsByMapDetailsId(mapDetailsId)
         }
         return dailyQuests
+    }
+
+    fun getDailyQuestByDailyQuestId(id: Long): List<DailyQuest> {
+        var dailyQuest : List<DailyQuest>
+        runBlocking {
+            dailyQuest = mapDetailsRepository.getDailyQuestByDailyQuestId(id)
+        }
+        return dailyQuest
     }
 
 }

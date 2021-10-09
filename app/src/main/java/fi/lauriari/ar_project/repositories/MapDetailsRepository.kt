@@ -44,8 +44,8 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
         return mapDetailsDao.getMapLatLngPointsByMapDetailsId(mapdetailsId)
     }
 
-    suspend fun insertDailyQuest(dailyQuest: DailyQuest) {
-        mapDetailsDao.insertDailyQuest(dailyQuest)
+    suspend fun insertDailyQuest(dailyQuest: DailyQuest): Long {
+        return mapDetailsDao.insertDailyQuest(dailyQuest)
     }
 
     suspend fun updateDailyQuest(dailyQuest: DailyQuest) {
@@ -54,5 +54,9 @@ class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
 
     suspend fun getDailyQuestsByMapDetailsId(mapdetailsId: Long): List<DailyQuest> {
         return mapDetailsDao.getDailyQuestsByMapDetailsId(mapdetailsId)
+    }
+
+    suspend fun getDailyQuestByDailyQuestId(id: Long): List<DailyQuest> {
+        return mapDetailsDao.getDailyQuestByDailyQuestId(id)
     }
 }

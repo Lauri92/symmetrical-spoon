@@ -39,12 +39,15 @@ interface MapDetailsDao {
     suspend fun getMapLatLngPointsByMapDetailsId(mapDetailsId: Long): List<MapLatLng>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDailyQuest(dailyQuest: DailyQuest)
+    suspend fun insertDailyQuest(dailyQuest: DailyQuest): Long
 
     @Update
     suspend fun updateDailyQuest(dailyQuest: DailyQuest)
 
     @Query("SELECT * FROM dailyquest_table WHERE mapDetailsId= :mapDetailsId")
     suspend fun getDailyQuestsByMapDetailsId(mapDetailsId: Long): List<DailyQuest>
+
+    @Query("SELECT * FROM dailyquest_table WHERE id= :id")
+    suspend fun getDailyQuestByDailyQuestId(id: Long): List<DailyQuest>
 
 }
