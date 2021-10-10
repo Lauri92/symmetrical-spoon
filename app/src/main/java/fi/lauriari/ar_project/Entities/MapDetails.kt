@@ -34,6 +34,7 @@ data class MapLatLng(
     val lng: Double,
     val address: String,
     val reward: String,
+    val gameType: String,
     var isActive: Boolean
 ) : Parcelable
 

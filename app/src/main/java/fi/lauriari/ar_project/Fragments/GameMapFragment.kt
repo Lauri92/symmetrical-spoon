@@ -55,6 +55,7 @@ class GameMapFragment : Fragment() {
     private val mMapDetailsViewModel: MapDetailsViewModel by viewModels()
     private val mInventoryViewModel: InventoryViewModel by viewModels()
     private var locationIdAction: Long? = null
+    private var locationStringAction: String? = null
     private var locationRequest: LocationRequest? = null
 
 
@@ -112,7 +113,8 @@ class GameMapFragment : Fragment() {
 
         navigateToARButton.setOnClickListener {
             val action = GameMapFragmentDirections.actionGameMapFragmentToGameARFragment(
-                locationIdAction!!
+                locationIdAction!!,
+                locationStringAction!!
             )
             findNavController().navigate(action)
         }
@@ -195,30 +197,6 @@ class GameMapFragment : Fragment() {
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             PERMISSIONS_REQUEST_LOCATION
         )
-        // similar for ACCESS_COARSE_LOCATION,
-
-/*
-        ActivityCompat.requestPermissions(
-            requireContext() as Activity,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            0
-        )
-
-        Log.i(
-            "GEOLOCATION",
-            "${
-                ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            } ${
-                ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.INTERNET
-                )
-            } ${PackageManager.PERMISSION_GRANTED}"
-        )
-*/
     }
 
     /**
@@ -410,7 +388,6 @@ class GameMapFragment : Fragment() {
      * Set locations on map from a list queried from DB
      */
     private fun setLocationsOnMap(chosenPoints: List<MapLatLng>) {
-        Log.d("locationsset", "Setting old locations")
         view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = true
         chosenPoints.forEach {
             if (it.isActive) {
@@ -430,7 +407,9 @@ class GameMapFragment : Fragment() {
                 loopMarker.position = GeoPoint(it.lat, it.lng)
 
                 loopMarker.setOnMarkerClickListener { marker, _ ->
+                    // Value that is passed to GameARFragment
                     locationIdAction = it.id
+                    locationStringAction = it.gameType
                     Log.d("test", marker.position.latitude.toString())
                     activeDestination.latitude = marker.position.latitude
                     activeDestination.longitude = marker.position.longitude
@@ -438,12 +417,13 @@ class GameMapFragment : Fragment() {
                     // Draw a Polygon around it
                     drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
                     getDistanceToMarker(activeDestination)
+                    map.controller.animateTo(GeoPoint(it.lat, it.lng))
                     map.invalidate()
                     marker.showInfoWindow()
                     return@setOnMarkerClickListener true
                 }
 
-                loopMarker.title = it.address
+                loopMarker.title = "${it.address}\n${it.gameType}"
                 map.overlays.add(loopMarker)
             }
         }
@@ -454,7 +434,6 @@ class GameMapFragment : Fragment() {
      */
     @DelicateCoroutinesApi
     private fun createNewDbRowsForMapDetailsLatLngPointsDailyQuests(chosenPoints: List<GeoPoint>) {
-        Log.d("locationsset", "Setting new locations")
         var dateNow = Calendar.getInstance().timeInMillis
         val calendar: Calendar = Calendar.getInstance()
         val hours = calendar.get(Calendar.HOUR) * 3_600_000
@@ -475,22 +454,27 @@ class GameMapFragment : Fragment() {
                     }
                     var collectableReward = ""
                     var collectable = R.drawable.ic_baseline_pets_24
+                    var gameType: String? = null
                     when ((0..100).random()) {
                         in 0..24 -> {
                             collectable = R.drawable.topaz
                             collectableReward = "Topaz"
+                            gameType = generateGameType()
                         }
                         in 25..49 -> {
                             collectable = R.drawable.ruby
                             collectableReward = "Ruby"
+                            gameType = generateGameType()
                         }
                         in 50..75 -> {
                             collectable = R.drawable.sapphire
                             collectableReward = "Sapphire"
+                            gameType = generateGameType()
                         }
                         in 76..100 -> {
                             collectable = R.drawable.emerald
                             collectableReward = "Emerald"
+                            gameType = generateGameType()
                         }
                     }
                     Log.d("random", "Collectable: $collectable")
@@ -502,6 +486,7 @@ class GameMapFragment : Fragment() {
                             it.longitude,
                             address,
                             collectableReward,
+                            gameType!!,
                             true
                         )
                     )
@@ -713,6 +698,26 @@ class GameMapFragment : Fragment() {
             view.findViewById<TextView>(R.id.sapphires_tv).text = gems.sapphires.toString()
             view.findViewById<TextView>(R.id.topazes_tv).text = gems.topazes.toString()
             view.findViewById<TextView>(R.id.diamonds_tv).text = gems.diamonds.toString()
+        }
+    }
+
+    /**
+     * Generate random gametype for a latlng value
+     */
+    private fun generateGameType(): String {
+        return when ((0..3).random()) {
+            0 -> {
+                "normalQuiz"
+            }
+            1 -> {
+                "imageQuiz"
+            }
+            2 -> {
+                "multipleImageQuiz"
+            }
+            else -> {
+                "sphereTask"
+            }
         }
     }
 }

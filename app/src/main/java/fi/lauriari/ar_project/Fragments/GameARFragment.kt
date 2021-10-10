@@ -72,7 +72,10 @@ class GameARFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_a_r, container, false)
-        Log.d("argstest", "Id of this latlng instance: ${args.id}")
+        Log.d(
+            "argstest",
+            "Id of this latlng instance: ${args.id} and gameType is: ${args.gameType}"
+        )
         latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
         Log.d("argstest", latestMapDetails.toString())
         selectedMapLatLngPoint = mMapDetailsViewModel.getMapLatPointLngById(args.id)
@@ -393,6 +396,7 @@ class GameARFragment : Fragment() {
                     selectedMapLatLngPoint!!.lng,
                     selectedMapLatLngPoint!!.address,
                     selectedMapLatLngPoint!!.reward,
+                    selectedMapLatLngPoint!!.gameType,
                     false
                 )
                 mMapDetailsViewModel.updateMapLatLng(updatedMapLatLng)
