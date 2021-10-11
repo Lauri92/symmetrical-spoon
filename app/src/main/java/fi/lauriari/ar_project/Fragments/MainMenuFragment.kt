@@ -63,7 +63,7 @@ class MainMenuFragment : Fragment() {
 
         if (list?.size == 0) {
             Log.d("inventory", "No inventory, creating one")
-            mInventoryViewModel.insertInventory(Inventory(0, 1000, 1000, 1000, 1000, 1000))
+            mInventoryViewModel.insertInventory(Inventory(0, 100, 100, 100, 100, 100))
 
         } else{
             Log.d("inventory", "There was an inventory, $list")

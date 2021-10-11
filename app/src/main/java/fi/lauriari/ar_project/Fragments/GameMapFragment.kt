@@ -104,11 +104,17 @@ class GameMapFragment : Fragment() {
 
         setUserCollectedGems()
         val dailyQuestButton = view.findViewById<ImageView>(R.id.daily_quest_fab)
+        val locateMyselfButton = view.findViewById<ImageView>(R.id.locate_myself_btn)
         val navigateToARButton = view.findViewById<Button>(R.id.navigate_to_game_AR_btn)
         dailyQuestButton.isEnabled = false
+        locateMyselfButton.isEnabled = false
 
         dailyQuestButton.setOnClickListener {
             openDailyQuestDialog()
+        }
+
+        locateMyselfButton.setOnClickListener {
+            locateUser()
         }
 
         navigateToARButton.setOnClickListener {
@@ -389,6 +395,7 @@ class GameMapFragment : Fragment() {
      */
     private fun setLocationsOnMap(chosenPoints: List<MapLatLng>) {
         view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = true
+        view.findViewById<ImageView>(R.id.locate_myself_btn).isEnabled = true
         chosenPoints.forEach {
             if (it.isActive) {
                 val loopMarker = Marker(map)
@@ -662,6 +669,12 @@ class GameMapFragment : Fragment() {
         map.overlays.add(ownLocationmarker)
         //displays the ownLocationmarker as soon as it has been added.
         map.invalidate()
+    }
+
+    private fun locateUser() {
+        val lat = ownLocationmarker.position.latitude
+        val lng = ownLocationmarker.position.longitude
+        map.controller.animateTo(GeoPoint(lat, lng))
     }
 
     /**
