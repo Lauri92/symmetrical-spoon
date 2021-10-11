@@ -16,6 +16,7 @@ import fi.lauriari.ar_project.Entities.Inventory
 import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.R
 import java.net.URL
+import java.util.*
 
 class MainMenuFragment : Fragment() {
 
@@ -64,8 +65,7 @@ class MainMenuFragment : Fragment() {
         if (list?.size == 0) {
             Log.d("inventory", "No inventory, creating one")
             mInventoryViewModel.insertInventory(Inventory(0, 100, 100, 100, 100, 100))
-
-        } else{
+        } else {
             Log.d("inventory", "There was an inventory, $list")
         }
 

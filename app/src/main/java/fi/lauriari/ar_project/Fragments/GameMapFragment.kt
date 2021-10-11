@@ -443,11 +443,11 @@ class GameMapFragment : Fragment() {
     private fun createNewDbRowsForMapDetailsLatLngPointsDailyQuests(chosenPoints: List<GeoPoint>) {
         var dateNow = Calendar.getInstance().timeInMillis
         val calendar: Calendar = Calendar.getInstance()
-        val hours = calendar.get(Calendar.HOUR) * 3_600_000
+        val hours = calendar.get(Calendar.HOUR_OF_DAY) * 3_600_000
         val minutes = calendar.get(Calendar.MINUTE) * 60_000
         val seconds = calendar.get(Calendar.SECOND) * 1000
         // Do calculation to set time to mid day 43200000ms -> 12hours
-        dateNow = dateNow - hours - minutes - seconds //+ 43_200_000
+        dateNow = dateNow - hours - minutes - seconds + 43_200_000
         // Returns the inserted rowId as well
         val newMapDetailsId =
             mMapDetailsViewModel.insertMapDetails(MapDetails(0, dateNow, 0, 0, 0, 0, 0))
@@ -674,6 +674,7 @@ class GameMapFragment : Fragment() {
     private fun locateUser() {
         val lat = ownLocationmarker.position.latitude
         val lng = ownLocationmarker.position.longitude
+        map.controller.setZoom(13.0)
         map.controller.animateTo(GeoPoint(lat, lng))
     }
 
