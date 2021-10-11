@@ -63,7 +63,6 @@ class GameARFragment : Fragment() {
     private var inventory: Inventory? = null
     private var quizQuestion: Response<QuizQuestion>? = null
     private var imageQuestionsResponse: MutableList<ImageQuestion>? = null
-    private var imageQuestionList: MutableList<ImageQuestion>? = null
     private var imageSelectionQuestionList: MutableList<ImageSelectionQuestion>? = null
 
     override fun onCreateView(
@@ -72,21 +71,13 @@ class GameARFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_a_r, container, false)
-        Log.d(
-            "argstest",
-            "Id of this latlng instance: ${args.id} and gameType is: ${args.gameType}"
-        )
         latestMapDetails = mMapDetailsViewModel.getLatestMapDetails()
-        Log.d("argstest", latestMapDetails.toString())
         selectedMapLatLngPoint = mMapDetailsViewModel.getMapLatPointLngById(args.id)
-        Log.d("argstest", selectedMapLatLngPoint.toString())
         inventory = mInventoryViewModel.getInventoryNormal()
 
         arFrag = childFragmentManager.findFragmentById(
             R.id.sceneform_fragment
         ) as ArFragment
-
-        buildRenderables()
 
         val repository = TriviaRepository()
         val viewModelFactory = TriviaViewModelFactory(repository)
@@ -99,283 +90,273 @@ class GameARFragment : Fragment() {
             imageSelectionQuestionList = mTriviaApiViewModel.getImageSelectionQuestions()
         }
 
-        view.findViewById<Button>(R.id.add_flag_question_btn).setOnClickListener {
-            imageQuestionRenderable ?: return@setOnClickListener
+        val playButton = view.findViewById<Button>(R.id.play_btn)
 
-            val node: TransformableNode =
-                createLocationAnchorForViewRenderable(imageQuestionRenderable!!)
-                    ?: return@setOnClickListener
-
-            // Randomize the questions
-            imageQuestionsResponse?.shuffle()
-            val chosenQuestion = imageQuestionsResponse?.take(1)
-
-            val questionTv = imageQuestionRenderable!!.view.findViewById<TextView>(R.id.question_tv)
-            val flagIv = imageQuestionRenderable!!.view.findViewById<ImageView>(R.id.flag_iv)
-            val button1 = imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
-            val button2 = imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
-            val button3 = imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
-
-            val answers = mutableListOf(
-                chosenQuestion!![0].answer1,
-                chosenQuestion[0].answer2,
-                chosenQuestion[0].answer3
-            )
-
-            // Randomize the answer locations
-            answers.shuffle()
-
-            // Create a drawable from an inputstream opened from an asset to display on screen
-            //val stream: InputStream = activity?.assets!!.open(chosenQuestion[0].flagSource)
-            //val drawable = Drawable.createFromStream(stream, null)
-            //flagIv.setImageDrawable(drawable)
-
-            val image = getWebImage(chosenQuestion[0].imageSource)
-
-            questionTv.text = chosenQuestion[0].question
-            flagIv.setImageBitmap(image)
-            button1.text = answers[0]
-            button2.text = answers[1]
-            button3.text = answers[2]
-
-            button1.setOnClickListener {
-                if (button1.text == chosenQuestion[0].correctAnswer) {
-                    displayAnswerResult(node)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Wrong answer! No reward for you!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+        when (args.gameType) {
+            "normalQuiz" -> {
+                ViewRenderable.builder()
+                    .setView(requireContext(), R.layout.quiz_question_layout)
+                    .build()
+                    .thenAccept { quizQuestionRenderable = it }
+                playButton.setOnClickListener {
+                    quizQuestionRenderable ?: return@setOnClickListener
+                    normalQuizTask()
                 }
             }
-
-            button2.setOnClickListener {
-                if (button2.text == chosenQuestion[0].correctAnswer) {
-                    displayAnswerResult(node)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Wrong answer! No reward for you!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+            "imageQuiz" -> {
+                ViewRenderable.builder()
+                    .setView(requireContext(), R.layout.image_question_layout)
+                    .build()
+                    .thenAccept { imageQuestionRenderable = it }
+                playButton.setOnClickListener {
+                    imageQuestionRenderable ?: return@setOnClickListener
+                    imageQuizTask()
                 }
             }
-
-            button3.setOnClickListener {
-                if (button3.text == chosenQuestion[0].correctAnswer) {
-                    displayAnswerResult(node)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Wrong answer! No reward for you!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
+            "sphereTask" -> playButton.setOnClickListener {
+                sphereTask()
             }
-        }
-
-        view.findViewById<Button>(R.id.add_quiz_question_btn).setOnClickListener {
-            quizQuestionRenderable ?: return@setOnClickListener
-
-            val node: TransformableNode =
-                createLocationAnchorForViewRenderable(quizQuestionRenderable!!)
-                    ?: return@setOnClickListener
-
-
-            val questionTv = quizQuestionRenderable!!.view.findViewById<TextView>(R.id.quiz_tv)
-            val button1 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
-            val button2 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
-            val button3 = quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
-
-            val correctAnswer = quizQuestion?.body()!!.results[0].correct_answer
-            val answers = mutableListOf(
-                quizQuestion?.body()!!.results[0].incorrect_answers[0],
-                quizQuestion?.body()!!.results[0].incorrect_answers[1],
-                quizQuestion?.body()!!.results[0].correct_answer
-            )
-            answers.shuffle()
-
-
-            val decodedQuestion: String = Html
-                .fromHtml(quizQuestion?.body()!!.results[0].question, Html.FROM_HTML_MODE_COMPACT)
-                .toString()
-            val decodedAnswers0: String = Html
-                .fromHtml(answers[0], Html.FROM_HTML_MODE_COMPACT)
-                .toString()
-            val decodedAnswers1: String = Html
-                .fromHtml(answers[1], Html.FROM_HTML_MODE_COMPACT)
-                .toString()
-            val decodedAnswers2: String = Html
-                .fromHtml(answers[2], Html.FROM_HTML_MODE_COMPACT)
-                .toString()
-
-            questionTv.text = decodedQuestion//quizQuestion.body()!!.results[0].question
-            button1.text = decodedAnswers0
-            button2.text = decodedAnswers1
-            button3.text = decodedAnswers2
-
-            button1.setOnClickListener {
-                if (button1.text == correctAnswer) {
-                    displayAnswerResult(node)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Wrong answer! No reward for you!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+            "multipleImageQuiz" -> {
+                createMultipleImageQuestionRenderables()
+                playButton.setOnClickListener {
+                    multipleImageQuizTask()
                 }
-            }
-
-            button2.setOnClickListener {
-                if (button2.text == correctAnswer) {
-                    displayAnswerResult(node)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Wrong answer! No reward for you!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-            }
-
-            button3.setOnClickListener {
-                if (button3.text == correctAnswer) {
-                    displayAnswerResult(node)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Wrong answer! No reward for you!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-            }
-
-        }
-
-        view.findViewById<Button>(R.id.add_sphere_btn).setOnClickListener {
-            sphereRenderable ?: return@setOnClickListener
-
-            var collectedSpheres = 0
-
-            // Generate 3 spheres around the user
-            val list = mutableListOf(0, 1, 2, 3, 4)
-            for (i in 1..3) {
-                val randomDirection = list.random()
-                list.remove(randomDirection)
-                val randomDepth = (2..5).random().toFloat()
-                Log.d("random", randomDepth.toString())
-                val node =
-                    createRandomLocationAnchorForModelRenderable(
-                        sphereRenderable!!,
-                        randomDirection,
-                        randomDepth
-                    )
-                        ?: return@setOnClickListener
-                node.setOnTapListener { hitTestResult, motionEvent ->
-                    node.setParent(null)
-                    node.renderable = null
-                    collectedSpheres++
-                    Toast.makeText(
-                        requireContext(),
-                        "Spheres collected $collectedSpheres/3",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-
-                    if (collectedSpheres == 3) {
-                        Toast.makeText(
-                            requireContext(),
-                            "3 COLLECTED!!!",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        displayAnswerResult(node)
-                    }
-                }
-            }
-
-        }
-
-        view.findViewById<Button>(R.id.add_image_btn).setOnClickListener {
-            imageSelectionQuizTvRenderable ?: return@setOnClickListener
-            imageRenderable ?: return@setOnClickListener
-            imageRenderable2 ?: return@setOnClickListener
-            imageRenderable3 ?: return@setOnClickListener
-            //imageSelectionQuestionList ?: return@setOnClickListener
-
-            imageSelectionQuestionList?.shuffle()
-            val chosen = imageSelectionQuestionList?.take(1)
-            val chosenQuestion = chosen!![0]
-            Log.d("chosenquestion", chosenQuestion.question)
-            val imageUrls = mutableListOf(
-                chosenQuestion.image1,
-                chosenQuestion.image2,
-                chosenQuestion.image3
-            )
-
-            val tvNode: TransformableNode =
-                createLocationAnchorForViewRenderable(imageSelectionQuizTvRenderable!!)
-                    ?: return@setOnClickListener
-
-            imageSelectionQuizTvRenderable!!.view.findViewById<TextView>(R.id.image_selection_question_tv).text =
-                chosenQuestion.question
-
-            val imageRenderablesList =
-                listOf<ViewRenderable>(imageRenderable!!, imageRenderable2!!, imageRenderable3!!)
-            val list = mutableListOf(0, 1, 2, 3, 4, 5)
-            imageRenderablesList.forEachIndexed { i, viewRenderable ->
-                val randomDirection = list.random()
-                list.remove(randomDirection)
-                val randomDepth = (2..5).random().toFloat()
-                val node: TransformableNode =
-                    createRandomLocationAnchorForViewRenderable(
-                        viewRenderable,
-                        randomDirection,
-                        randomDepth
-                    )
-                        ?: return@setOnClickListener
-
-                node.name = imageUrls[i]
-
-                node.setOnTapListener { hitTestResult, motionEvent ->
-                    Log.d(
-                        "chosenquestion",
-                        "Tapped node: ${node.name}"
-                    )
-                    if (node.name == chosenQuestion.correctAnswer) {
-                        displayAnswerResult(node)
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "You pressed wrong item!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                }
-
-
-                val randomedImage: Bitmap = getWebImage(imageUrls[i])
-                viewRenderable.view.findViewById<ImageView>(R.id.image)
-                    .setImageBitmap(randomedImage)
             }
         }
 
         return view
     }
 
+    private fun normalQuizTask() {
+        val node: TransformableNode =
+            createLocationAnchorForViewRenderable(quizQuestionRenderable!!)
+                ?: return
+
+        val questionTv =
+            quizQuestionRenderable!!.view.findViewById<TextView>(R.id.quiz_tv)
+        val button1 =
+            quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
+        val button2 =
+            quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
+        val button3 =
+            quizQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
+
+        val correctAnswer = quizQuestion?.body()!!.results[0].correct_answer
+        val answers = mutableListOf(
+            quizQuestion?.body()!!.results[0].incorrect_answers[0],
+            quizQuestion?.body()!!.results[0].incorrect_answers[1],
+            quizQuestion?.body()!!.results[0].correct_answer
+        )
+        answers.shuffle()
+
+        val decodedQuestion =
+            decodeHtmlString(quizQuestion?.body()!!.results[0].question)
+        val decodedAnswers0 = decodeHtmlString(answers[0])
+        val decodedAnswers1 = decodeHtmlString(answers[1])
+        val decodedAnswers2 = decodeHtmlString(answers[2])
+
+        questionTv.text = decodedQuestion
+        button1.text = decodedAnswers0
+        button2.text = decodedAnswers1
+        button3.text = decodedAnswers2
+
+        button1.setOnClickListener {
+            if (button1.text == correctAnswer) {
+                handleCorrectAnswer(node)
+            } else {
+                handleWrongAnswer()
+            }
+        }
+
+        button2.setOnClickListener {
+            if (button2.text == correctAnswer) {
+                handleCorrectAnswer(node)
+            } else {
+                handleWrongAnswer()
+            }
+        }
+
+        button3.setOnClickListener {
+            if (button3.text == correctAnswer) {
+                handleCorrectAnswer(node)
+            } else {
+                handleWrongAnswer()
+            }
+        }
+
+    }
+
+    private fun imageQuizTask() {
+        val node: TransformableNode =
+            createLocationAnchorForViewRenderable(imageQuestionRenderable!!)
+                ?: return
+        Log.d("imagequetions", imageQuestionsResponse.toString())
+        imageQuestionsResponse?.shuffle()
+        val chosenQuestion = imageQuestionsResponse?.take(1)?.get(0)
+
+        val questionTv =
+            imageQuestionRenderable!!.view.findViewById<TextView>(R.id.question_tv)
+        val flagIv =
+            imageQuestionRenderable!!.view.findViewById<ImageView>(R.id.flag_iv)
+        val button1 =
+            imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer1_btn)
+        val button2 =
+            imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer2_btn)
+        val button3 =
+            imageQuestionRenderable!!.view.findViewById<Button>(R.id.answer3_btn)
+
+        val answers = mutableListOf(
+            chosenQuestion!!.answer1,
+            chosenQuestion.answer2,
+            chosenQuestion.answer3
+        )
+
+        // Randomize the answer locations
+        answers.shuffle()
+
+        val image = getWebImage(chosenQuestion.imageSource)
+
+        questionTv.text = chosenQuestion.question
+        flagIv.setImageBitmap(image)
+        button1.text = answers[0]
+        button2.text = answers[1]
+        button3.text = answers[2]
+
+        button1.setOnClickListener {
+            if (button1.text == chosenQuestion.correctAnswer) {
+                handleCorrectAnswer(node)
+            } else {
+                handleWrongAnswer()
+            }
+        }
+        button2.setOnClickListener {
+            if (button2.text == chosenQuestion.correctAnswer) {
+                handleCorrectAnswer(node)
+            } else {
+                handleWrongAnswer()
+            }
+        }
+        button3.setOnClickListener {
+            if (button3.text == chosenQuestion.correctAnswer) {
+                handleCorrectAnswer(node)
+            } else {
+                handleWrongAnswer()
+            }
+        }
+    }
+
+    private fun sphereTask() {
+        createSpehere()
+        sphereRenderable ?: return
+        var collectedSpheres = 0
+
+        // Generate 3 spheres around the user
+        val list = mutableListOf(0, 1, 2, 3, 4)
+        for (i in 1..3) {
+            val randomDirection = list.random()
+            list.remove(randomDirection)
+            val randomDepth = (2..5).random().toFloat()
+            Log.d("random", randomDepth.toString())
+            val node =
+                createRandomLocationAnchorForModelRenderable(
+                    sphereRenderable!!,
+                    randomDirection,
+                    randomDepth
+                )
+                    ?: return
+
+            node.setOnTapListener { _, _ ->
+                node.setParent(null)
+                node.renderable = null
+                collectedSpheres++
+                Toast.makeText(
+                    requireContext(),
+                    "Spheres collected $collectedSpheres/3",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+
+                if (collectedSpheres == 3) {
+                    Toast.makeText(
+                        requireContext(),
+                        "3 COLLECTED!!!",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    handleCorrectAnswer(node)
+                }
+            }
+        }
+    }
+
+    private fun multipleImageQuizTask() {
+        imageSelectionQuizTvRenderable ?: return
+        imageRenderable ?: return
+        imageRenderable2 ?: return
+        imageRenderable3 ?: return
+        imageSelectionQuestionList?.shuffle()
+        val chosen = imageSelectionQuestionList?.take(1)
+        val chosenQuestion = chosen!![0]
+        Log.d("chosenquestion", chosenQuestion.question)
+        val imageUrls = mutableListOf(
+            chosenQuestion.image1,
+            chosenQuestion.image2,
+            chosenQuestion.image3
+        )
+
+        val tvNode: TransformableNode =
+            createLocationAnchorForViewRenderable(imageSelectionQuizTvRenderable!!)
+                ?: return
+
+        imageSelectionQuizTvRenderable!!.view.findViewById<TextView>(R.id.image_selection_question_tv).text =
+            chosenQuestion.question
+
+        val imageRenderablesList =
+            listOf(
+                imageRenderable!!,
+                imageRenderable2!!,
+                imageRenderable3!!
+            )
+        val list = mutableListOf(0, 1, 2, 3, 4, 5)
+        imageRenderablesList.forEachIndexed { i, viewRenderable ->
+            val randomDirection = list.random()
+            list.remove(randomDirection)
+            val randomDepth = (2..5).random().toFloat()
+            val node: TransformableNode =
+                createRandomLocationAnchorForViewRenderable(
+                    viewRenderable,
+                    randomDirection,
+                    randomDepth
+                )
+                    ?: return
+
+            node.name = imageUrls[i]
+
+            node.setOnTapListener { _, _ ->
+                if (node.name == chosenQuestion.correctAnswer) {
+                    handleCorrectAnswer(node)
+                } else {
+                    handleWrongAnswer()
+                }
+
+            }
+
+            val randomedImage: Bitmap = getWebImage(imageUrls[i])
+            viewRenderable.view.findViewById<ImageView>(R.id.image)
+                .setImageBitmap(randomedImage)
+        }
+    }
+
     /**
-     * After clicking the button, display whether the user answered correct or wrong
+     * After clicking the correct button, inform user of the correct answer and update DB
+     * Modifies this LatLng value isComplete value to be true and adds correct reward(s) to Inventory
      */
-    private fun displayAnswerResult(questionNode: TransformableNode) {
-        Toast.makeText(requireContext(), "Correct answer! Collect your reward!", Toast.LENGTH_SHORT)
+    private fun handleCorrectAnswer(questionNode: TransformableNode) {
+        Toast.makeText(
+            requireContext(),
+            "Correct answer! Collect your reward!",
+            Toast.LENGTH_SHORT
+        )
             .show()
         questionNode.setParent(null)
         questionNode.renderable = null
@@ -563,44 +544,11 @@ class GameARFragment : Fragment() {
     }
 
     /**
-     * Build the ViewRenderables needed for the fragment
+     * Display toast for wrong answer
      */
-    private fun buildRenderables() {
-        ViewRenderable.builder()
-            .setView(requireContext(), R.layout.flag_question_layout)
-            .build()
-            .thenAccept { imageQuestionRenderable = it }
-
-        ViewRenderable.builder()
-            .setView(requireContext(), R.layout.quiz_question_layout)
-            .build()
-            .thenAccept { quizQuestionRenderable = it }
-
-        ViewRenderable.builder()
-            .setView(requireContext(), R.layout.game_ar_image_tv_layout)
-            .build()
-            .thenAccept { imageSelectionQuizTvRenderable = it }
-
-        ViewRenderable.builder()
-            .setView(requireContext(), R.layout.game_ar_image_layout)
-            .build()
-            .thenAccept { imageRenderable = it }
-
-        ViewRenderable.builder()
-            .setView(requireContext(), R.layout.game_ar_image_layout2)
-            .build()
-            .thenAccept { imageRenderable2 = it }
-
-        ViewRenderable.builder()
-            .setView(requireContext(), R.layout.game_ar_image_layout3)
-            .build()
-            .thenAccept { imageRenderable3 = it }
-
-        MaterialFactory.makeOpaqueWithColor(requireContext(), Color(255f, 0f, 0f))
-            .thenAccept { material: Material? ->
-                sphereRenderable =
-                    ShapeFactory.makeSphere(0.1f, Vector3(0.0f, 0.15f, 0.0f), material)
-            }
+    private fun handleWrongAnswer() {
+        Toast.makeText(requireContext(), "Wrong answer!", Toast.LENGTH_SHORT).show()
+        // TODO: Add some further functionality for wrong answer, exit without reward or something else?
     }
 
     /**
@@ -753,6 +701,42 @@ class GameARFragment : Fragment() {
             img = getImg(URL(Url))
         }
         return img
+    }
+
+    private fun createMultipleImageQuestionRenderables() {
+        ViewRenderable.builder()
+            .setView(requireContext(), R.layout.game_ar_image_tv_layout)
+            .build()
+            .thenAccept { imageSelectionQuizTvRenderable = it }
+
+        ViewRenderable.builder()
+            .setView(requireContext(), R.layout.game_ar_image_layout)
+            .build()
+            .thenAccept { imageRenderable = it }
+
+        ViewRenderable.builder()
+            .setView(requireContext(), R.layout.game_ar_image_layout2)
+            .build()
+            .thenAccept { imageRenderable2 = it }
+
+        ViewRenderable.builder()
+            .setView(requireContext(), R.layout.game_ar_image_layout3)
+            .build()
+            .thenAccept { imageRenderable3 = it }
+    }
+
+    private fun createSpehere() {
+        MaterialFactory.makeOpaqueWithColor(requireContext(), Color(255f, 0f, 0f))
+            .thenAccept { material: Material? ->
+                sphereRenderable =
+                    ShapeFactory.makeSphere(0.1f, Vector3(0.0f, 0.15f, 0.0f), material)
+            }
+    }
+
+    private fun decodeHtmlString(string: String): String {
+        return Html
+            .fromHtml(string, Html.FROM_HTML_MODE_COMPACT)
+            .toString()
     }
 
 }

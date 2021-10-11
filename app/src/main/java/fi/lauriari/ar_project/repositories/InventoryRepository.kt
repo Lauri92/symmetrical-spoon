@@ -6,7 +6,7 @@ import fi.lauriari.ar_project.Entities.Inventory
 
 class InventoryRepository(private val inventoryDao: InventoryDao) {
 
-    suspend fun insertInventory(inventory: Inventory):Long {
+    suspend fun insertInventory(inventory: Inventory): Long {
         return inventoryDao.insertInventory(inventory)
     }
 
@@ -34,7 +34,7 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         inventoryDao.updateEmeralds(diamond)
     }
 
-     fun getInventory(): LiveData<Inventory> {
+    fun getInventory(): LiveData<Inventory> {
         return inventoryDao.getInventory()
     }
 
@@ -42,7 +42,7 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         return inventoryDao.getInventoryNormal()
     }
 
-    suspend fun getList():List<Inventory>{
+    suspend fun getList(): List<Inventory> {
         return inventoryDao.getInventoryList()
     }
 

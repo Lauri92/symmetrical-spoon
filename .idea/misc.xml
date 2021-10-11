@@ -29,6 +29,7 @@
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/activity_main.xml" value="0.13802083333333334" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/daily_quest_dialog.xml" value="0.6" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/flag_question_layout.xml" value="0.268" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_a_r.xml" value="0.11875" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_ar_fragment.xml" value="0.1421875" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_game_map.xml" value="0.3" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/fragment_graphs.xml" value="0.15364583333333334" />
@@ -38,6 +39,7 @@
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/game_ar_image_layout2.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/game_ar_image_layout3.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/game_ar_image_tv_layout.xml" value="0.12135416666666667" />
+        <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/image_question_layout.xml" value="0.1546875" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/quiz_question_layout.xml" value="0.2546875" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/reward_item.xml" value="0.16510416666666666" />
         <entry key="..\:/Users/lauri/AndroidStudioProjects/AR_Project/app/src/main/res/layout/reward_layout.xml" value="0.2390625" />
