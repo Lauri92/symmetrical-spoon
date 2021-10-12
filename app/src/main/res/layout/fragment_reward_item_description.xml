@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal|center_vertical"
     android:background="@drawable/ic_background"
-    tools:context=".Fragments.RewardItemDescriptionFragment">
+    tools:context=".fragments.RewardItemDescriptionFragment">
 
     <LinearLayout
         android:id="@+id/money_container"
@@ -364,9 +364,9 @@
 
     <Button
         android:id="@+id/buy_btn"
+        style="@style/AccentedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#C62828"
         android:padding="24dp"
         android:text="@string/buy_item"
         android:textSize="20sp"

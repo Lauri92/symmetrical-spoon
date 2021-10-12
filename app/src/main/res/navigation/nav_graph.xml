@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainMenuFragment"
-        android:name="fi.lauriari.ar_project.Fragments.MainMenuFragment"
+        android:name="fi.lauriari.ar_project.fragments.MainMenuFragment"
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/gameMapFragment"
-        android:name="fi.lauriari.ar_project.Fragments.GameMapFragment"
+        android:name="fi.lauriari.ar_project.fragments.GameMapFragment"
         android:label="fragment_game_map"
         tools:layout="@layout/fragment_game_map" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/gameARFragment"
-        android:name="fi.lauriari.ar_project.Fragments.GameARFragment"
+        android:name="fi.lauriari.ar_project.fragments.GameARFragment"
         android:label="fragment_game_a_r"
         tools:layout="@layout/fragment_game_a_r" >
         <action
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/rewardListFragment"
-        android:name="fi.lauriari.ar_project.Fragments.RewardListFragment"
+        android:name="fi.lauriari.ar_project.fragments.RewardListFragment"
         android:label="fragment_reward_list"
         tools:layout="@layout/fragment_reward_list" >
         <action
@@ -56,16 +56,15 @@
     </fragment>
     <fragment
         android:id="@+id/rewardItemDescription"
-        android:name="fi.lauriari.ar_project.Fragments.RewardItemDescriptionFragment"
-        android:label="fragment_reward_item_description"
-        tools:layout="@layout/fragment_reward_item_description" >
+        android:name="fi.lauriari.ar_project.fragments.RewardItemDescriptionFragment"
+        android:label="fragment_reward_item_description">
         <argument
             android:name="rewardItem"
-            app:argType="fi.lauriari.ar_project.Item" />
+            app:argType="fi.lauriari.ar_project.Network.Item" />
     </fragment>
     <fragment
         android:id="@+id/collectedItemList"
-        android:name="fi.lauriari.ar_project.Fragments.CollectedItemListFragment"
+        android:name="fi.lauriari.ar_project.fragments.CollectedItemListFragment"
         android:label="fragment_collected_item_list"
         tools:layout="@layout/fragment_collected_item_list" >
         <action
@@ -74,18 +73,18 @@
     </fragment>
     <fragment
         android:id="@+id/collectionDescriptionFragment"
-        android:name="fi.lauriari.ar_project.Fragments.CollectionDescriptionFragment"
+        android:name="fi.lauriari.ar_project.fragments.CollectionDescriptionFragment"
         android:label="CollectionDescriptionFragment" >
         <argument
             android:name="collectedItem"
-            app:argType="fi.lauriari.ar_project.Entities.CollectedItem" />
+            app:argType="fi.lauriari.ar_project.entities.CollectedItem" />
         <action
             android:id="@+id/action_collectionDescriptionFragment_to_collectedItemARFragment"
             app:destination="@id/collectedItemARFragment" />
     </fragment>
     <fragment
         android:id="@+id/collectedItemARFragment"
-        android:name="fi.lauriari.ar_project.Fragments.CollectedItemARFragment"
+        android:name="fi.lauriari.ar_project.fragments.CollectedItemARFragment"
         android:label="fragment_collected_item_ar"
         tools:layout="@layout/fragment_collected_item_ar" >
         <argument
@@ -94,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/graphsFragment"
-        android:name="fi.lauriari.ar_project.Fragments.GraphsFragment"
+        android:name="fi.lauriari.ar_project.fragments.GraphsFragment"
         android:label="fragment_graphs"
         tools:layout="@layout/fragment_graphs" />
 </navigation>

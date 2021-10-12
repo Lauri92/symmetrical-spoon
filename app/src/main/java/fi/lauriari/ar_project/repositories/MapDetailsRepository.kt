@@ -1,10 +1,10 @@
 package fi.lauriari.ar_project.repositories
 
-import fi.lauriari.ar_project.DailyQuest
-import fi.lauriari.ar_project.MapDetails
-import fi.lauriari.ar_project.Dao.MapDetailsDao
-import fi.lauriari.ar_project.MapDetailsWithAllLatLngValues
-import fi.lauriari.ar_project.MapLatLng
+import fi.lauriari.ar_project.entities.DailyQuest
+import fi.lauriari.ar_project.dao.MapDetailsDao
+import fi.lauriari.ar_project.entities.MapDetails
+import fi.lauriari.ar_project.entities.MapDetailsWithAllLatLngValues
+import fi.lauriari.ar_project.entities.MapLatLng
 
 class MapDetailsRepository(private val mapDetailsDao: MapDetailsDao) {
 

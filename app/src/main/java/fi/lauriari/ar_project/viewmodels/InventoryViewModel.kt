@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.entities.Inventory
 import fi.lauriari.ar_project.SpoonDB
 import fi.lauriari.ar_project.repositories.InventoryRepository
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +13,7 @@ import kotlinx.coroutines.runBlocking
 
 class InventoryViewModel(application: Application) : AndroidViewModel(application) {
 
-    val inventoryRepository: InventoryRepository
+    private val inventoryRepository: InventoryRepository
 
     init {
         val inventoryDao = SpoonDB.getDatabase(application).inventoryDao()
@@ -34,31 +34,31 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun updateEmeralds(emerald: Int){
+    fun updateEmeralds(emerald: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             inventoryRepository.updateEmeralds(emerald)
         }
     }
 
-    fun updateRubies(ruby: Int){
+    fun updateRubies(ruby: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             inventoryRepository.updateRubies(ruby)
         }
     }
 
-    fun updateSapphires(sapphire: Int){
+    fun updateSapphires(sapphire: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             inventoryRepository.updateSapphires(sapphire)
         }
     }
 
-    fun updateTopazes(topaz: Int){
+    fun updateTopazes(topaz: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             inventoryRepository.updateTopazes(topaz)
         }
     }
 
-    fun updateDiamonds(diamond: Int){
+    fun updateDiamonds(diamond: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             inventoryRepository.updateDiamonds(diamond)
         }

@@ -33,7 +33,7 @@
         android:elevation="8dp"
         android:gravity="center"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="32dp"
+        android:paddingVertical="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/back_btn">
@@ -45,7 +45,7 @@
             android:layout_centerInParent="false"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="false"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/ic_reward_item_placeholder" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:layout_centerInParent="true"
             android:text="name"
             android:textAlignment="center"
-            android:textSize="40sp"
+            android:textSize="34sp"
             android:textStyle="bold" />
 
         <TextView
@@ -84,9 +84,9 @@
 
     <Button
         android:id="@+id/play_btn"
+        style="@style/AccentedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#C62828"
         android:padding="24dp"
         android:text="@string/play_with"
         android:textSize="20sp"

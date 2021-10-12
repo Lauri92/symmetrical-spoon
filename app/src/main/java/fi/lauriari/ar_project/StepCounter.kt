@@ -11,69 +11,82 @@ import android.util.Log
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class StepCounter(private val activity: Activity) : SensorEventListener {
+class StepCounter() : SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var stepCounterSensor: Sensor? = null
 
-    private val SHARED_PREF_NAME = "stepCounter"
-    private val PREF_VALUE = "previousSteps"
-    private val CURRENT_DATE_VALUE = "currentDate"
-    private var running = false
+    private val sharedPrefName = "stepCounter"
+    private val savedPreviousSteps = "previousSteps"
+    private val savedCurrentDate = "currentDate"
     private var totalSteps = 0f
-    var previousTotalSteps = 0f
+    private var previousTotalSteps = 0f
+    private var currentSteps = 0
     private lateinit var sharedPreferences: SharedPreferences
 
 
-    fun initSensorManager() {
-        //loadData(activity)
-        sharedPreferences = activity.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+    fun initSensorManager(activity: Activity) {
+        sharedPreferences = activity.getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE)
         sensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+        loadData()
     }
 
     fun getTotalSteps() = totalSteps
     fun getSensorManager() = sensorManager
     fun getStepCounterSensor() = stepCounterSensor
+    fun getSavedDate()=  sharedPreferences.getString(savedCurrentDate, LocalDate.now().toString())
 
     fun saveCurrentDate() {
         val currentDate = LocalDate.now().toString()
         val editor = sharedPreferences.edit()
-        editor.putString(CURRENT_DATE_VALUE, currentDate)
+        editor.putString(savedCurrentDate, currentDate)
         editor.apply()
     }
 
     fun savePreviousTotalSteps() {
         previousTotalSteps = totalSteps
         val editor = sharedPreferences.edit()
-        editor.putFloat(PREF_VALUE, previousTotalSteps)
+        editor.putFloat(savedPreviousSteps, previousTotalSteps)
         editor.apply()
     }
 
-    fun loadData() {
-        //val sharedPreferences = activity.getSharedPreferences(SHARED_PREF_NAME,Context.MODE_PRIVATE)
-        val savedValue = sharedPreferences.getFloat(PREF_VALUE, 0f)
-//        val savedDateString = sharedPreferences.getString(CURRENT_DATE_VALUE, "")
-//        val savedDate = LocalDate.parse(savedDateString, DateTimeFormatter.ISO_DATE)
+    private fun loadData() {
+        val savedValue = sharedPreferences.getFloat(savedPreviousSteps, 0f)
+//        val savedDateString =
+//            sharedPreferences.getString(savedCurrentDate, LocalDate.now().toString())
+        val savedDateString = getSavedDate()
+        val savedDate = LocalDate.parse(savedDateString, DateTimeFormatter.ISO_DATE)
+        Log.d(
+            "saved",
+            " ***** saved: $savedValue, sdate: $savedDateString, previous: $previousTotalSteps"
+        )
 
         // when the date is changed
-//        if (totalSteps != 0f && savedDate.compareTo(LocalDate.now()) != 0) {
-//            saveCurrentDate()
-//            previousTotalSteps = savedValue
-//        }
-        Log.d("saved", "$savedValue, ${previousTotalSteps}")
+        if (savedDate.compareTo(LocalDate.now()) != 0) {
+            saveCurrentDate()
+            previousTotalSteps = savedValue
+        }
+        Log.d("saved", "saved: $savedValue,sdata: $savedDateString, previous: $previousTotalSteps")
     }
-
-    fun resetSteps() {
-        previousTotalSteps = totalSteps
-        savePreviousTotalSteps()
-    }
+//
+//    fun resetSteps() {
+//        previousTotalSteps = totalSteps
+//        savePreviousTotalSteps()
+//    }
 
     override fun onSensorChanged(p0: SensorEvent?) {
         p0 ?: return
         p0.sensor = stepCounterSensor
         totalSteps = p0.values[0]
-        val currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
-        Log.d("steps", "$totalSteps, $currentSteps")
+        val savedDate = LocalDate.parse(getSavedDate(), DateTimeFormatter.ISO_DATE)
+        if(savedDate.compareTo(LocalDate.now())!=0){
+            currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
+        }else{
+            currentSteps = totalSteps.toInt()
+        }
+
+
+        Log.d("steps", "total: $totalSteps, current: $currentSteps, previous:$previousTotalSteps")
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {

@@ -4,6 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import fi.lauriari.ar_project.*
+import fi.lauriari.ar_project.entities.DailyQuest
+import fi.lauriari.ar_project.entities.MapDetails
+import fi.lauriari.ar_project.entities.MapDetailsWithAllLatLngValues
+import fi.lauriari.ar_project.entities.MapLatLng
 import fi.lauriari.ar_project.repositories.MapDetailsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

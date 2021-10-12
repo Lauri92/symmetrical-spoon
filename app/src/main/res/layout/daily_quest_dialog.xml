@@ -2,68 +2,142 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="380dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_background"
-    android:padding="12dp">
+    android:minWidth="320dp"
+    android:padding="16dp"
+    app:layout_constraintWidth="match_parent"
+    app:layout_constraintWidth_min="wrap">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/container"
+        android:elevation="8dp"
+        android:gravity="fill"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
+        app:layout_constraintStart_toStartOf="@+id/relativeLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+        <TextView
+            android:id="@+id/task1_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="Walk 2000 steps"
+            android:textAlignment="center"
+            android:textColor="#002681"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/walk_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/task1_description"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="Progress goes here" />
+
+        <TextView
+            android:id="@+id/task1_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/walk_progress"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            tools:text="reward" />
+
+        <ImageView
+            android:id="@+id/task1_complete"
+            android:layout_width="66dp"
+            android:layout_height="67dp"
+            android:layout_below="@+id/walk_progress"
+            android:layout_toEndOf="@+id/task1_reward"
+            tools:srcCompat="@drawable/ic_close" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Daily quest for today"
+        android:layout_marginTop="16dp"
+        android:text="@string/daily_quest"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_900"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/task1_description_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
-        tools:text="Task description goes here"
-        android:textColor="@color/black"
-        android:textSize="25sp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/container"
+        android:elevation="8dp"
+        android:gravity="fill"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-    <TextView
-        android:id="@+id/task1_progress_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task1_description_tv"
-        tools:text="Progress goes here" />
+        <TextView
+            android:id="@+id/task1_description_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|fill"
+            android:padding="4dp"
+            android:textAlignment="center"
+            android:textColor="#002681"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="Task description goes here" />
 
-    <TextView
-        android:id="@+id/task1_reward_tv"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task1_progress_tv"
-        tools:text="Reward string goes here" />
+        <TextView
+            android:id="@+id/task1_progress_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/task1_description_tv"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="Progress goes here" />
 
-    <ImageView
-        android:id="@+id/task1_complete_tv"
-        android:layout_width="66dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="36dp"
-        app:layout_constraintBottom_toBottomOf="@+id/task1_reward_tv"
-        app:layout_constraintStart_toEndOf="@+id/task1_reward_tv"
-        app:layout_constraintTop_toTopOf="@+id/task1_reward_tv"
-        app:layout_constraintVertical_bias="1.0"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        <TextView
+            android:id="@+id/task1_reward_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/task1_progress_tv"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="reward" />
+
+        <ImageView
+            android:id="@+id/task1_complete_tv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignStart="@id/task1_description_tv"
+            tools:srcCompat="@drawable/ic_close" />
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

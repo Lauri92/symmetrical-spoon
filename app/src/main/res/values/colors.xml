@@ -13,12 +13,22 @@
     <color name="green">#74FF00</color>
     <color name="dollar_green">#85BB65</color>
     <color name="orange">#FF9100</color>
-    <color name="transparent">#00FFFFFF</color>
-    <color name="primary"></color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
-<color name="container">#5BFFFFFF</color>
+    <!-- custom colors -->
+    <color name="transparent">#00FFFFFF</color>
+    <color name="blue_primary">#84a4d8</color>
+    <color name="blue_primary_light">#b6d5ff</color>
+    <color name="blue_primary_dark">#5475a6</color>
+    <color name="primary_900">#002681</color>
+    <color name="primary_400">#0069c0</color>
+    <color name="purple_secondary">#a781be</color>
+    <color name="purple_secondary_light">#d9b1f1</color>
+    <color name="purple_secondary_dark">#77548e</color>
+    <color name="accent_color">#8b0540</color>
+    <color name="container">#5BFFFFFF</color>
+    <color name="container_dark">#90FFFFFF</color>
 </resources>

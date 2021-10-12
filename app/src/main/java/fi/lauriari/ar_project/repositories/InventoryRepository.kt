@@ -1,12 +1,12 @@
 package fi.lauriari.ar_project.repositories
 
 import androidx.lifecycle.LiveData
-import fi.lauriari.ar_project.Dao.InventoryDao
-import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.dao.InventoryDao
+import fi.lauriari.ar_project.entities.Inventory
 
 class InventoryRepository(private val inventoryDao: InventoryDao) {
 
-    suspend fun insertInventory(inventory: Inventory):Long {
+    suspend fun insertInventory(inventory: Inventory): Long {
         return inventoryDao.insertInventory(inventory)
     }
 
@@ -14,27 +14,27 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         inventoryDao.updateInventory(inventory)
     }
 
-    suspend fun updateEmeralds(emerald: Int){
+    suspend fun updateEmeralds(emerald: Int) {
         inventoryDao.updateEmeralds(emerald)
     }
 
-    suspend fun updateRubies(ruby: Int){
+    suspend fun updateRubies(ruby: Int) {
         inventoryDao.updateEmeralds(ruby)
     }
 
-    suspend fun updateSapphires(sapphire: Int){
+    suspend fun updateSapphires(sapphire: Int) {
         inventoryDao.updateEmeralds(sapphire)
     }
 
-    suspend fun updateTopazes(topaz: Int){
+    suspend fun updateTopazes(topaz: Int) {
         inventoryDao.updateEmeralds(topaz)
     }
 
-    suspend fun updateDiamonds(diamond: Int){
+    suspend fun updateDiamonds(diamond: Int) {
         inventoryDao.updateEmeralds(diamond)
     }
 
-     fun getInventory(): LiveData<Inventory> {
+    fun getInventory(): LiveData<Inventory> {
         return inventoryDao.getInventory()
     }
 
@@ -42,7 +42,7 @@ class InventoryRepository(private val inventoryDao: InventoryDao) {
         return inventoryDao.getInventoryNormal()
     }
 
-    suspend fun getList():List<Inventory>{
+    suspend fun getList(): List<Inventory> {
         return inventoryDao.getInventoryList()
     }
 
