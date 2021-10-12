@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project
+package fi.lauriari.ar_project.Network
 
 import android.os.Parcelable
 import android.util.Log
@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -20,7 +20,7 @@ class Item(
     @SerializedName("description") val description: String,
     @SerializedName("thumbnail") val thumbnail: String,
     @SerializedName("objectUrl") val objectUrl: String,
-    @SerializedName("isAnimated") val isAnimated:Boolean,
+    @SerializedName("isAnimated") val isAnimated: Boolean,
     @SerializedName("emerald") val itemEmerald: Int,
     @SerializedName("ruby") val itemRuby: Int,
     @SerializedName("sapphire") val itemSapphire: Int,
@@ -30,13 +30,12 @@ class Item(
 
 
 object RewardsRetrofit {
-    const val REWARDS_URL = "https://users.metropolia.fi/~minjic/AR_project/data/"
+    private const val REWARDS_URL = "https://users.metropolia.fi/~minjic/AR_project/data/"
 
     private val rewardsRetrofit by lazy {
         Retrofit.Builder()
             .baseUrl(REWARDS_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     val rewardsApi: RewardsApi by lazy {
@@ -58,13 +57,13 @@ class RewardsRepository {
 
 class RewardsApiViewModel(private val repository: RewardsRepository) : ViewModel() {
 
-    val response:MutableLiveData<List<Item>> = MutableLiveData()
+    val response: MutableLiveData<List<Item>> = MutableLiveData()
 
     fun getItems() {
         viewModelScope.launch {
             response.value = repository.getItems()
-            response?.value?.forEach {
-                Log.d("response","${it.itemId}: ${it.itemName}")
+            response.value?.forEach {
+                Log.d("response", "${it.itemId}: ${it.itemName}")
             }
         }
     }

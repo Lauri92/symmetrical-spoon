@@ -4,11 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import fi.lauriari.ar_project.Dao.CollectedItemDao
-import fi.lauriari.ar_project.Dao.InventoryDao
-import fi.lauriari.ar_project.Dao.MapDetailsDao
-import fi.lauriari.ar_project.Entities.CollectedItem
-import fi.lauriari.ar_project.Entities.Inventory
+import fi.lauriari.ar_project.dao.CollectedItemDao
+import fi.lauriari.ar_project.dao.InventoryDao
+import fi.lauriari.ar_project.dao.MapDetailsDao
+import fi.lauriari.ar_project.entities.*
 
 
 @Database(

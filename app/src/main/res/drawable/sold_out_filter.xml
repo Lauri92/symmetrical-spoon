@@ -3,7 +3,7 @@
     android:width="240dp"
     android:height="270dp"
     android:viewportWidth="240"
-    android:viewportHeight="270">
+    android:viewportHeight="200">
   <path
       android:pathData="M0,0h240v270h-240z"
       android:strokeAlpha="0.3"
