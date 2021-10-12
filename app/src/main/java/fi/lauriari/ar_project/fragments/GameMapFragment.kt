@@ -163,7 +163,6 @@ class GameMapFragment : Fragment() {
                 dailyQuests[0].isCompleted
             )
 
-            val progressLabel = "Progress:\n"
             val emeraldProgress =
                 if (helper.hasEmeralds) "Emeralds collected: ${helper.collectedEmeralds}/${helper.requiredEmeralds}\n" else ""
             val rubiesProgress =
@@ -174,7 +173,7 @@ class GameMapFragment : Fragment() {
                 if (helper.hasTopazes) "Topazes collected: ${helper.collectedTopazes}/${helper.requiredTopazes}\n" else ""
 
             val progressString =
-                progressLabel + emeraldProgress + rubiesProgress + sapphiresProgress + topazesProgress
+                emeraldProgress + rubiesProgress + sapphiresProgress + topazesProgress
             descriptionTv.text = helper.description
             progressTv.text = progressString
             rewardTv.text = helper.rewardString
