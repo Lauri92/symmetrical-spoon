@@ -29,8 +29,8 @@ The application will work just by downloading or cloning the repository, there a
     * Feature that allows users to track their daily step count as they would ideally complete the AR tasks by walking to the locations
 
 
-## Data persistance
-The application uses Room SQLite database for data persistance.
+## Data persistence
+The application uses Room SQLite database for data persistence.
 Included tables are:
 1. **Mapdetails table** for storing single day entries, including collected currency amounts
 2. **Latitude/Longitude table** for storing single latitude/longitude values with associated rewards and gametypes. Contains foreign key to Mapdetails table, a single day can have 15 lat/lng entries

@@ -303,12 +303,11 @@ class GameMapFragment : Fragment() {
 
         val geoPoints = ArrayList<GeoPoint>()
         val polygon = Polygon()
-        val radius = 10.0
+        val radius = 30.0
         for (i in 1..360) {
             geoPoints.add(GeoPoint(geoPoint).destinationPoint(radius, i.toDouble()))
         }
         polygon.id = "activityRange"
-        Log.d("DBG", geoPoints.toString())
         geoPoints.add(geoPoints[0])
         polygon.points = geoPoints
         //polygon.title = "A sample polygon"
@@ -361,79 +360,157 @@ class GameMapFragment : Fragment() {
         val latestDbDate = simpleDateFormat.format(latestMapDetails.time)
         val dateNowString = simpleDateFormat.format(dateNow)
 
-
         // Check if latest DB date matches with current date
         if (latestDbDate == dateNowString) {
             //if (dateNow == latestMapDetails.time) {
             // Dates match -> set old values
             val latLngList =
                 mMapDetailsViewModel.getMapLatLngPointsByMapDetailsId(latestMapDetails.id)
-            setLocationsOnMap(latLngList)
+            setLocationsOnMap(latLngList, geoPoint)
         } else {
             // Dates don't match -> generate new values
-            val interactionLocations = ArrayList<GeoPoint>()
-            val radius = 5000
-            for (i in 1..360) {
-                val rnds = (0..radius).random().toDouble()
-                interactionLocations.add(
-                    GeoPoint(geoPoint.latitude, geoPoint.longitude).destinationPoint(
-                        rnds,
-                        i.toDouble()
-                    )
-                )
-            }
-            interactionLocations.shuffle()
-
-            val chosenPoints = interactionLocations.take(15)
+            val chosenPoints = createInteractionLocations(geoPoint)
             createNewDbRowsForMapDetailsLatLngPointsDailyQuests(chosenPoints)
         }
 
     }
 
+    private fun createInteractionLocations(geoPoint: GeoPoint): List<GeoPoint> {
+        val interactionLocations = ArrayList<GeoPoint>()
+        val radius = 5000
+        for (i in 1..360) {
+            val rnds = (0..radius).random().toDouble()
+            interactionLocations.add(
+                GeoPoint(geoPoint.latitude, geoPoint.longitude).destinationPoint(
+                    rnds,
+                    i.toDouble()
+                )
+            )
+        }
+        interactionLocations.shuffle()
+        return interactionLocations.take(15)
+    }
+
     /**
      * Set locations on map from a list queried from DB
      */
-    private fun setLocationsOnMap(chosenPoints: List<MapLatLng>) {
+    @DelicateCoroutinesApi
+    private fun setLocationsOnMap(chosenPoints: List<MapLatLng>, geoPoint: GeoPoint? = null) {
         view.findViewById<ImageView>(R.id.daily_quest_fab).isEnabled = true
         view.findViewById<ImageView>(R.id.locate_myself_btn).isEnabled = true
-        chosenPoints.forEach {
-            if (it.isActive) {
-                val loopMarker = Marker(map)
-                var iconDrawable = R.drawable.ic_baseline_pets_24
-                when (it.reward) {
-                    "Emerald" -> iconDrawable = R.drawable.emerald
-                    "Ruby" -> iconDrawable = R.drawable.ruby
-                    "Sapphire" -> iconDrawable = R.drawable.sapphire
-                    "Topaz" -> iconDrawable = R.drawable.topaz
+        // TODO if [chosenPoints] is empty createNewLocationsForSameDay()... -> Come back here with new list
+        val activeLatLngCheck = chosenPoints.filter {
+            it.isActive
+        }
+        Log.d("tesr", activeLatLngCheck.size.toString())
+        if (activeLatLngCheck.isNotEmpty()) {
+            chosenPoints.forEach {
+                if (it.isActive) {
+                    val loopMarker = Marker(map)
+                    var iconDrawable = R.drawable.ic_baseline_pets_24
+                    when (it.reward) {
+                        "Emerald" -> iconDrawable = R.drawable.emerald
+                        "Ruby" -> iconDrawable = R.drawable.ruby
+                        "Sapphire" -> iconDrawable = R.drawable.sapphire
+                        "Topaz" -> iconDrawable = R.drawable.topaz
+                    }
+                    loopMarker.icon = AppCompatResources.getDrawable(
+                        requireContext(),
+                        iconDrawable
+                    )
+                    loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                    loopMarker.position = GeoPoint(it.lat, it.lng)
+
+                    loopMarker.setOnMarkerClickListener { marker, _ ->
+                        // Value that is passed to GameARFragment
+                        locationIdAction = it.id
+                        locationStringAction = it.gameType
+                        Log.d("test", marker.position.latitude.toString())
+                        activeDestination.latitude = marker.position.latitude
+                        activeDestination.longitude = marker.position.longitude
+
+                        // Draw a Polygon around it
+                        drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
+                        getDistanceToMarker(activeDestination)
+                        map.controller.animateTo(GeoPoint(it.lat, it.lng))
+                        map.invalidate()
+                        marker.showInfoWindow()
+                        return@setOnMarkerClickListener true
+                    }
+
+                    loopMarker.title = "${it.address}\n${it.gameType}"
+                    map.overlays.add(loopMarker)
                 }
-                loopMarker.icon = AppCompatResources.getDrawable(
-                    requireContext(),
-                    iconDrawable
-                )
-                loopMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                loopMarker.position = GeoPoint(it.lat, it.lng)
-
-                loopMarker.setOnMarkerClickListener { marker, _ ->
-                    // Value that is passed to GameARFragment
-                    locationIdAction = it.id
-                    locationStringAction = it.gameType
-                    Log.d("test", marker.position.latitude.toString())
-                    activeDestination.latitude = marker.position.latitude
-                    activeDestination.longitude = marker.position.longitude
-
-                    // Draw a Polygon around it
-                    drawPolygon(GeoPoint(marker.position.latitude, marker.position.longitude))
-                    getDistanceToMarker(activeDestination)
-                    map.controller.animateTo(GeoPoint(it.lat, it.lng))
-                    map.invalidate()
-                    marker.showInfoWindow()
-                    return@setOnMarkerClickListener true
-                }
-
-                loopMarker.title = "${it.address}\n${it.gameType}"
-                map.overlays.add(loopMarker)
+            }
+        } else {
+            Log.d("tesr", "before null check")
+            if (geoPoint != null) {
+                createNewLocationsForSameDay(geoPoint)
             }
         }
+    }
+
+    @DelicateCoroutinesApi
+    private fun createNewLocationsForSameDay(geoPoint: GeoPoint) {
+        val chosenPoints = createInteractionLocations(geoPoint)
+        val mapdetailsId = mMapDetailsViewModel.getLatestMapDetails().id
+
+
+        GlobalScope.launch {
+            val addLatLng = async(Dispatchers.IO) {
+                chosenPoints.forEach {
+                    val address = getAddress(it.latitude, it.longitude)
+                    if (address.contains("Unnamed Road")) {
+                        Log.d("Leave", "Leaving the loop!")
+                        return@forEach
+                    }
+                    var collectableReward = ""
+                    var collectable = R.drawable.ic_baseline_pets_24
+                    var gameType: String? = null
+                    when ((0..100).random()) {
+                        in 0..24 -> {
+                            collectable = R.drawable.topaz
+                            collectableReward = "Topaz"
+                            gameType = generateGameType()
+                        }
+                        in 25..49 -> {
+                            collectable = R.drawable.ruby
+                            collectableReward = "Ruby"
+                            gameType = generateGameType()
+                        }
+                        in 50..75 -> {
+                            collectable = R.drawable.sapphire
+                            collectableReward = "Sapphire"
+                            gameType = generateGameType()
+                        }
+                        in 76..100 -> {
+                            collectable = R.drawable.emerald
+                            collectableReward = "Emerald"
+                            gameType = generateGameType()
+                        }
+                    }
+                    Log.d("random", "Collectable: $collectable")
+                    mMapDetailsViewModel.insertMapLatLng(
+                        MapLatLng(
+                            0,
+                            mapdetailsId,
+                            it.latitude,
+                            it.longitude,
+                            address,
+                            collectableReward,
+                            gameType!!,
+                            true
+                        )
+                    )
+                }
+            }
+            addLatLng.await()
+            val updatedList = mMapDetailsViewModel.getMapLatLngPointsByMapDetailsId(mapdetailsId)
+            activity?.runOnUiThread {
+                setLocationsOnMap(updatedList)
+            }
+        }
+
     }
 
     /**
@@ -501,7 +578,6 @@ class GameMapFragment : Fragment() {
             }
             addLatLng.await()
 
-            //TODO  Construct the daily quest here!!
             val addDailyQuestToDb = async {
                 val newest = mMapDetailsViewModel.getMapInfoWithAllLtLngValues(newMapDetailsId)
                 val latLngValues = newest.latLngValues
