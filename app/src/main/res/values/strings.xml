@@ -19,4 +19,27 @@
     <string name="daily_quest">Daily quest for today 📜</string>
     <string name="purchase_message">Are you sure that you would buy %s?</string>
     <string name="warning_message">You don\'t have enough gems to get %s</string>
+    <string name="normal_quiz_description">Normal quiz, answer correctly to the multiple choice question</string>
+    <string name="image_quiz_description">Image quiz, select the correct answer</string>
+    <string name="sphere_task_description">Find 3 spheres around you!</string>
+    <string name="multiple_image_quiz_description">Find the image corresponding to the task</string>
+    <string name="start_quiz">Start quiz</string>
+    <string name="start_image_quiz">Start image quiz</string>
+    <string name="start_sphere_task">Start sphere task</string>
+    <string name="start_find_correct_image_task">Start find correct image task</string>
+    <string name="start_task">Start task</string>
+    <string name="task_completed">Task completed!</string>
+    <string name="ok">OK</string>
+    <string name="task_completed_description">%s %s!\n%s</string>
+    <string name="all_gems_collected_toast">New locations set, well done collecting all the previous ones!!</string>
+    <string name="normal_quiz">Normal Quiz</string>
+    <string name="image_quiz">Image Quiz</string>
+    <string name="sphere_task">Sphere Task</string>
+    <string name="multiple_image_quiz">Multiple Image Quiz</string>
+    <string name="collect_all_emeralds_daily">Collect all Emeralds from the map!</string>
+    <string name="collect_all_rubies_daily">Collect all Rubies from the map!</string>
+    <string name="collect_all_sapphires_daily">Collect all Sapphires from the map!</string>
+    <string name="collect_all_topazes_daily">Collect all Topazes from the map!</string>
+    <string name="diamond_reward_daily">Reward: 3 Diamonds</string>
+    <string name="collect_one_of_each_daily">Collect one of each gems!</string>
 </resources>

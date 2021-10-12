@@ -2,6 +2,7 @@ package fi.lauriari.ar_project.fragments
 
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,11 +20,14 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.Camera
+import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
@@ -94,6 +99,29 @@ class GameARFragment : Fragment() {
         }
 
         val playButton = view.findViewById<Button>(R.id.play_btn)
+        val resetFab = view.findViewById<FloatingActionButton>(R.id.reset_fab)
+        val gameTypeTv = view.findViewById<TextView>(R.id.gametype_tv)
+        resetFab.visibility = View.GONE
+        resetFab.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Clear")
+            builder.setMessage("Do you really want to clear the scene?")
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
+            builder.setPositiveButton("Yes") { _, _ ->
+                removeChildNodes()
+                Toast.makeText(
+                    requireContext(),
+                    "Cleared all Augmented Reality items",
+                    Toast.LENGTH_LONG
+                ).show()
+                playButton.visibility = View.VISIBLE
+                resetFab.visibility = View.GONE
+            }
+            builder.setNegativeButton("Cancel") { _, _ ->
+            }.create()
+            builder.show()
+        }
+
 
         when (args.gameType) {
             "normalQuiz" -> {
@@ -101,9 +129,14 @@ class GameARFragment : Fragment() {
                     .setView(requireContext(), R.layout.quiz_question_layout)
                     .build()
                     .thenAccept { quizQuestionRenderable = it }
+                gameTypeTv.text = getString(R.string.normal_quiz_description)
+                playButton.text = getString(R.string.start_quiz)
                 playButton.setOnClickListener {
                     quizQuestionRenderable ?: return@setOnClickListener
+                    quizQuestion?.body() ?: return@setOnClickListener
                     normalQuizTask()
+                    playButton.visibility = View.GONE
+                    resetFab.visibility = View.VISIBLE
                 }
             }
             "imageQuiz" -> {
@@ -111,23 +144,55 @@ class GameARFragment : Fragment() {
                     .setView(requireContext(), R.layout.image_question_layout)
                     .build()
                     .thenAccept { imageQuestionRenderable = it }
+                gameTypeTv.text = getString(R.string.image_quiz_description)
+                playButton.text = getString(R.string.start_image_quiz)
                 playButton.setOnClickListener {
                     imageQuestionRenderable ?: return@setOnClickListener
                     imageQuizTask()
+                    playButton.visibility = View.GONE
+                    resetFab.visibility = View.VISIBLE
                 }
             }
-            "sphereTask" -> playButton.setOnClickListener {
-                sphereTask()
+            "sphereTask" -> {
+                playButton.text = getString(R.string.start_sphere_task)
+                gameTypeTv.text = getString(R.string.sphere_task_description)
+                playButton.setOnClickListener {
+                    sphereTask()
+                    playButton.visibility = View.GONE
+                    resetFab.visibility = View.VISIBLE
+                }
             }
             "multipleImageQuiz" -> {
                 createMultipleImageQuestionRenderables()
+                gameTypeTv.text = getString(R.string.multiple_image_quiz_description)
+                playButton.text = getString(R.string.start_find_correct_image_task)
                 playButton.setOnClickListener {
+                    imageSelectionQuizTvRenderable ?: return@setOnClickListener
+                    imageRenderable ?: return@setOnClickListener
+                    imageRenderable2 ?: return@setOnClickListener
+                    imageRenderable3 ?: return@setOnClickListener
                     multipleImageQuizTask()
+                    playButton.visibility = View.GONE
+                    resetFab.visibility = View.VISIBLE
                 }
             }
         }
 
         return view
+    }
+
+    private fun removeChildNodes() {
+        val children: List<Node> = ArrayList(arFrag.arSceneView.scene.children)
+        for (node in children) {
+            if (node is AnchorNode) {
+                if (node.anchor != null) {
+                    node.anchor!!.detach()
+                }
+            }
+            if (node !is Camera) {
+                node.setParent(null)
+            }
+        }
     }
 
     private fun normalQuizTask() {
@@ -307,9 +372,9 @@ class GameARFragment : Fragment() {
             chosenQuestion.image3
         )
 
-        val tvNode: TransformableNode =
-            createLocationAnchorForViewRenderable(imageSelectionQuizTvRenderable!!)
-                ?: return
+
+        createLocationAnchorForViewRenderable(imageSelectionQuizTvRenderable!!)
+
 
         imageSelectionQuizTvRenderable!!.view.findViewById<TextView>(R.id.image_selection_question_tv).text =
             chosenQuestion.question
@@ -371,7 +436,7 @@ class GameARFragment : Fragment() {
                 diamondInsertable = 1
             }
 
-            var imageresource: Int = 123
+            var imageresource = 123
             val updateDb = async {
                 val updatedMapLatLng = MapLatLng(
                     selectedMapLatLngPoint!!.id,
@@ -534,15 +599,21 @@ class GameARFragment : Fragment() {
                 if (gem != "Emerald") "You were rewarded a" else "You were rewarded an"
             val diamondMessage = if (diamondInsertable != 0) "You also got a diamond!" else ""
 
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton("OK") { _, _ ->
-                findNavController().navigate(R.id.action_gameARFragment_to_gameMapFragment)
+            val dialog = Dialog(requireContext())
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.task_completed_dialog)
+            dialog.findViewById<ImageView>(R.id.task_complete_iv).setImageResource(imageresource)
+            dialog.findViewById<TextView>(R.id.task_complete_description_tv).text =
+                getString(R.string.task_completed_description, message, gem, diamondMessage)
+            dialog.findViewById<Button>(R.id.task_complete_btn).setOnClickListener {
+                activity?.let { it1 ->
+                    Navigation.findNavController(it1, R.id.nav_host_fragment).popBackStack()
+                }
+                dialog.dismiss()
             }
-            builder.setTitle("Task completed!")
-            builder.setMessage("$message $gem!\n$diamondMessage")
-            builder.setIcon(imageresource)
-            builder.setCancelable(false)
-            builder.create().show()
+            dialog.setCancelable(false)
+            dialog.show()
+
         }
     }
 

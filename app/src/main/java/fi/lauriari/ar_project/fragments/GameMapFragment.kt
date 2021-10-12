@@ -109,8 +109,10 @@ class GameMapFragment : Fragment() {
         val dailyQuestButton = view.findViewById<ImageView>(R.id.daily_quest_fab)
         val locateMyselfButton = view.findViewById<ImageView>(R.id.locate_myself_btn)
         val navigateToARButton = view.findViewById<Button>(R.id.navigate_to_game_AR_btn)
+        val distanceTv = view.findViewById<TextView>(R.id.distance_tv)
         dailyQuestButton.isEnabled = false
         locateMyselfButton.isEnabled = false
+        distanceTv.visibility = View.GONE
 
         dailyQuestButton.setOnClickListener {
             openDailyQuestDialog()
@@ -377,6 +379,9 @@ class GameMapFragment : Fragment() {
 
     }
 
+    /**
+     * Creates the latitude/longitude positions for a point to be added to DB
+     */
     private fun createInteractionLocations(geoPoint: GeoPoint): List<GeoPoint> {
         val interactionLocations = ArrayList<GeoPoint>()
         val radius = 5000
@@ -404,7 +409,6 @@ class GameMapFragment : Fragment() {
         val activeLatLngCheck = chosenPoints.filter {
             it.isActive
         }
-        Log.d("tesr", activeLatLngCheck.size.toString())
         if (activeLatLngCheck.isNotEmpty()) {
             chosenPoints.forEach {
                 if (it.isActive) {
@@ -440,18 +444,32 @@ class GameMapFragment : Fragment() {
                         return@setOnMarkerClickListener true
                     }
 
-                    loopMarker.title = "${it.address}\n${it.gameType}"
+                    var gameType = "123"
+                    when (it.gameType) {
+                        "normalQuiz" -> gameType = getString(R.string.normal_quiz)
+                        "imageQuiz" -> gameType = getString(R.string.image_quiz)
+                        "sphereTask" -> gameType = getString(R.string.sphere_task)
+                        "multipleImageQuiz" -> gameType = getString(R.string.multiple_image_quiz)
+                    }
+                    loopMarker.title = "${it.address}\n$gameType"
                     map.overlays.add(loopMarker)
                 }
             }
         } else {
-            Log.d("tesr", "before null check")
             if (geoPoint != null) {
                 createNewLocationsForSameDay(geoPoint)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.all_gems_collected_toast),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
+    /**
+     * Called if a day doesn't have anymore active locations
+     */
     @DelicateCoroutinesApi
     private fun createNewLocationsForSameDay(geoPoint: GeoPoint) {
         val chosenPoints = createInteractionLocations(geoPoint)
@@ -606,8 +624,8 @@ class GameMapFragment : Fragment() {
                     requiredSapphires = 0,
                     requiredTopazes = 0,
                     requiredSteps = 0,
-                    description = "Collect all Emeralds from the map!",
-                    rewardString = "Reward: 3 Diamonds",
+                    description = getString(R.string.collect_all_emeralds_daily),
+                    rewardString = getString(R.string.diamond_reward_daily),
                     rewardAmount = 3,
                     isCompleted = false
                 )
@@ -621,8 +639,8 @@ class GameMapFragment : Fragment() {
                     requiredSapphires = 0,
                     requiredTopazes = 0,
                     requiredSteps = 0,
-                    description = "Collect all Rubies from the map!",
-                    rewardString = "Reward: 3 Diamonds",
+                    description = getString(R.string.collect_all_rubies_daily),
+                    rewardString = getString(R.string.diamond_reward_daily),
                     rewardAmount = 3,
                     isCompleted = false
                 )
@@ -636,8 +654,8 @@ class GameMapFragment : Fragment() {
                     requiredSapphires = totalSapphires!!.size,
                     requiredTopazes = 0,
                     requiredSteps = 0,
-                    description = "Collect all Sapphires from the map!",
-                    rewardString = "Reward: 3 Diamonds",
+                    description = getString(R.string.collect_all_sapphires_daily),
+                    rewardString = getString(R.string.diamond_reward_daily),
                     rewardAmount = 3,
                     isCompleted = false
                 )
@@ -651,8 +669,8 @@ class GameMapFragment : Fragment() {
                     requiredSapphires = 0,
                     requiredTopazes = totalTopazes!!.size,
                     requiredSteps = 0,
-                    description = "Collect all Topazes from the map!",
-                    rewardString = "Reward: 3 Diamonds",
+                    description = getString(R.string.collect_all_topazes_daily),
+                    rewardString = getString(R.string.diamond_reward_daily),
                     rewardAmount = 3,
                     isCompleted = false
                 )
@@ -666,7 +684,7 @@ class GameMapFragment : Fragment() {
                     requiredSapphires = 1,
                     requiredTopazes = 1,
                     requiredSteps = 0,
-                    description = "Collect one of each gems!",
+                    description = getString(R.string.collect_one_of_each_daily),
                     rewardString = "Reward: 3 Diamonds",
                     rewardAmount = 3,
                     isCompleted = false
@@ -702,8 +720,10 @@ class GameMapFragment : Fragment() {
         currentLocation.longitude = ownLocationmarker.position.longitude
 
         val distance = currentLocation.distanceTo(destinationLocation).toInt()
+        val distanceTv = view.findViewById<TextView>(R.id.distance_tv)
 
-        view.findViewById<TextView>(R.id.distance_tv).text = getString(
+        distanceTv.visibility = View.VISIBLE
+        distanceTv.text = getString(
             R.string.distance_to_destination,
             distance
         )
@@ -735,15 +755,8 @@ class GameMapFragment : Fragment() {
         )
         ownLocationmarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         ownLocationmarker.position = GeoPoint(geoPoint.latitude, geoPoint.longitude)
-        /*ownLocationmarker.title = "${
-            getAddress(
-                location.latitude,
-                location.longitude
-            )
-        } Latitude: ${location.latitude}, Longitude: ${location.longitude} Altitude: ${location.altitude}"
 
-         */
-        //ownLocationmarker.closeInfoWindow()
+        ownLocationmarker.setInfoWindow(null)
         map.overlays.add(ownLocationmarker)
         //displays the ownLocationmarker as soon as it has been added.
         map.invalidate()
@@ -773,16 +786,6 @@ class GameMapFragment : Fragment() {
      * Display the remaining gems for today
      */
     private fun setUserCollectedGems() {
-        /*lifecycleScope.launch(context = Dispatchers.IO) {
-            val gems = mInventoryViewModel.getInventoryNormal()
-            view.findViewById<TextView>(R.id.emeralds_tv).text = gems.emeralds.toString()
-            view.findViewById<TextView>(R.id.rubies_tv).text = gems.rubies.toString()
-            view.findViewById<TextView>(R.id.sapphires_tv).text = gems.sapphires.toString()
-            view.findViewById<TextView>(R.id.topazes_tv).text = gems.topazes.toString()
-            view.findViewById<TextView>(R.id.diamonds_tv).text = gems.diamonds.toString()
-        }
-
-         */
         activity?.runOnUiThread {
             val gems = mInventoryViewModel.getInventoryNormal()
             view.findViewById<TextView>(R.id.emeralds_tv).text = gems.emeralds.toString()

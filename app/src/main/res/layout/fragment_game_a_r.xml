@@ -24,59 +24,33 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.923" />
+        app:layout_constraintVertical_bias="0.976" />
 
-    <!--
-    <Button
-        android:id="@+id/add_flag_question_btn"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/gametype_tv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:enabled="true"
-        android:text="Add Flag question"
-        app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/container_dark"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sceneform_fragment"
-        app:layout_constraintVertical_bias="0.737" />
+        tools:text="TextView" />
 
-    <Button
-        android:id="@+id/add_quiz_question_btn"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/reset_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="true"
-        android:text="Add Quiz question"
-        app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_close_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_flag_question_btn"
-        app:layout_constraintVertical_bias="0.091" />
-
-    <Button
-        android:id="@+id/add_sphere_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="true"
-        android:text="Add Sphere"
-        app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_quiz_question_btn"
-        app:layout_constraintVertical_bias="0.439" />
-
-    <Button
-        android:id="@+id/add_image_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="true"
-        android:text="Add Image"
-        app:layout_constraintBottom_toBottomOf="@+id/sceneform_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_sphere_btn"
-        app:layout_constraintVertical_bias="0.757" />
--->
+        app:layout_constraintTop_toBottomOf="@+id/gametype_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
