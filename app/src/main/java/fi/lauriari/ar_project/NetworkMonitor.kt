@@ -6,6 +6,9 @@ import android.net.ConnectivityManager
 import android.net.Network
 import androidx.annotation.RequiresPermission
 
+/**
+ * Class for keeping track of network state
+ */
 class NetworkMonitor
 @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
 constructor(private val application: Application) {
@@ -29,6 +32,10 @@ constructor(private val application: Application) {
         }
 
         override fun onLost(network: Network) {
+            NetworkVariables.isNetworkConnected = false
+        }
+
+        override fun onUnavailable() {
             NetworkVariables.isNetworkConnected = false
         }
     }

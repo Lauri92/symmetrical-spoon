@@ -181,6 +181,9 @@ class GameARFragment : Fragment() {
         return view
     }
 
+    /**
+     * Removes the generated nodes from the scene
+     */
     private fun removeChildNodes() {
         val children: List<Node> = ArrayList(arFrag.arSceneView.scene.children)
         for (node in children) {
@@ -195,6 +198,9 @@ class GameARFragment : Fragment() {
         }
     }
 
+    /**
+     * Generates a normal quiz
+     */
     private fun normalQuizTask() {
         val node: TransformableNode =
             createLocationAnchorForViewRenderable(quizQuestionRenderable!!)
@@ -254,6 +260,9 @@ class GameARFragment : Fragment() {
 
     }
 
+    /**
+     * Generates an image quiz
+     */
     private fun imageQuizTask() {
         val node: TransformableNode =
             createLocationAnchorForViewRenderable(imageQuestionRenderable!!)
@@ -313,6 +322,9 @@ class GameARFragment : Fragment() {
         }
     }
 
+    /**
+     * Generates a spehere task
+     */
     private fun sphereTask() {
         createSpehere()
         sphereRenderable ?: return
@@ -357,6 +369,9 @@ class GameARFragment : Fragment() {
         }
     }
 
+    /**
+     * Generates a task with multiple images
+     */
     private fun multipleImageQuizTask() {
         imageSelectionQuizTvRenderable ?: return
         imageRenderable ?: return
@@ -777,6 +792,9 @@ class GameARFragment : Fragment() {
         return img
     }
 
+    /**
+     * Crates ViewRenderables required for multiple image task
+     */
     private fun createMultipleImageQuestionRenderables() {
         ViewRenderable.builder()
             .setView(requireContext(), R.layout.game_ar_image_tv_layout)
@@ -799,6 +817,9 @@ class GameARFragment : Fragment() {
             .thenAccept { imageRenderable3 = it }
     }
 
+    /**
+     * Creates a sphere
+     */
     private fun createSpehere() {
         MaterialFactory.makeOpaqueWithColor(requireContext(), Color(255f, 0f, 0f))
             .thenAccept { material: Material? ->
@@ -807,6 +828,9 @@ class GameARFragment : Fragment() {
             }
     }
 
+    /**
+     * Decode HTML values from string
+     */
     private fun decodeHtmlString(string: String): String {
         return Html
             .fromHtml(string, Html.FROM_HTML_MODE_COMPACT)

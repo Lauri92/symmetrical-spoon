@@ -136,11 +136,19 @@ class GameMapFragment : Fragment() {
         }
 
         navigateToARButton.setOnClickListener {
-            val action = GameMapFragmentDirections.actionGameMapFragmentToGameARFragment(
-                locationIdAction!!,
-                locationStringAction!!
-            )
-            findNavController().navigate(action)
+            if (NetworkVariables.isNetworkConnected) {
+                val action = GameMapFragmentDirections.actionGameMapFragmentToGameARFragment(
+                    locationIdAction!!,
+                    locationStringAction!!
+                )
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Network access required to start Augmented Reality session!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
 
         return view
@@ -348,20 +356,6 @@ class GameMapFragment : Fragment() {
         }
     }
 
-    /**
-     * Function for creating test marker with hardcoded values
-     */
-    private fun setTestMarker() {
-        val map = view.findViewById<MapView>(R.id.map)
-        val testMarker1 = Marker(map)
-        testMarker1.icon = AppCompatResources.getDrawable(
-            requireContext(),
-            R.drawable.ic_baseline_star_24
-        )
-        testMarker1.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        testMarker1.position = GeoPoint(60.2238005, 24.7589279)
-        map?.overlays?.add(testMarker1)
-    }
 
     /**
      * Set locations where it's possible to enter AR event
@@ -779,6 +773,9 @@ class GameMapFragment : Fragment() {
         map.invalidate()
     }
 
+    /**
+     * Center map to user
+     */
     private fun locateUser() {
         val lat = ownLocationmarker.position.latitude
         val lng = ownLocationmarker.position.longitude
@@ -833,6 +830,9 @@ class GameMapFragment : Fragment() {
         }
     }
 
+    /**
+     * Check if location is active on the device
+     */
     private fun isGpsEnabled(context: Context): Boolean {
         val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(
@@ -840,6 +840,9 @@ class GameMapFragment : Fragment() {
         )
     }
 
+    /**
+     * Builds an alert dialog if location is not active
+     */
     private fun buildGpsMissingAlertDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Location")
@@ -857,6 +860,9 @@ class GameMapFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Builds an alert dialog if user doesn't have network when trying to create new locations
+     */
     private fun buildNetworkMissingAlertDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Network")
