@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager
 import com.google.android.gms.location.*
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.R
+import fi.lauriari.ar_project.activities.stepCounter
 import fi.lauriari.ar_project.entities.DailyQuest
 import fi.lauriari.ar_project.entities.MapDetails
 import fi.lauriari.ar_project.entities.MapLatLng
@@ -177,15 +178,34 @@ class GameMapFragment : Fragment() {
             descriptionTv.text = helper.description
             progressTv.text = progressString
             rewardTv.text = helper.rewardString
-            if (helper.isCompleted) {
-                completeTv.setBackgroundResource(R.drawable.ic_baseline_check_24)
-            } else {
-                completeTv.setBackgroundResource(R.drawable.ic_baseline_close_24)
-            }
+            setCompleteMark(completeTv, (helper.isCompleted))
+//            if (helper.isCompleted) {
+//                completeTv.setBackgroundResource(R.drawable.ic_baseline_check_24)
+//            } else {
+//                completeTv.setBackgroundResource(R.drawable.ic_baseline_close_24)
+//            }
+
+            // quest for steps
+            val requiredSteps = 5000
+            val currentSteps = stepCounter.getCurrentSteps().toInt()
+            val stepProgressTv = dialog.findViewById<TextView>(R.id.step_progress)
+            stepProgressTv.text = getString(R.string.step_count, currentSteps, requiredSteps)
+           // dialog.findViewById<TextView>(R.id.step_task_description).text =
+            val stepReward = dialog.findViewById<ImageView>(R.id.task2_complete)
+            setCompleteMark(stepReward, (currentSteps == requiredSteps))
+
             dialog.show()
             // TODO Construct new daily in else block if one hasn't been created for some reason?
         }
 
+    }
+
+    private fun setCompleteMark(imgView: ImageView, condition: Boolean) {
+        if (condition) {
+            imgView.setBackgroundResource(R.drawable.ic_baseline_check_24)
+        } else {
+            imgView.setBackgroundResource(R.drawable.ic_baseline_close_24)
+        }
     }
 
     override fun onDestroyView() {
@@ -678,7 +698,22 @@ class GameMapFragment : Fragment() {
                 }
 
                 val chosenDailyQuest = taskList.random()
+
+                val stepsQuest = DailyQuest(
+                    id = 0,
+                    newMapDetailsId,
+                    0,
+                    0,
+                    0,
+                    0,
+                    requiredSteps = 5000,
+                    "Walk 5000 steps!",
+                    "Reward: 3 Diamonds",
+                    3,
+                    false
+                )
                 mMapDetailsViewModel.insertDailyQuest(chosenDailyQuest)
+                mMapDetailsViewModel.insertDailyQuest(stepsQuest)
             }
             addDailyQuestToDb.await()
             activity?.runOnUiThread {

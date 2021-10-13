@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/ic_background">
+    android:background="@drawable/ic_background"
+    android:elevation="8dp">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/back_btn"
@@ -24,86 +25,77 @@
         app:maxImageSize="40dp"
         app:tint="@color/white" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
         android:background="@color/container"
-        android:elevation="8dp"
-        android:gravity="center"
         android:paddingHorizontal="24dp"
         android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/back_btn">
 
         <ImageView
             android:id="@+id/thumbnail"
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_reward_item_placeholder" />
+            android:src="@drawable/ic_reward_item_placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@+id/thumbnail"
-            android:layout_toRightOf="@id/thumbnail"
-            android:gravity="center"
             android:text="name"
             android:textAlignment="center"
             android:textSize="34sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:layout_toEndOf="@+id/thumbnail"
-            android:layout_toRightOf="@id/thumbnail"
             android:text="some description.."
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <TextView
             android:id="@+id/saved_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/description"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_toEndOf="@+id/thumbnail"
-            android:layout_toRightOf="@id/thumbnail"
+            android:layout_marginTop="24dp"
             android:text="@string/collected_time"
             android:textAlignment="center"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/play_btn"
         style="@style/AccentedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="24dp"
         android:text="@string/play_with"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
