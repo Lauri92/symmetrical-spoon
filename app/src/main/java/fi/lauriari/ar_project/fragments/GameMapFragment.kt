@@ -47,6 +47,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import android.content.Intent
 import android.provider.Settings
+import androidx.lifecycle.lifecycleScope
+import fi.lauriari.ar_project.entities.Inventory
 
 
 class GameMapFragment : Fragment() {
@@ -209,13 +211,47 @@ class GameMapFragment : Fragment() {
 //            }
 
             // quest for steps
-            val requiredSteps = 5000
-            val currentSteps = stepCounter.getCurrentSteps().toInt()
-            val stepProgressTv = dialog.findViewById<TextView>(R.id.step_progress)
-            stepProgressTv.text = getString(R.string.step_count, currentSteps, requiredSteps)
-           // dialog.findViewById<TextView>(R.id.step_task_description).text =
+            val currentSteps = stepCounter.getCurrentSteps()
+            val stepQuest = dailyQuests[1]
+            val stepQuestDescriptionTv = dialog.findViewById<TextView>(R.id.step_task_description)
+            val stepProgessTv = dialog.findViewById<TextView>(R.id.step_progress)
+            val stepQuestHelper = StepQuest(currentSteps, stepQuest)
+
+            stepQuestHelper.setDescriptionText(stepQuestDescriptionTv)
+            stepQuestHelper.setProgressText(context!!, stepProgessTv)
+            if (stepQuestHelper?.getIsCompleted() == false && stepQuestHelper.checkIsCompleted()) {
+                lifecycleScope.launch {
+                    mMapDetailsViewModel.updateDailyQuest(
+                        DailyQuest(
+                            stepQuest.id,
+                            stepQuest.mapDetailsId,
+                            stepQuest.requiredEmeralds,
+                            stepQuest.requiredRubies,
+                            stepQuest.requiredSapphires,
+                            stepQuest.requiredTopazes,
+                            stepQuest.requiredSteps,
+                            stepQuest.description,
+                            stepQuest.rewardString,
+                            stepQuest.rewardAmount,
+                            isCompleted = true
+                        )
+                    )
+                    val userGems = mInventoryViewModel.getInventoryNormal()
+                    mInventoryViewModel.updateInventory(
+                        Inventory(
+                            userGems.id,
+                            userGems.emeralds,
+                            userGems.rubies,
+                            userGems.sapphires,
+                            userGems.topazes,
+                            userGems.diamonds + stepQuest.rewardAmount
+                        )
+                    )
+                }
+            Toast.makeText(context,"Congratulations! You completed step quest",Toast.LENGTH_LONG).show()
+            }
             val stepReward = dialog.findViewById<ImageView>(R.id.task2_complete)
-            setCompleteMark(stepReward, (currentSteps == requiredSteps))
+            setCompleteMark(stepReward, stepQuestHelper.getIsCompleted())
 
             dialog.show()
             // TODO Construct new daily in else block if one hasn't been created for some reason?
@@ -716,7 +752,7 @@ class GameMapFragment : Fragment() {
                     requiredTopazes = 1,
                     requiredSteps = 0,
                     description = getString(R.string.collect_one_of_each_daily),
-                    rewardString = "Reward: 3 Diamonds",
+                    rewardString = getString(R.string.diamond_reward_daily),
                     rewardAmount = 3,
                     isCompleted = false
                 )
@@ -728,6 +764,7 @@ class GameMapFragment : Fragment() {
 
                 val chosenDailyQuest = taskList.random()
 
+                val randomSteps = (1..10).shuffled().first()
                 val stepsQuest = DailyQuest(
                     id = 0,
                     newMapDetailsId,
@@ -735,9 +772,9 @@ class GameMapFragment : Fragment() {
                     0,
                     0,
                     0,
-                    requiredSteps = 5000,
-                    "Walk 5000 steps!",
-                    "Reward: 3 Diamonds",
+                    requiredSteps = randomSteps,
+                    "Walk $randomSteps steps!",
+                    getString(R.string.diamond_reward_daily),
                     3,
                     false
                 )

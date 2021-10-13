@@ -162,9 +162,6 @@ class RewardItemDescriptionFragment : Fragment() {
                 .navigate(R.id.collectedItemList)
         }
         snackbar.show()
-//            .setAction("go") {
-//                Navigation.findNavController(activity,R.id.nav_host_fragment).navigate(R.id.collectedItemList)
-//            }.show()
     }
 
     private fun setDialog(layoutId: Int): Dialog {

@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 
-// for handling values of gems
+// for handling value of gems in the reward shop
 class Gems(private val value: Int?, private val layoutId: Int, private val textViewId: Int) {
 
     val gemValue = value
