@@ -3,9 +3,11 @@ package fi.lauriari.ar_project.fragments
 import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -42,6 +44,9 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.content.Intent
+import android.provider.Settings
+
 
 class GameMapFragment : Fragment() {
 
@@ -77,6 +82,14 @@ class GameMapFragment : Fragment() {
         map = view.findViewById(R.id.map)
         ownLocationmarker = Marker(map)
         geocoder = Geocoder(requireContext(), Locale.getDefault())
+
+        val isGpsEnabled = isGpsEnabled(requireContext())
+        val isNetworkConnection = NetworkVariables.isNetworkConnected
+        Log.d("networkgpscheck", "gps: $isGpsEnabled network: $isNetworkConnection")
+
+        if (!isGpsEnabled) {
+            buildGpsMissingAlertDialog()
+        }
 
 
         locationRequest = LocationRequest
@@ -373,8 +386,12 @@ class GameMapFragment : Fragment() {
             setLocationsOnMap(latLngList, geoPoint)
         } else {
             // Dates don't match -> generate new values
-            val chosenPoints = createInteractionLocations(geoPoint)
-            createNewDbRowsForMapDetailsLatLngPointsDailyQuests(chosenPoints)
+            if (NetworkVariables.isNetworkConnected) {
+                val chosenPoints = createInteractionLocations(geoPoint)
+                createNewDbRowsForMapDetailsLatLngPointsDailyQuests(chosenPoints)
+            } else {
+                buildNetworkMissingAlertDialog()
+            }
         }
 
     }
@@ -814,5 +831,39 @@ class GameMapFragment : Fragment() {
                 "sphereTask"
             }
         }
+    }
+
+    private fun isGpsEnabled(context: Context): Boolean {
+        val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    private fun buildGpsMissingAlertDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Location")
+        builder.setMessage(
+            "Location has to be enabled in order to display the map." +
+                    "\nSwitch location on now?"
+        )
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setPositiveButton("Yes") { _, _ ->
+            val viewIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(viewIntent)
+        }
+        builder.setNegativeButton("Cancel") { _, _ ->
+        }.create()
+        builder.show()
+    }
+
+    private fun buildNetworkMissingAlertDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Network")
+        builder.setMessage("Network has to be available in order to generate locations on the map.")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+        builder.setNegativeButton("OK") { _, _ ->
+        }.create()
+        builder.show()
     }
 }

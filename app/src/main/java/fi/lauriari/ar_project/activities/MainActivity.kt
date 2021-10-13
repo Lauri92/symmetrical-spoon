@@ -6,11 +6,11 @@ import android.hardware.SensorManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
-import fi.lauriari.ar_project.R
-import fi.lauriari.ar_project.StepCounter
+import fi.lauriari.ar_project.*
 
 val stepCounter = StepCounter()
 
@@ -21,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
         //setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
+
+        // Star networkcallback to receive network status updates
+        NetworkMonitor(application).startNetworkCallback()
 
         if (ContextCompat.checkSelfPermission(
                 this@MainActivity,
@@ -57,5 +60,10 @@ class MainActivity : AppCompatActivity() {
         stepCounter.getSensorManager().unregisterListener(stepCounter)
         stepCounter.savePreviousTotalSteps()
         stepCounter.saveCurrentDate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NetworkMonitor(application).stopNetworkCallback()
     }
 }
