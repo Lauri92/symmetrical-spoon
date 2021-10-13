@@ -22,10 +22,10 @@
 
         <Button
             android:id="@+id/navigate_to_map_btn"
+            style="@style/MainMenuButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="#5475a6 "
             android:fontFamily="@font/nunito_bold"
             android:paddingVertical="12dp"
             android:text="@string/go_to_game_map"

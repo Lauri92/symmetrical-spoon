@@ -16,7 +16,6 @@ import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.Network.RewardsApiViewModel
 import fi.lauriari.ar_project.Network.RewardsApiViewModelFactory
 import fi.lauriari.ar_project.Network.RewardsRepository
-import fi.lauriari.ar_project.activities.stepCounter
 import fi.lauriari.ar_project.viewmodels.CollectedItemViewModel
 import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
@@ -36,8 +35,7 @@ class RewardListFragment : Fragment() {
 
         val collectedItems = collectedItemViewModel.getCollectedItems().map { it.name }
 
-        Log.d("test", "${stepCounter.getTotalSteps()}")
-        binding.textView2.text = stepCounter.getTotalSteps().toString()
+
         // display current amount of gems that the user has collected
         inventoryViewModel.getInventory().observe(viewLifecycleOwner, {
             binding.emeraldAmount.text = it.emeralds.toString()

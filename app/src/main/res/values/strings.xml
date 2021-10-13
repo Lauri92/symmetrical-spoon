@@ -16,7 +16,7 @@
     <string name="play_with">Play with %s!</string>
     <string name="collected_time">Collected time: %s</string>
     <string name="distance_to_destination">Distance to destination: %dm</string>
-    <string name="daily_quest">Daily quest for today 📜</string>
+    <string name="daily_quest">Daily quests for today 📜</string>
     <string name="purchase_message">Are you sure that you would buy %s?</string>
     <string name="warning_message">You don\'t have enough gems to get %s</string>
     <string name="normal_quiz_description">Normal quiz, answer correctly to the multiple choice question</string>
@@ -42,4 +42,5 @@
     <string name="collect_all_topazes_daily">Collect all Topazes from the map!</string>
     <string name="diamond_reward_daily">Reward: 3 Diamonds</string>
     <string name="collect_one_of_each_daily">Collect one of each gems!</string>
+    <string name="step_count">%d / %d steps</string>
 </resources>

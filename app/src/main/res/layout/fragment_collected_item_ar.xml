@@ -20,6 +20,8 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="32dp"
         android:gravity="center"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
         android:text="add" />
 
 </FrameLayout>

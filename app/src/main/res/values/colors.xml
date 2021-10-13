@@ -30,5 +30,5 @@
     <color name="purple_secondary_dark">#77548e</color>
     <color name="accent_color">#8b0540</color>
     <color name="container">#5BFFFFFF</color>
-    <color name="container_dark">#90FFFFFF</color>
+    <color name="container_dark">#C6FFFFFF</color>
 </resources>

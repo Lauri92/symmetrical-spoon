@@ -31,10 +31,10 @@ class StepCounter() : SensorEventListener {
         loadData()
     }
 
-    fun getTotalSteps() = totalSteps
+    fun getCurrentSteps() = currentSteps
     fun getSensorManager() = sensorManager
     fun getStepCounterSensor() = stepCounterSensor
-    fun getSavedDate()=  sharedPreferences.getString(savedCurrentDate, LocalDate.now().toString())
+    fun getSavedDate() = sharedPreferences.getString(savedCurrentDate, LocalDate.now().toString())
 
     fun saveCurrentDate() {
         val currentDate = LocalDate.now().toString()
@@ -52,8 +52,6 @@ class StepCounter() : SensorEventListener {
 
     private fun loadData() {
         val savedValue = sharedPreferences.getFloat(savedPreviousSteps, 0f)
-//        val savedDateString =
-//            sharedPreferences.getString(savedCurrentDate, LocalDate.now().toString())
         val savedDateString = getSavedDate()
         val savedDate = LocalDate.parse(savedDateString, DateTimeFormatter.ISO_DATE)
         Log.d(
@@ -63,7 +61,7 @@ class StepCounter() : SensorEventListener {
 
         // when the date is changed
         if (savedDate.compareTo(LocalDate.now()) != 0) {
-            saveCurrentDate()
+            //  saveCurrentDate()
             previousTotalSteps = savedValue
         }
         Log.d("saved", "saved: $savedValue,sdata: $savedDateString, previous: $previousTotalSteps")
@@ -78,14 +76,8 @@ class StepCounter() : SensorEventListener {
         p0 ?: return
         p0.sensor = stepCounterSensor
         totalSteps = p0.values[0]
-        val savedDate = LocalDate.parse(getSavedDate(), DateTimeFormatter.ISO_DATE)
-        if(savedDate.compareTo(LocalDate.now())!=0){
-            currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
-        }else{
-            currentSteps = totalSteps.toInt()
-        }
-
-
+        if (totalSteps == 0f) previousTotalSteps = 0f
+        currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
         Log.d("steps", "total: $totalSteps, current: $currentSteps, previous:$previousTotalSteps")
     }
 
