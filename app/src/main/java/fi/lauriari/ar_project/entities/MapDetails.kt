@@ -2,7 +2,8 @@ package fi.lauriari.ar_project.entities
 
 import android.os.Parcelable
 import androidx.room.*
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+
 
 @Entity(tableName = "mapdetails_table")
 data class MapDetails(

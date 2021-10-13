@@ -64,6 +64,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        NetworkMonitor(application).stopNetworkCallback()
+        //NetworkMonitor(application).stopNetworkCallback()
     }
 }
