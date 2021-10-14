@@ -1,5 +1,8 @@
-# Symmetrical spoon
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/61379336/137374988-b12e6c7b-2d54-448e-a6ed-73ff5b9aa47c.png">
+</p>
 
+# Symmetrical spoon
 Symmetrical spoon is an application which encourages users to explore their nearby areas and  complete various tasks to receive ingame rewards. It follows the MVVM design pattern.
 
 ## Getting started
@@ -83,8 +86,12 @@ Augmented Reality is provided by [ARCore](https://developers.google.com/ar) whic
 The scene graph API used to create the virtual objects is called Sceneform, it's responsible for displaying the simple widgets, images and 3D objects that appear in the AR fragment of the application. Sceneform was deprecated and open sourced by Google a few years ago but this application uses a [fork](https://thomasgorisse.github.io/sceneform-android-sdk/) which is maintained by community.
 
 ## App design
+<p align="center">
+<img src="https://user-images.githubusercontent.com/61379336/137375886-b90ae5f0-c74e-4f6a-a729-4e7b9979f6dd.png">
+   Color theme
+   </p>
 
-This app is designed under the [material design guidelines](https://material.io/design).
+This application is designed under the [material design guidelines](https://material.io/design).
 
 
 ## Sensors
