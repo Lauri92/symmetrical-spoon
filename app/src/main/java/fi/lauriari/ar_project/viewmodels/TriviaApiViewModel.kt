@@ -3,7 +3,7 @@ package fi.lauriari.ar_project.viewmodels
 import androidx.lifecycle.ViewModel
 import fi.lauriari.ar_project.datamodels.ImageQuestion
 import fi.lauriari.ar_project.datamodels.ImageSelectionQuestion
-import fi.lauriari.ar_project.QuizQuestion
+import fi.lauriari.ar_project.datamodels.QuizQuestion
 import fi.lauriari.ar_project.repositories.TriviaRepository
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response

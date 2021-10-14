@@ -9,5 +9,4 @@ data class ImageQuestion(
     @SerializedName("answer2") val answer2 : String,
     @SerializedName("answer3") val answer3 : String,
     @SerializedName("correctAnswer") val correctAnswer : String
-) {
-}
+)

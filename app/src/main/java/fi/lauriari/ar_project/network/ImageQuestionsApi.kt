@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project.Network
+package fi.lauriari.ar_project.network
 
 import fi.lauriari.ar_project.datamodels.ImageQuestion
 import fi.lauriari.ar_project.datamodels.ImageSelectionQuestion

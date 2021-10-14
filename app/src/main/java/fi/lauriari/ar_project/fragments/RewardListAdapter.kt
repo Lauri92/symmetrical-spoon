@@ -11,7 +11,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fi.lauriari.ar_project.Gems
-import fi.lauriari.ar_project.Network.Item
+import fi.lauriari.ar_project.network.Item
 import fi.lauriari.ar_project.R
 
 class RewardListAdapter(private val items: List<Item>?, private val collectedItems: List<String>) :

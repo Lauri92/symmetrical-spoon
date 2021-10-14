@@ -301,17 +301,8 @@ class GameMapFragment : Fragment() {
         ) {
             // Permissions are not granted so requesting of location updates is not possible
             Log.i("test", "failed")
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            //requestPermissions()
             AlertDialog.Builder(requireContext())
-                .setTitle("Location Permission Needed")
+                .setTitle("Location Permission required")
                 .setMessage("This application needs the Location permission, please accept to use location functionality")
                 .setPositiveButton(
                     "OK"
