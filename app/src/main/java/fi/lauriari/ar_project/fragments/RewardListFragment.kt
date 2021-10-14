@@ -44,23 +44,28 @@ class RewardListFragment : Fragment() {
             binding.diamondAmount.text = it.diamonds.toString()
         })
 
-        view.findViewById<FloatingActionButton>(R.id.back_btn).setOnClickListener {
+        binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        val repo = RewardsRepository()
-        val viewModelFactory = RewardsApiViewModelFactory(repo)
+        if (!NetworkVariables.isNetworkConnected) {
+            binding.noInternetMsg.visibility = View.VISIBLE
+        } else {
 
-        val rewardsApiViewModel =
-            ViewModelProvider(this, viewModelFactory).get(RewardsApiViewModel::class.java)
-        rewardsApiViewModel.getItems()
+            val repo = RewardsRepository()
+            val viewModelFactory = RewardsApiViewModelFactory(repo)
 
-        val itemList = binding.rewardsList
-        itemList.layoutManager = GridLayoutManager(activity, 2)
+            val rewardsApiViewModel =
+                ViewModelProvider(this, viewModelFactory).get(RewardsApiViewModel::class.java)
+            rewardsApiViewModel.getItems()
 
-        rewardsApiViewModel.response.observe(viewLifecycleOwner, {
-            itemList.adapter = RewardListAdapter(it, collectedItems)
-        })
+            val itemList = binding.rewardsList
+            itemList.layoutManager = GridLayoutManager(activity, 2)
+
+            rewardsApiViewModel.response.observe(viewLifecycleOwner, {
+                itemList.adapter = RewardListAdapter(it, collectedItems)
+            })
+        }
         return view
     }
 

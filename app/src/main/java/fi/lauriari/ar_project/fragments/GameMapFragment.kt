@@ -68,7 +68,7 @@ class GameMapFragment : Fragment() {
     private var locationIdAction: Long? = null
     private var locationStringAction: String? = null
     private var locationRequest: LocationRequest? = null
-
+    val currentSteps = stepCounter.getCurrentSteps()
 
     @DelicateCoroutinesApi
     override fun onCreateView(
@@ -93,7 +93,6 @@ class GameMapFragment : Fragment() {
         if (!isGpsEnabled) {
             buildGpsMissingAlertDialog()
         }
-
 
         locationRequest = LocationRequest
             .create()
@@ -120,8 +119,9 @@ class GameMapFragment : Fragment() {
         }
 
         checkSelfPermissions()
-
         setUserCollectedGems()
+
+        view.findViewById<TextView>(R.id.steps).text = getString(R.string.steps,currentSteps.toString())
         val dailyQuestButton = view.findViewById<ImageView>(R.id.daily_quest_fab)
         val locateMyselfButton = view.findViewById<ImageView>(R.id.locate_myself_btn)
         val navigateToARButton = view.findViewById<Button>(R.id.navigate_to_game_AR_btn)
@@ -211,15 +211,19 @@ class GameMapFragment : Fragment() {
 //            }
 
             // quest for steps
-            val currentSteps = stepCounter.getCurrentSteps()
+
             val stepQuest = dailyQuests[1]
-            val stepQuestDescriptionTv = dialog.findViewById<TextView>(R.id.step_task_description)
-            val stepProgessTv = dialog.findViewById<TextView>(R.id.step_progress)
             val stepQuestHelper = StepQuest(currentSteps, stepQuest)
 
+            val stepQuestDescriptionTv = dialog.findViewById<TextView>(R.id.step_task_description)
+            val stepProgessTv = dialog.findViewById<TextView>(R.id.step_progress)
+            val stepReward = dialog.findViewById<ImageView>(R.id.task2_complete)
+
+            setCompleteMark(stepReward, stepQuestHelper.getIsCompleted())
             stepQuestHelper.setDescriptionText(stepQuestDescriptionTv)
             stepQuestHelper.setProgressText(context!!, stepProgessTv)
-            if (stepQuestHelper?.getIsCompleted() == false && stepQuestHelper.checkIsCompleted()) {
+
+            if (!stepQuestHelper.getIsCompleted() && stepQuestHelper.checkIsCompleted()) {
                 lifecycleScope.launch {
                     mMapDetailsViewModel.updateDailyQuest(
                         DailyQuest(
@@ -248,10 +252,9 @@ class GameMapFragment : Fragment() {
                         )
                     )
                 }
-            Toast.makeText(context,"Congratulations! You completed step quest",Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"Congratulations! You completed step quest",Toast.LENGTH_LONG).show()
+                setCompleteMark(stepReward, stepQuestHelper.getIsCompleted())
             }
-            val stepReward = dialog.findViewById<ImageView>(R.id.task2_complete)
-            setCompleteMark(stepReward, stepQuestHelper.getIsCompleted())
 
             dialog.show()
             // TODO Construct new daily in else block if one hasn't been created for some reason?

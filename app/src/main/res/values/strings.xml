@@ -43,4 +43,8 @@
     <string name="diamond_reward_daily">Reward: 3 Diamonds</string>
     <string name="collect_one_of_each_daily">Collect one of each gems!</string>
     <string name="step_count">%d / %d steps</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="go_back">go back</string>
+    <string name="no_internet_connection_description">Connect to Wifi or Mobile data first to call your item!</string>
+    <string name="steps">👟 %s</string>
 </resources>

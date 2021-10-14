@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
-        //setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
 
         // Star networkcallback to receive network status updates
         NetworkMonitor(application).startNetworkCallback()
