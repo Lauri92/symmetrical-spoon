@@ -25,7 +25,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:gravity="center"
+            android:gravity="start"
             android:text="@string/no_internet_connection_description"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"

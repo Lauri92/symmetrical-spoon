@@ -6,6 +6,7 @@ import android.hardware.SensorManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -51,11 +52,14 @@ class MainActivity : AppCompatActivity() {
             stepCounter.getSensorManager()
                 .registerListener(stepCounter, it, SensorManager.SENSOR_DELAY_UI)
         }
+        if (stepCounter.getStepCounterSensor() == null) {
+            Toast.makeText(this, "Sorry Sensor is not available!", Toast.LENGTH_LONG).show();
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        stepCounter.getSensorManager().unregisterListener(stepCounter)
+       // stepCounter.getSensorManager().unregisterListener(stepCounter)
         stepCounter.savePreviousTotalSteps()
         stepCounter.saveCurrentDate()
     }
