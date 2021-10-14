@@ -1,10 +1,11 @@
 package fi.lauriari.ar_project.fragments
 
+import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import fi.lauriari.ar_project.NetworkVariables
 import fi.lauriari.ar_project.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +27,6 @@ class CollectionDescriptionFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_collection_description, container, false)
         val item = args.collectedItem
-        Log.d("current item", "$item")
         val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
         val collectedTimeString = simpleDateFormat.format(item.collectedTime)
 
@@ -45,11 +46,21 @@ class CollectionDescriptionFragment : Fragment() {
         val playBtn = view.findViewById<Button>(R.id.play_btn)
         playBtn.text = getString(R.string.play_with, item.name)
         playBtn.setOnClickListener {
-            val action =
-                CollectionDescriptionFragmentDirections.actionCollectionDescriptionFragmentToCollectedItemARFragment(
-                    item.objectUrl
-                )
-            it.findNavController().navigate(action)
+            if (!NetworkVariables.isNetworkConnected) {
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setContentView(R.layout.no_internet_dialog)
+                dialog.findViewById<Button>(R.id.cancel_btn).setOnClickListener {
+                    dialog.dismiss()
+                }
+                dialog.show()
+            } else {
+                val action =
+                    CollectionDescriptionFragmentDirections.actionCollectionDescriptionFragmentToCollectedItemARFragment(
+                        item.objectUrl
+                    )
+                it.findNavController().navigate(action)
+            }
         }
         return view
     }
