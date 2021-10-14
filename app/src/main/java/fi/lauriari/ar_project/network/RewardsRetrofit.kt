@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
+// information of a reward item
 @Parcelize
 class Item(
     @SerializedName("id") val itemId: Long,
@@ -28,7 +29,7 @@ class Item(
     @SerializedName("diamond") val itemDiamond: Int
 ) : Parcelable
 
-
+// get the data of reward items
 object RewardsRetrofit {
     private const val REWARDS_URL = "https://users.metropolia.fi/~minjic/AR_project/data/"
 
@@ -42,7 +43,6 @@ object RewardsRetrofit {
         rewardsRetrofit.create(RewardsApi::class.java)
     }
 }
-
 
 interface RewardsApi {
     @GET("rewards.json")

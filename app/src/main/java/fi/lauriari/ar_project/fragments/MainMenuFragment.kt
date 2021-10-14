@@ -14,6 +14,7 @@ import fi.lauriari.ar_project.entities.Inventory
 import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.R
 
+// fragment for menus of the application
 class MainMenuFragment : Fragment() {
 
     private val mInventoryViewModel: InventoryViewModel by viewModels()
@@ -41,7 +42,7 @@ class MainMenuFragment : Fragment() {
 
         if (list.isEmpty()) {
             Log.d("inventory", "No inventory, creating one")
-
+            // set initial amount of user's gems
             mInventoryViewModel.insertInventory(Inventory(0, 100, 100, 100, 100, 100))
 
         } else {

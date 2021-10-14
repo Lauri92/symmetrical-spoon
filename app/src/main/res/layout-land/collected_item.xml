@@ -38,7 +38,7 @@
                 android:layout_height="100dp"
                 android:layout_centerInParent="false"
                 android:layout_centerHorizontal="true"
-                android:contentDescription="Collected item preview"
+                android:contentDescription="@string/collected_item_preview"
                 app:srcCompat="@drawable/ic_reward_item_placeholder" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Sample item"
+                android:text="@string/sample_item"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

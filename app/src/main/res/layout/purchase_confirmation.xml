@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
-            android:text="Purchase confirmation"
+            android:text="@string/purchase_confirmation"
             android:textAlignment="center"
             android:textColor="@color/light_blue_900"
             android:textSize="28sp"
@@ -62,8 +62,9 @@
                 android:layout_marginEnd="8dp"
                 android:background="@color/transparent"
                 android:fontFamily="@font/nunito_bold"
-                android:text="cancel"
-                android:textColor="@color/light_blue_900" />
+                android:text="@string/cancel"
+                android:textColor="@color/light_blue_900"
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/purchase_btn"
@@ -72,9 +73,10 @@
                 android:backgroundTint="?attr/colorPrimaryVariant"
                 android:fontFamily="@font/nunito_bold"
                 android:paddingVertical="12dp"
-                android:text="buy"
+                android:text="@string/buy"
                 android:textColor="@color/white"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                style="?android:attr/buttonBarButtonStyle" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

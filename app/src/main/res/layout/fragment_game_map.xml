@@ -58,10 +58,10 @@
         android:enabled="false"
         android:fontFamily="@font/nunito_bold"
         android:padding="16dp"
+        android:text="@string/start_task"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:cornerRadius="12dp"
-        android:text="@string/start_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -100,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:clickable="true"
+            android:contentDescription="@string/user_emerald"
             android:src="@drawable/emerald"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:clickable="true"
+            android:contentDescription="@string/user_ruby"
             android:src="@drawable/ruby"
             app:layout_constraintBottom_toBottomOf="@+id/emeralds_tv"
             app:layout_constraintStart_toEndOf="@+id/emeralds_tv"
@@ -122,6 +124,7 @@
             android:layout_height="28dp"
             android:layout_marginStart="8dp"
             android:clickable="true"
+            android:contentDescription="@string/user_sapphire"
             android:src="@drawable/sapphire"
             app:layout_constraintBottom_toBottomOf="@+id/rubies_tv"
             app:layout_constraintStart_toEndOf="@+id/rubies_tv"
@@ -134,6 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:clickable="true"
+            android:contentDescription="@string/user_topaz"
             android:src="@drawable/topaz"
             app:layout_constraintBottom_toBottomOf="@+id/sapphires_tv"
             app:layout_constraintStart_toEndOf="@+id/sapphires_tv"
@@ -146,6 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:clickable="true"
+            android:contentDescription="@string/user_diamond"
             android:src="@drawable/ic_diamond"
             app:layout_constraintBottom_toBottomOf="@+id/topazes_tv"
             app:layout_constraintStart_toEndOf="@+id/topazes_tv"
@@ -232,15 +237,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:maxImageSize="40dp"
-        app:tint="#00FFFFFF" />
+        app:tint="#00FFFFFF"
+        android:contentDescription="@string/daily_quest" />
 
     <ImageView
-
         android:id="@+id/locate_myself_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
+        android:contentDescription="@string/get_current_location"
         android:src="@drawable/ic_baseline_my_location_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

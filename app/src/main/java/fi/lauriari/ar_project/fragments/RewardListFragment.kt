@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.network.RewardsApiViewModel
 import fi.lauriari.ar_project.network.RewardsApiViewModelFactory
@@ -19,6 +18,7 @@ import fi.lauriari.ar_project.viewmodels.CollectedItemViewModel
 import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding
 
+// Fragment for the reward shop
 class RewardListFragment : Fragment() {
 
     override fun onCreateView(
@@ -32,8 +32,8 @@ class RewardListFragment : Fragment() {
         binding.viewmodel = inventoryViewModel
         val view = binding.root
 
+        // get item names from the list of items purchased to check if the item is already purchased or not
         val collectedItems = collectedItemViewModel.getCollectedItems().map { it.name }
-
 
         // display current amount of gems that the user has collected
         inventoryViewModel.getInventory().observe(viewLifecycleOwner, {
@@ -48,13 +48,12 @@ class RewardListFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        // if there is no network connection, warning image view appears
         if (!NetworkVariables.isNetworkConnected) {
             binding.noInternetMsg.visibility = View.VISIBLE
         } else {
-
             val repo = RewardsRepository()
             val viewModelFactory = RewardsApiViewModelFactory(repo)
-
             val rewardsApiViewModel =
                 ViewModelProvider(this, viewModelFactory).get(RewardsApiViewModel::class.java)
             rewardsApiViewModel.getItems()

@@ -52,8 +52,9 @@ class MainActivity : AppCompatActivity() {
             stepCounter.getSensorManager()
                 .registerListener(stepCounter, it, SensorManager.SENSOR_DELAY_UI)
         }
+        // send toast message when there is no step detector sensor in the device
         if (stepCounter.getStepCounterSensor() == null) {
-            Toast.makeText(this, "Sorry Sensor is not available!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Sorry, Step detector sensor is not available!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -62,10 +63,5 @@ class MainActivity : AppCompatActivity() {
        // stepCounter.getSensorManager().unregisterListener(stepCounter)
         stepCounter.savePreviousTotalSteps()
         stepCounter.saveCurrentDate()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //NetworkMonitor(application).stopNetworkCallback()
     }
 }

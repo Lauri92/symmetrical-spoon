@@ -14,6 +14,7 @@ import fi.lauriari.ar_project.Gems
 import fi.lauriari.ar_project.network.Item
 import fi.lauriari.ar_project.R
 
+// adapter for reward shop's recyclerview
 class RewardListAdapter(private val items: List<Item>?, private val collectedItems: List<String>) :
     RecyclerView.Adapter<RewardListAdapter.RewardListViewHolder>() {
 

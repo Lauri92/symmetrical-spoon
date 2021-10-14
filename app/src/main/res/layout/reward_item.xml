@@ -38,6 +38,7 @@
                 android:layout_height="100dp"
                 android:layout_centerInParent="false"
                 android:layout_centerHorizontal="true"
+                android:contentDescription="@string/reward_item_preview"
                 app:srcCompat="@drawable/ic_reward_item_placeholder" />
 
             <TextView
@@ -49,7 +50,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Sample item"
+                android:text="@string/sample_item"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -75,7 +76,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_diamond" />
+                        android:src="@drawable/ic_diamond"
+                        android:contentDescription="@string/required_diamond" />
 
                     <TextView
                         android:id="@+id/diamond_amount"
@@ -110,7 +112,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
-                            android:src="@drawable/emerald" />
+                            android:src="@drawable/emerald"
+                            android:contentDescription="@string/required_emerald" />
 
                         <TextView
                             android:id="@+id/emerald_amount"
@@ -136,7 +139,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
-                            android:src="@drawable/ruby" />
+                            android:src="@drawable/ruby"
+                            android:contentDescription="@string/required_ruby" />
 
                         <TextView
                             android:id="@+id/ruby_amount"
@@ -161,7 +165,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
-                            android:src="@drawable/sapphire" />
+                            android:src="@drawable/sapphire"
+                            android:contentDescription="@string/required_sapphire" />
 
                         <TextView
                             android:id="@+id/sapphire_amount"
@@ -187,7 +192,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
                             android:layout_weight="1"
-                            android:src="@drawable/topaz" />
+                            android:src="@drawable/topaz"
+                            android:contentDescription="@string/required_topaz" />
 
                         <TextView
                             android:id="@+id/topaz_amount"

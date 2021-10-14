@@ -31,7 +31,7 @@
         android:theme="@style/Theme.AR_Project">
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
 
         <activity android:name=".activities.SplashActivity">
             <intent-filter>

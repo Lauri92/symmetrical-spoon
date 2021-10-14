@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import fi.lauriari.ar_project.entities.CollectedItem
 import fi.lauriari.ar_project.R
 
-
+// adapter for the purchased items' recyclerview
 class CollectedItemListAdapter(private val items: List<CollectedItem>) :
     RecyclerView.Adapter<CollectedItemListAdapter.CollectedItemListViewHolder>() {
 
@@ -26,11 +26,13 @@ class CollectedItemListAdapter(private val items: List<CollectedItem>) :
         val item = items[position]
         holder.itemView.findViewById<TextView>(R.id.item_name).text = item.name
 
+        // fetch item preview image using Glide
         Glide.with(holder.itemView.context).load(item.thumbnail)
             .placeholder(R.drawable.ic_reward_item_placeholder)
             .error(R.drawable.ic_reward_item_placeholder)
             .into(holder.itemView.findViewById(R.id.item_thumbnail))
 
+        // navigate to the description view of each items
         holder.itemView.findViewById<View>(R.id.collected_item_layout).setOnClickListener {
             val action =
                 CollectedItemListFragmentDirections.actionCollectedItemListToCollectionDescriptionFragment(

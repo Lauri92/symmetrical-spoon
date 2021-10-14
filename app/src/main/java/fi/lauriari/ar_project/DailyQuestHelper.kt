@@ -34,19 +34,19 @@ class DailyQuestHelper(
     val hasSapphires: Boolean = requiredSapphires > 0
     val hasTopazes: Boolean = requiredTopazes > 0
 
-    fun isEmeraldsCollected(): Boolean {
+    private fun isEmeraldsCollected(): Boolean {
         return this.collectedEmeralds >= this.requiredEmeralds
     }
 
-    fun isRubiesCollected(): Boolean {
+    private fun isRubiesCollected(): Boolean {
         return this.collectedRubies >= this.requiredRubies
     }
 
-    fun isSapphiresCollected(): Boolean {
+    private fun isSapphiresCollected(): Boolean {
         return this.collectedSapphires >= this.requiredSapphires
     }
 
-    fun isTopazesCollected(): Boolean {
+    private fun isTopazesCollected(): Boolean {
         return this.collectedTopazes >= this.requiredTopazes
     }
 

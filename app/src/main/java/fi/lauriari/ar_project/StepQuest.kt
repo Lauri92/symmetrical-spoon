@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import fi.lauriari.ar_project.entities.DailyQuest
 
+// helper class for the step quest
 class StepQuest(
     private var currentStep: Int, private val stepQuest: DailyQuest
 ) {

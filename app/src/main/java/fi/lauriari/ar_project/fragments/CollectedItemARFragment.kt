@@ -17,6 +17,7 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import fi.lauriari.ar_project.R
 
+// AR fragment to display purchased items
 class CollectedItemARFragment : Fragment() {
 
     private val arguments by navArgs<CollectedItemARFragmentArgs>()
@@ -28,6 +29,7 @@ class CollectedItemARFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // get the 3d model's url through the navigation argument
         val objectUrl = arguments.objectUrl
         val view = inflater.inflate(R.layout.fragment_collected_item_ar, container, false)
         val rootView = requireActivity().findViewById<View>(android.R.id.content)
@@ -38,6 +40,7 @@ class CollectedItemARFragment : Fragment() {
         StrictMode.setThreadPolicy(
             StrictMode.ThreadPolicy.Builder().permitAll().build()
         )
+
         arFragment = childFragmentManager.findFragmentById(R.id.sceneform_fragment) as ArFragment
         ModelRenderable.builder()
             .setSource(activity, Uri.parse(objectUrl))
@@ -69,6 +72,7 @@ class CollectedItemARFragment : Fragment() {
                     mNode.select()
                     mNode.setOnTapListener { _, _ ->
                         button.visibility = View.INVISIBLE
+                        // make an object animate if it has an animation
                         mNode.setRenderable(modelRenderable).animate(true).start()
                     }
                     break

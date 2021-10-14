@@ -12,6 +12,7 @@ class Gems(private val value: Int?, private val layoutId: Int, private val textV
     fun initPriceText(view: View) {
         // to prevent displaying wrong data when the recyclerview recycles its views
         view.findViewById<LinearLayout>(layoutId).visibility = View.VISIBLE
+        // if the required amount of a gem is 0, hide the price container of the gem
         if (gemValue == 0) {
             view.findViewById<LinearLayout>(layoutId).visibility = View.GONE
         } else {

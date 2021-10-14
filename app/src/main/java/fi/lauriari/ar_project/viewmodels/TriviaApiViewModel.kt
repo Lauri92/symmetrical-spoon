@@ -12,7 +12,7 @@ class TriviaApiViewModel(private val triviaRepository: TriviaRepository) : ViewM
 
 
     fun getQuiz(): Response<QuizQuestion>? {
-        var response: Response<QuizQuestion>? = null
+        var response: Response<QuizQuestion>?
         runBlocking {
             val apiResponse = triviaRepository.getQuiz()
             response = apiResponse

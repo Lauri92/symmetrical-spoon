@@ -24,20 +24,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:srcCompat="@drawable/ic_reward_item_placeholder" />
+            app:srcCompat="@drawable/ic_reward_item_placeholder"
+            android:contentDescription="@string/no_internet_notification" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="no internet connection :("
+            android:text="@string/no_internet_connection_msg"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp" />
@@ -70,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:src="@drawable/emerald" />
+                android:src="@drawable/emerald"
+                android:contentDescription="@string/user_emerald" />
 
             <TextView
                 android:id="@+id/emerald_amount"
@@ -93,9 +96,10 @@
                 android:id="@+id/ruby"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:src="@drawable/ruby" />
+                android:src="@drawable/ruby"
+                android:contentDescription="@string/user_ruby" />
 
             <TextView
                 android:id="@+id/ruby_amount"
@@ -110,7 +114,7 @@
             android:id="@+id/sapphire_counter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -118,9 +122,10 @@
                 android:id="@+id/sapphire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:src="@drawable/sapphire" />
+                android:src="@drawable/sapphire"
+                android:contentDescription="@string/user_sapphire" />
 
             <TextView
                 android:id="@+id/sapphire_amount"
@@ -135,7 +140,7 @@
             android:id="@+id/topaz_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -143,9 +148,10 @@
                 android:id="@+id/topaz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:src="@drawable/topaz" />
+                android:src="@drawable/topaz"
+                android:contentDescription="@string/user_topaz" />
 
             <TextView
                 android:id="@+id/topaz_amount"
@@ -169,7 +175,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_diamond" />
+                android:src="@drawable/ic_diamond"
+                android:contentDescription="@string/user_diamond" />
 
             <TextView
                 android:id="@+id/diamond_amount"

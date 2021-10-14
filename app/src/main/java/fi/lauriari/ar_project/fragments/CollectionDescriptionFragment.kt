@@ -27,6 +27,7 @@ class CollectionDescriptionFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_collection_description, container, false)
         val item = args.collectedItem
+        // display the purchased date
         val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
         val collectedTimeString = simpleDateFormat.format(item.collectedTime)
 
@@ -46,6 +47,7 @@ class CollectionDescriptionFragment : Fragment() {
         val playBtn = view.findViewById<Button>(R.id.play_btn)
         playBtn.text = getString(R.string.play_with, item.name)
         playBtn.setOnClickListener {
+            // if there is no network connection, show a warning dialog
             if (!NetworkVariables.isNetworkConnected) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -55,6 +57,7 @@ class CollectionDescriptionFragment : Fragment() {
                 }
                 dialog.show()
             } else {
+                // if there is a network connection, navigate to the AR view to display the object
                 val action =
                     CollectionDescriptionFragmentDirections.actionCollectionDescriptionFragmentToCollectedItemARFragment(
                         item.objectUrl

@@ -71,7 +71,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/task1_progress_tv"
-                    tools:srcCompat="@drawable/ic_close" />
+                    tools:srcCompat="@drawable/ic_close"
+                    android:contentDescription="@string/incomplete" />
 
                 <TextView
                     android:id="@+id/task1_description_tv"
@@ -97,14 +98,16 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toStartOf="@+id/task1_complete_tv"
                     app:layout_constraintStart_toStartOf="@+id/task1_description_tv"
-                    app:layout_constraintTop_toBottomOf="@+id/task1_progress_tv">
+                    app:layout_constraintTop_toBottomOf="@+id/task1_progress_tv"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:id="@+id/reward_diamond"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        app:srcCompat="@drawable/ic_diamond" />
+                        app:srcCompat="@drawable/ic_diamond"
+                        android:contentDescription="@string/reward_diamond" />
 
                     <TextView
                         android:id="@+id/task1_reward_tv"
@@ -150,7 +153,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/step_progress"
-                    tools:srcCompat="@drawable/ic_close" />
+                    tools:srcCompat="@drawable/ic_close"
+                    android:contentDescription="@string/incomplete" />
 
                 <TextView
                     android:id="@+id/step_task_description"
@@ -177,20 +181,22 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toStartOf="@+id/task2_complete"
                     app:layout_constraintStart_toStartOf="@+id/step_task_description"
-                    app:layout_constraintTop_toBottomOf="@+id/step_progress">
+                    app:layout_constraintTop_toBottomOf="@+id/step_progress"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:id="@+id/reward_diamond2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        app:srcCompat="@drawable/ic_diamond" />
+                        app:srcCompat="@drawable/ic_diamond"
+                        android:contentDescription="@string/reward_diamond" />
 
                     <TextView
                         android:id="@+id/task2_reward"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reward: 3 Diamonds"
+                        android:text="@string/reward_3_diamonds"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp"

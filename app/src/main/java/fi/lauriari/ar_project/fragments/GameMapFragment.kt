@@ -120,8 +120,10 @@ class GameMapFragment : Fragment() {
 
         checkSelfPermissions()
         setUserCollectedGems()
+        currentSteps.observe(viewLifecycleOwner, {
+            view.findViewById<TextView>(R.id.steps).text = getString(R.string.steps, it.toString())
+        })
 
-        view.findViewById<TextView>(R.id.steps).text = getString(R.string.steps,currentSteps.toString())
         val dailyQuestButton = view.findViewById<ImageView>(R.id.daily_quest_fab)
         val locateMyselfButton = view.findViewById<ImageView>(R.id.locate_myself_btn)
         val navigateToARButton = view.findViewById<Button>(R.id.navigate_to_game_AR_btn)
@@ -213,17 +215,17 @@ class GameMapFragment : Fragment() {
             // quest for steps
 
             val stepQuest = dailyQuests[1]
-            val stepQuestHelper = StepQuest(currentSteps, stepQuest)
+            val stepQuestHelper = currentSteps.value?.let { StepQuest(it, stepQuest) }
 
             val stepQuestDescriptionTv = dialog.findViewById<TextView>(R.id.step_task_description)
             val stepProgessTv = dialog.findViewById<TextView>(R.id.step_progress)
             val stepReward = dialog.findViewById<ImageView>(R.id.task2_complete)
 
-            setCompleteMark(stepReward, stepQuestHelper.getIsCompleted())
-            stepQuestHelper.setDescriptionText(stepQuestDescriptionTv)
-            stepQuestHelper.setProgressText(context!!, stepProgessTv)
+            stepQuestHelper?.getIsCompleted()?.let { setCompleteMark(stepReward, it) }
+            stepQuestHelper?.setDescriptionText(stepQuestDescriptionTv)
+            stepQuestHelper?.setProgressText(context!!, stepProgessTv)
 
-            if (!stepQuestHelper.getIsCompleted() && stepQuestHelper.checkIsCompleted()) {
+            if (stepQuestHelper?.getIsCompleted() == false && stepQuestHelper.checkIsCompleted()) {
                 lifecycleScope.launch {
                     mMapDetailsViewModel.updateDailyQuest(
                         DailyQuest(
@@ -252,7 +254,11 @@ class GameMapFragment : Fragment() {
                         )
                     )
                 }
-                Toast.makeText(context,"Congratulations! You completed step quest",Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Congratulations! You completed step quest",
+                    Toast.LENGTH_LONG
+                ).show()
                 setCompleteMark(stepReward, stepQuestHelper.getIsCompleted())
             }
 

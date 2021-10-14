@@ -42,7 +42,8 @@
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_diamond" />
+        app:srcCompat="@drawable/ic_diamond"
+        android:contentDescription="@string/reward_diamond" />
 
     <Button
         android:id="@+id/task_complete_btn"

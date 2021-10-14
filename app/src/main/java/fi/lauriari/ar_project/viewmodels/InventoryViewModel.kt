@@ -34,36 +34,6 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun updateEmeralds(emerald: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateEmeralds(emerald)
-        }
-    }
-
-    fun updateRubies(ruby: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateRubies(ruby)
-        }
-    }
-
-    fun updateSapphires(sapphire: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateSapphires(sapphire)
-        }
-    }
-
-    fun updateTopazes(topaz: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateTopazes(topaz)
-        }
-    }
-
-    fun updateDiamonds(diamond: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            inventoryRepository.updateDiamonds(diamond)
-        }
-    }
-
     fun getInventory(): LiveData<Inventory> {
         var inventory: LiveData<Inventory>
         runBlocking {

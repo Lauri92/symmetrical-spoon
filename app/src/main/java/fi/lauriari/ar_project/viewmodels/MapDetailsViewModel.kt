@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 
 class MapDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
-    val mapDetailsRepository: MapDetailsRepository
+    private val mapDetailsRepository: MapDetailsRepository
 
     init {
         val mapDetailsDao = SpoonDB.getDatabase(application).mapDetailsDao()
@@ -110,14 +110,6 @@ class MapDetailsViewModel(application: Application) : AndroidViewModel(applicati
             dailyQuests = mapDetailsRepository.getDailyQuestsByMapDetailsId(mapDetailsId)
         }
         return dailyQuests
-    }
-
-    fun getDailyQuestByDailyQuestId(id: Long): List<DailyQuest> {
-        var dailyQuest : List<DailyQuest>
-        runBlocking {
-            dailyQuest = mapDetailsRepository.getDailyQuestByDailyQuestId(id)
-        }
-        return dailyQuest
     }
 
 }

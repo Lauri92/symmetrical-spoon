@@ -3,6 +3,7 @@ package fi.lauriari.ar_project.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// gems that the user currently has
 
 @Entity(tableName = "inventory_table")
 data class Inventory(

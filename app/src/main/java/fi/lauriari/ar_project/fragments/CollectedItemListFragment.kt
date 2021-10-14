@@ -13,7 +13,7 @@ import fi.lauriari.ar_project.viewmodels.CollectedItemViewModel
 import fi.lauriari.ar_project.R
 import fi.lauriari.ar_project.databinding.FragmentCollectedItemListBinding
 
-
+// fragment for the list of purchased items
 class CollectedItemListFragment : Fragment() {
 
     override fun onCreateView(
