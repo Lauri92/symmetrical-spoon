@@ -63,7 +63,7 @@
         android:label="fragment_reward_item_description">
         <argument
             android:name="rewardItem"
-            app:argType="fi.lauriari.ar_project.Network.Item" />
+            app:argType="fi.lauriari.ar_project.network.Item" />
     </fragment>
     <fragment
         android:id="@+id/collectedItemList"

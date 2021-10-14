@@ -37,10 +37,12 @@ import fi.lauriari.ar_project.*
 import fi.lauriari.ar_project.entities.Inventory
 import fi.lauriari.ar_project.datamodels.ImageQuestion
 import fi.lauriari.ar_project.datamodels.ImageSelectionQuestion
+import fi.lauriari.ar_project.datamodels.QuizQuestion
 import fi.lauriari.ar_project.entities.DailyQuest
 import fi.lauriari.ar_project.entities.MapDetails
 import fi.lauriari.ar_project.entities.MapLatLng
 import fi.lauriari.ar_project.repositories.TriviaRepository
+import fi.lauriari.ar_project.viewmodelfactories.TriviaViewModelFactory
 import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.viewmodels.MapDetailsViewModel
 import fi.lauriari.ar_project.viewmodels.TriviaApiViewModel

@@ -1,7 +1,6 @@
 package fi.lauriari.ar_project.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import fi.lauriari.ar_project.*
-import fi.lauriari.ar_project.Network.RewardsApiViewModel
-import fi.lauriari.ar_project.Network.RewardsApiViewModelFactory
-import fi.lauriari.ar_project.Network.RewardsRepository
+import fi.lauriari.ar_project.network.RewardsApiViewModel
+import fi.lauriari.ar_project.network.RewardsApiViewModelFactory
+import fi.lauriari.ar_project.network.RewardsRepository
 import fi.lauriari.ar_project.viewmodels.CollectedItemViewModel
 import fi.lauriari.ar_project.viewmodels.InventoryViewModel
 import fi.lauriari.ar_project.databinding.FragmentRewardListBinding

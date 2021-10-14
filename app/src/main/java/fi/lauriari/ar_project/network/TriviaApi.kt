@@ -1,6 +1,6 @@
-package fi.lauriari.ar_project.Network
+package fi.lauriari.ar_project.network
 
-import fi.lauriari.ar_project.QuizQuestion
+import fi.lauriari.ar_project.datamodels.QuizQuestion
 import retrofit2.Response
 import retrofit2.http.GET
 

@@ -1,4 +1,4 @@
-package fi.lauriari.ar_project.Network
+package fi.lauriari.ar_project.network
 
 import android.os.Parcelable
 import android.util.Log
