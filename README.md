@@ -99,3 +99,4 @@ This application uses a step detector sensor to store the number of steps that t
   Step sensor is a kind of [motion sensor](https://developer.android.com/guide/topics/sensors/sensors_motion#java), and it generates an event every single time when the user takes a step. Latency is expected to be less than 2 seconds.
 
 To keep track of your steps, physical activity permission must be allowed in the application.
+
