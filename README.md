@@ -100,25 +100,24 @@ This application uses a step detector sensor to store the number of steps that t
 
 To keep track of your steps, physical activity permission must be allowed in the application.
 
+## Screenshots
 
-Map view
+### Map view
 Map view|Distance to the destination|Destination info
 :-------------------------:|:-------------------------:|:-------------------------:
 ![map](https://user-images.githubusercontent.com/61379336/137454623-4e7f2cbf-c4a3-4e2c-96f6-15bec3f23527.png)  |  ![](https://user-images.githubusercontent.com/61379336/137454683-3cb6083e-3cc4-4c30-88e1-a574eb7f57a8.png)  | ![](https://user-images.githubusercontent.com/61379336/137454792-56d28dbf-86d4-4754-b6a5-6b74bc798131.png)
 
-Tasks
+### Tasks
 Sphere task|Trivia quiz|Image qhiz|Multiple image quiz
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![Screenshot_20211014-142231](https://user-images.githubusercontent.com/61379336/137455076-355a4d29-2209-42c2-bff6-91ce09ec377a.png)  | ![Screenshot_20211014-142049](https://user-images.githubusercontent.com/61379336/137455151-2188ce37-0520-453f-876b-ae4c0c04ed02.png) |![Screenshot_20211014-142445](https://user-images.githubusercontent.com/61379336/137455164-ccf84bd7-cfd8-4c8a-ae86-faa1859cb468.png)|![Screenshot_20211014-142546](https://user-images.githubusercontent.com/61379336/137455175-2b2faa45-7e2d-4c30-a08b-6b385fb2ba90.png)
 
-
-Reward shop
+### Reward shop
 Reward item list|Reward item info
 :-------------------------:|:-------------------------:|
 ![Screenshot_20211014-142720](https://user-images.githubusercontent.com/61379336/137455429-568ee3d3-d762-4768-8314-bba1da4c74e5.png)|![Screenshot_20211014-142727](https://user-images.githubusercontent.com/61379336/137455452-6ee5b9f8-1060-43d1-9705-c39877d35c61.png)
 
-Collections
+### Collections
 Collection list|Collected item info|Collected item in AR
 :-------------------------:|:-------------------------:|:-------------------------:|
 ![Screenshot_20211014-142744](https://user-images.githubusercontent.com/61379336/137457049-61d06fda-7c4f-4c6d-9807-1f636688b4c2.png)|![Screenshot_20211014-142809](https://user-images.githubusercontent.com/61379336/137457063-9837beee-442f-46be-91c2-def5da994729.png)|![Screenshot_20211014-142940](https://user-images.githubusercontent.com/61379336/137457096-4540d1c2-5051-4067-af8d-b92c99526f3c.png)
-
