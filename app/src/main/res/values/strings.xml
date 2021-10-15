@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AR_Project</string>
+    <string name="app_name">Symmetrical Spoon</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go_to_game_map">Go to game map</string>
     <string name="navigate_to_game_ar">Navigate to game AR</string>
